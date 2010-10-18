@@ -1,13 +1,6 @@
 /* Default stylesheet for phpmedes */
 
-@import url(module/basic_structure.css);
-@import url(module/phpmedes_logo.css);
-@import url(module/choose_style.css);
-@import url(module/nav_mainmenu.css);
-@import url(module/nav_breadcrumb.css);
-@import url(module/footer.css);
-
-body{font-family:georgia,serif;}
+@import url(stylesheet_default.css);
 
 /* color sheme silver: from darkest to lightest */
 /* color sheme silver: fonts */
