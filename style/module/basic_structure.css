@@ -1,0 +1,12 @@
+/* Basic structure for the page */
+html{overflow-y:scroll;}
+body{background:white;margin:8px auto;width:800px;color:#222;}
+header,footer,nav,article,aside{display:block;}
+header#top img{border:0;} /* no border when linking logo-image */
+div#content{min-height:20em;}
+article,aside{display:block;overflow:auto;}
+article{width:600px;}
+aside{float:right;width:200px;}
+
+div.color{width:20px;height:20px;float:left;}
+div.color:after{clear:both;}

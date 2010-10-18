@@ -51,8 +51,8 @@ $pageCopyright 		= isset($pageCopyright) 	? $pageCopyright 		: 'Copyright for th
 
 		<!-- Default phpmedes-logo -->
 		<div class=logo>
-			<h1 id=kurs>phpmedes</h1>
-			<h2 id=tagline>dbwebb.se</h2>
+			<p id=label>phpmedes
+			<p id=tagline>dbwebb.se
 		</div>
 
 		<!-- Use an image as logo -->
@@ -65,5 +65,6 @@ $pageCopyright 		= isset($pageCopyright) 	? $pageCopyright 		: 'Copyright for th
 		<a id="about-"  					href="about.php">about</a> 
 		<a id="documentation-"   	href="documentation.php">documentation</a> 
 		<a id="template-"   			href="template.php">template</a> 
+		<a id="style-"   					href="style.php">style</a> 
 		<a id="admin-"  					href="admin/admin.php">admin</a> 
 	</nav>
