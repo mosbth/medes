@@ -1,0 +1,105 @@
+/* Default stylesheet for phpmedes */
+
+@import url(module/phpmedes_logo.css);
+@import url(module/choose_style.css);
+
+html{overflow-y:scroll;}
+
+body{background:white;margin:8px auto;width:700px;}
+/* col1 #550000 */
+/* col2 #ff8080 */
+/* col2 #ffaaaa */
+/* col3 #ffd5d5 */
+/* col4 #ffe3e3 */
+
+header#top     {display:block;}
+header#top img {border:0;float:left;}
+
+nav.mainmenu{display:block;clear:both;overflow:auto;background:#ffd5d5;padding:2px 90px 2px 25px;
+margin:0;font:12px verdana,geneva,sans-serif;border:1px 0px 1px 0px solid #ffe3e3;}
+nav.mainmenu a{color:#550000;text-decoration:none;float:left;padding:7px 10px 7px 10px;border-left:1px solid #ffe3e3;}
+nav.mainmenu a:last-child{border-right:1px solid #ffe3e3;}
+nav.mainmenu a:hover,nav a#sel{background:#ffaaaa;}
+
+/* gradient background if supported */
+nav.mainmenu{
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd5d5', endColorstr='#ffaaaa'); 
+background: -webkit-gradient(linear, left top, left bottom, from(#ffd5d5), to(#ffaaaa)); 
+background: -moz-linear-gradient(top,  #ffd5d5,  #ff8080); 
+}
+
+
+/* breadcrumb */
+nav.breadcrumb {display:inline;margin:0;padding:1em 0 0 0;}
+nav.breadcrumb {font:x-small arial,helvetica,sans-serif;color:#999;}
+nav.breadcrumb a {color:inherit;content:" \00BB ";}
+nav.breadcrumb a:after {content:" \00BB ";}
+nav.breadcrumb a:hover {color:#555;}
+
+
+/* content */
+div#content{}
+
+article,aside{display:block;overflow:auto;}
+article{width:500px;}
+aside{float:right;width:200px;}
+
+p.boxtitle{font:larger verdana;}
+
+
+/* footer */
+footer#bottom{display:block;height:100px;border-top:1px solid;color:#550000;
+background: #ffe3e3; /* for non-css3 browsers */
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaaaa', endColorstr='#ffe3e3'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#ffaaaa), to(#ffe3e3)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #ffaaaa,  #ffe3e3); /* for firefox 3.6+ */
+}
+
+
+
+/* -------------------------------------------------------------------------------------
+/* Style for the footer and related footer elements */
+footer#bottom {
+	display: block;
+	padding: 0 1em 1em 1em;
+	border-top: 1px solid #999999;
+	background: #e3e3df;
+	color: #999999;
+}
+
+/* Link-lists in the footer */
+footer#bottom nav {
+	float: left;
+	padding-left:0.3em;
+	width: 8em;
+	margin-bottom: 2em;
+}
+
+footer#bottom nav h5 { 
+	margin-bottom: 0.5em;
+}
+
+footer#bottom nav a { 
+	display: list-item;
+	list-style: none;
+	color: inherit;
+	font: 0.8em Arial, Helvetica, sans-serif;
+	text-decoration:none; 
+}
+footer#bottom nav a:link    { }
+footer#bottom nav a:visited { }
+footer#bottom nav a:hover   { text-decoration:underline;  color: #333333; background: none;}
+footer#bottom nav a:active  { }
+
+footer#bottom nav.clear-float {clear:both;}
+
+/* Final message in the footer */
+footer#bottom div.final {
+	clear: both;
+	padding-left: 50px;
+	background: url(../img/me.png) no-repeat;
+	font-size: 0.8em;
+}
+
+
+
