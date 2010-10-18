@@ -7,7 +7,8 @@ include("inc/header.php");
 <!-- Here is the actual content of the page-->
 <div id=content>
 
-<p>Copy this file and edit its content to create a new file.
+<h1>Create a page using template.php</h1>
+<p>Copy this file, save it with a new name and edit its content to create a new webpage.
 
 
 

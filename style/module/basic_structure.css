@@ -4,7 +4,7 @@ body{background:white;margin:8px auto;width:800px;color:#222;}
 header,footer,nav,article,aside{display:block;}
 header#top img{border:0;} /* no border when linking logo-image */
 div#content{min-height:20em;}
-article,aside{display:block;overflow:auto;}
+article,aside{display:block;overflow:auto;margin-bottom:2em;}
 article{width:600px;}
 aside{float:right;width:200px;}
 

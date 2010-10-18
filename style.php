@@ -7,6 +7,11 @@ include("inc/header.php");
 <!-- Here is the actual content of the page-->
 <div id=content>
 
+<article>
+<h1>Change style</h1>
+
+<p>Choose from the existing stylesheets or create your own personlized style by editing 
+the stylesheet.
 
 <p>Silver, color1-6:
 <div class=color style="background:#222"></div>
@@ -39,7 +44,7 @@ include("inc/header.php");
 <div class=color style="background:#88f"></div>
 <div class=color style="background:#aaf"></div>
 <div class=color style="background:#eef"></div>
-
+</article>
         
 </div> <!-- content -->
 
