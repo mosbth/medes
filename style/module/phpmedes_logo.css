@@ -1,5 +1,5 @@
 /* Stylesheet for phpmedes logotype */
-div.logo{font-family:serif;font-weight:bold;width:175px;height:60px;}
+div.logo{position:relative;font-family:serif;font-weight:bold;width:300px;height:70px;line-height:1px;}
 
-div.logo p#label{font-size:50px;margin:0;text-shadow: 1px 1px 1px #222, -1px -1px 1px #222;color:#444;}
-div.logo p#tagline{position:relative;top:-22px;left:100px;color:#222;font-size:14px;}
+div.logo p#label{position:absolute;top:-20px;left:0;font-size:50px;text-shadow: 1px 1px 1px #222, -1px -1px 1px #222;color:#444;}
+div.logo p#tagline{position:absolute;top:40px;left:100px;color:#222;font-size:14px;}

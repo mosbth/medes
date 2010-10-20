@@ -1,13 +1,11 @@
 <?php 
-$sessionName = 'a_named_session';
-session_name($sessionName); 
-session_start(); 
-error_reporting(-1);
+include(dirname(__FILE__) . "/../config.php");
+if(!empty($cfgSessionName)) {
+	session_name($cfgSessionName); 
+	session_start(); 
+}
+error_reporting($cfgErrorReporting);
 include(dirname(__FILE__) . "/../src/functions.php");
-$pageKeywords 		= isset($pageKeywords) 		? $pageKeywords 		: 'General keywords for this site/page';
-$pageDescription	= isset($pageDescription) ? $pageDescription 	: 'General description for this site/page';
-$pageAuthor 			= isset($pageAuthor) 			? $pageAuthor 			: 'Author of this site/page';
-$pageCopyright 		= isset($pageCopyright) 	? $pageCopyright 		: 'Copyright for this site/page';
 ?>
 
 <!DOCTYPE html>
@@ -17,10 +15,10 @@ $pageCopyright 		= isset($pageCopyright) 	? $pageCopyright 		: 'Copyright for th
 	<meta charset="utf-8">
 
 	<!-- Use meta to ease indexing made by search engines -->
-	<meta name="keywords"    content="<?php echo $pageKeywords; ?>">
- 	<meta name="description" content="<?php echo $pageDescription; ?>">
- 	<meta name="author"      content="<?php echo $pageAuthor; ?>">	
- 	<meta name="copyright"   content="<?php echo $pageCopyright; ?>">	
+	<meta name="keywords"    content="<?php echo isset($pageKeywords) ? $pageKeywords : $cfgPageKeywords; ?>">
+ 	<meta name="description" content="<?php echo isset($pageDescription) ? $pageDescription : $cfgPageDescription; ?>">
+ 	<meta name="author"      content="<?php echo isset($pageAuthor) ? $pageAuthor : $cfgPageAuthor; ?>">	
+ 	<meta name="copyright"   content="<?php echo isset($pageCopyright) ? $pageCopyright : $cfgPageCopyright; ?>">	
  		
 	<!-- Stylesheets -->
 	<?php include(dirname(__FILE__) . "/choose_style.php"); ?>
@@ -37,6 +35,9 @@ $pageCopyright 		= isset($pageCopyright) 	? $pageCopyright 		: 'Copyright for th
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+	<!-- Support Google Analytics -->
+	<?php if(!empty($cfgGoogleAnalytics)) echo $cfgGoogleAnalytics; ?>
 
 </head>
 
