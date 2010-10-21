@@ -4,26 +4,22 @@
 // config.php (config-sample.php)
 //
 // General configurations for the site. Copy config-sample.php to config.php and edit it.
+// All configurations are hold in the $cfg-object and can be used all over the site.
 //
+
+// Enable auto-load of class declarations
+function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassName}.php");}
 
 // -------------------------------------------------------------------------------------------
 //
-// Sessions
+// The config-object, $cfg
 //
-// The sessions is started in the file inc/header.php
+// Create a $cfg-object for this site and and set its values
 //
-//$cfgSessionName = ''; // An empty value disables the use of sessions
-$cfgSessionName = 'a_named_session';
+$cfg = CConfigSite::GetInstance();
 
-
-// -------------------------------------------------------------------------------------------
-//
-// Error reporting
-//
-// The following value is used when calling error_reporting() in inc/header.php
-//
-//$cfgErrorReporting = 0; // Disable error reporting
-$cfgErrorReporting = -1; // Full error reporting
+// Set the link to this site. Can this be figured out dynamically?
+$cfg->siteUrl = "/medes";
 
 
 // -------------------------------------------------------------------------------------------
@@ -32,17 +28,17 @@ $cfgErrorReporting = -1; // Full error reporting
 //
 // Set the default meta tags for this site. Each page can override them by setting individual 
 // values in the following variables:
-//  $pageKeywords
-//  $pageDescription
-//  $pageAuthor 
-//  $pageCopyright
+//  $cfg->pageKeywords
+//  $cfg->pageDescription
+//  $cfg->pageAuthor 
+//  $cfg->pageCopyright
 //
 // Review the file inc/header.php to see how the variables are used.
 //
-$cfgPageKeywords 		= 'General keywords for this site/page';
-$cfgPageDescription	= 'General description for this site/page';
-$cfgPageAuthor 			= 'Author of this site/page';
-$cfgPageCopyright 	= 'Copyright for this site/page';
+$cfg->pageKeywords 		= 'General keywords for this site/page';
+$cfg->pageDescription	= 'General description for this site/page';
+$cfg->pageAuthor 			= 'Author of this site/page';
+$cfg->pageCopyright 	= 'Copyright for this site/page';
 
 
 // -------------------------------------------------------------------------------------------
@@ -52,9 +48,9 @@ $cfgPageCopyright 	= 'Copyright for this site/page';
 // Are you using Google Analytics to track visits of this site? Then put the Javascript here.
 // It will be output just before the </head>-tag in the file inc/header.php.
 // 
-// $cfgGoogleAnalytics = ''; // An empty string will disable this feature.
+// $cfg->googleAnalytics = ''; // An empty string will disable this feature.
 //
-$cfgGoogleAnalytics = <<<EOD
+$cfg->googleAnalytics = <<<EOD
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -70,6 +66,3 @@ $cfgGoogleAnalytics = <<<EOD
 </script>
 EOD;
 
-
-
-// Omitting PHP end-tag by purpose

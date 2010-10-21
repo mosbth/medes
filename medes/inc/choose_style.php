@@ -37,10 +37,10 @@
 // http://php.net/manual/en/language.types.array.php
 //
 $styles = Array(
-		"default" 	=> Array("title" => "phpmedes default", "path" => "style/stylesheet_default.css"),	
-		"red" 			=> Array("title" => "phpmedes red", 		"path" => "style/stylesheet_red.css"),	
-		"green" 		=> Array("title" => "phpmedes green", 	"path" => "style/stylesheet_green.css"),	
-		"blue" 			=> Array("title" => "phpmedes blue", 		"path" => "style/stylesheet_blue.css"),	
+		"default" 	=> Array("title" => "phpmedes default", "path" => "/medes/style/stylesheet_default.css"),	
+		"red" 			=> Array("title" => "phpmedes red", 		"path" => "/medes/style/stylesheet_red.css"),	
+		"green" 		=> Array("title" => "phpmedes green", 	"path" => "/medes/style/stylesheet_green.css"),	
+		"blue" 			=> Array("title" => "phpmedes blue", 		"path" => "/medes/style/stylesheet_blue.css"),	
 	);
 
 

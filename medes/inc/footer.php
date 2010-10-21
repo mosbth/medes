@@ -1,3 +1,5 @@
+</div> <!-- content -->
+
 <!-- This is the standard footer of the page -->
 <?php $refToThisPage = createLinkToCurrentPage(); ?>
 

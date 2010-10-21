@@ -1,11 +1,9 @@
-<?php 
-$pageTitle = "Documentation on phpmedes";  // The title of the page
-$pageBodyId = "documentation"; // Each page should have an individual id
-include("inc/header.php"); 
+<?php
+require_once("../config.php");
+$cfg->pageTitle = "Documentation on phpmedes";
+//$cfg->Dump();
+include($cfg->medesPath . "/inc/header.php");
 ?>
-
-<!-- Here is the actual content of the page-->
-<div id=content>
 
 <article>
 
@@ -28,10 +26,13 @@ include("inc/header.php");
 
 
 <h2>Create new content</h2>
-<p>Create and edit new pages
+<p>Create and edit new pages using template.php
 
 <h2>Protect admin-area</h2>
 <p>How to do it using htaccesss
+
+<h2>Admin area</h2>
+<p>What will be there?
 
 
 <h2>Addon modules</h2>
@@ -39,13 +40,9 @@ include("inc/header.php");
 <p>Additional modules to use
 
 
-<h3>WRite own modules</h3>
+<h3>Write own modules</h3>
 <p>Write your own modules
-
 
 </article>
 
-        
-</div> <!-- content -->
-
-<?php include("inc/footer.php"); ?>
+<?php include($cfg->medesPath . "/inc/footer.php"); ?>

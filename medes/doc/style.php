@@ -1,11 +1,9 @@
-<?php 
-$pageTitle = "Style";  // The title of the page
-$pageBodyId = "style"; // Each page should have an individual id
-include("inc/header.php"); 
+<?php
+require_once("../config.php");
+$cfg->pageTitle = "Style your phpmedes";
+//$cfg->Dump();
+include($cfg->medesPath . "/inc/header.php");
 ?>
-
-<!-- Here is the actual content of the page-->
-<div id=content>
 
 <article>
 <h1>Change style</h1>
@@ -48,4 +46,4 @@ the stylesheet.
         
 </div> <!-- content -->
 
-<?php include("inc/footer.php"); ?>
+<?php include($cfg->medesPath . "/inc/footer.php"); ?>
