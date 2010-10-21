@@ -54,8 +54,8 @@
 	<a href="<?php echo $cfg->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
 <!--
 	<a href="<?php echo $cfg->siteUrl . "/blog"; ?>">blog</a> 
-	<a href="<?php echo $cfg->siteUrl . "/medes/doc/download.php"; ?>">download</a> 
 -->
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/download.php"; ?>">download</a> 
 	<a href="<?php echo $cfg->siteUrl . "/medes/doc/documentation.php"; ?>">documentation</a> 
 </nav>
 
