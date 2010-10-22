@@ -7,11 +7,7 @@
 
 	<nav>
 		<h5>phpmedes</h5>
-			<a href='#'>Website</a>
-			<a href='#'>News</a>
-			<a href='#'>Download</a>
-			<a href='#'>Documentation</a>
-			<a href='#'>Forum</a>
+			<a href='http://phpmedes.org/'>phpmedes.org</a>
 	</nav>
 
 	<nav>
