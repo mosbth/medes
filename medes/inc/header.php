@@ -40,7 +40,7 @@
 
 	<!-- Default phpmedes-logo -->
 	<div class=logo>
-		<p id=label>phpmedes.org
+		<p id=label>phpmedes
 		<p id=tagline>dbwebb.se
 	</div>
 
@@ -51,13 +51,21 @@
 
 <!-- Top navigation bar -->
 <nav class=mainmenu>
-	<a href="<?php echo $cfg->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
 <!--
 	<a href="<?php echo $cfg->siteUrl . "/blog"; ?>">blog</a> 
 -->
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/home.php"; ?>">home</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/showcase.php"; ?>">showcase</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/features.php"; ?>">features</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/style.php"; ?>">style</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/addons.php"; ?>">addons</a> 
 	<a href="<?php echo $cfg->siteUrl . "/medes/doc/download.php"; ?>">download</a> 
-	<a href="<?php echo $cfg->siteUrl . "/medes/doc/documentation.php"; ?>">documentation</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/contribute.php"; ?>">contribute</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/docs.php"; ?>">docs</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/blog.php"; ?>">blog</a> 
+	<a href="<?php echo $cfg->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
 </nav>
+
 
 <!-- Here is the actual content of the page-->
 <div id=content>

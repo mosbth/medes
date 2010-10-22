@@ -63,3 +63,5 @@ footer#bottom{
 	background: -webkit-gradient(linear, left top, left bottom, from(#aaf), to(#eef)); 
 	background: -moz-linear-gradient(top,  #aaf,  #eef);
 }
+
+a:hover{color:#003;background:#eef;}

@@ -1,16 +1,17 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Documentation on phpmedes";
+$cfg->pageTitle = "Docs";
 //$cfg->Dump();
 include($cfg->medesPath . "/inc/header.php");
 ?>
 
 <article>
 
-<h1>Documentation on phpmedes</h1>
+<h1>Docs</h1>
 
-<p>Write documentation in this file. All thats needed.
+<p>Write docs on how to use phpmedes. Later.
 
+<!--
 <h2>Installation and get going</h2>
 <p>Installation and get going
 
@@ -42,7 +43,8 @@ include($cfg->medesPath . "/inc/header.php");
 
 <h3>Write own modules</h3>
 <p>Write your own modules
-
+</p>
+-->
 </article>
 
 <?php include($cfg->medesPath . "/inc/footer.php"); ?>

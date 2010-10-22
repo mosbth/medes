@@ -19,6 +19,7 @@ function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassNa
 $cfg = CConfigSite::GetInstance();
 
 // Set the link to this site. Can this be figured out dynamically?
+// Leave empty-string if site is on top of website
 $cfg->siteUrl = "/medes";
 
 
@@ -48,21 +49,6 @@ $cfg->pageCopyright 	= 'Copyright for this site/page';
 // Are you using Google Analytics to track visits of this site? Then put the Javascript here.
 // It will be output just before the </head>-tag in the file inc/header.php.
 // 
-// $cfg->googleAnalytics = ''; // An empty string will disable this feature.
-//
-$cfg->googleAnalytics = <<<EOD
-<script type="text/javascript">
+$cfg->googleAnalytics = ''; // An empty string will disable this feature.
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-6902244-5']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-EOD;
 

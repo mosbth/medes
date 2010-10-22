@@ -9,5 +9,14 @@ article,aside{display:block;overflow:auto;margin-bottom:2em;}
 article{width:600px;}
 aside{float:right;width:200px;}
 
+article{text-align:justify;}
+
+
 div.color{width:20px;height:20px;float:left;}
 div.color:after{clear:both;}
+
+a{color:inherit;}
+a:link{}
+a:visited{}
+a:hover{text-decoration:none;color:#222;background:#eee;}
+a:active{}

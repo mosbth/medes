@@ -1,15 +1,19 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Style your phpmedes";
+$cfg->pageTitle = "Style";
 //$cfg->Dump();
 include($cfg->medesPath . "/inc/header.php");
 ?>
 
 <article>
-<h1>Change style</h1>
+<h1>Style</h1>
 
-<p>Choose from the existing stylesheets or create your own personlized style by editing 
-the stylesheet.
+<p>Change of style in phpmedes will be an issue of creating a stylesheet. There will be a set
+of stylesheets available to choose from. The flexibility of changing stylesheets must be one of 
+the key features of phpmedes.
+
+<p>Use the stylechooser (see the top right corner of this page) to choose from the avilable styles. 
+Currently there are 4 available styles that changes the color.
 
 <p>Silver, color1-6:
 <div class=color style="background:#222"></div>
@@ -19,7 +23,7 @@ the stylesheet.
 <div class=color style="background:#ccc"></div>
 <div class=color style="background:#eee"></div>
 
-<p style="clear:both;padding-top:1em;">Redish, color1-6:
+<p style="clear:both;padding-top:1em;">Red, color1-6:
 <div class=color style="background:#300"></div>
 <div class=color style="background:#500"></div>
 <div class=color style="background:#f55"></div>
@@ -44,6 +48,5 @@ the stylesheet.
 <div class=color style="background:#eef"></div>
 </article>
         
-</div> <!-- content -->
 
 <?php include($cfg->medesPath . "/inc/footer.php"); ?>
