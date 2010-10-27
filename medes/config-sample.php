@@ -8,7 +8,7 @@
 //
 
 // Enable auto-load of class declarations
-function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassName}.php");}
+function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassName}/{$aClassName}.php");}
 
 // -------------------------------------------------------------------------------------------
 //
@@ -16,7 +16,7 @@ function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassNa
 //
 // Create a $cfg-object for this site and and set its values
 //
-$pp = CConfigSite::GetInstance();
+$pp = CPrinceOfPersia::GetInstance();
 
 // Set the link to this site. Can this be figured out dynamically?
 // Leave empty-string if site is on top of website
