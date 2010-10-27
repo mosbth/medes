@@ -49,6 +49,6 @@ $pp->pageCopyright 		= 'Copyright for this site/page';
 // Are you using Google Analytics to track visits of this site? Then put the Javascript here.
 // It will be output just before the </head>-tag in the file inc/header.php.
 // 
-$cfg->googleAnalytics = ''; // An empty string will disable this feature.
+$pp->googleAnalytics = ''; // An empty string will disable this feature.
 
 
