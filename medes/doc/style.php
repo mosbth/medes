@@ -1,8 +1,8 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Style";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "Style";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 <article>
@@ -49,4 +49,4 @@ Currently there are 4 available styles that changes the color.
 </article>
         
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>

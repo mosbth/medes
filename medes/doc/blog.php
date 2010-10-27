@@ -1,8 +1,8 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Blog";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "Blog";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 
@@ -25,4 +25,4 @@ phpmedes is the simpler variant of phpersia. First phpmedes, then phpersia. That
 </p>
 </article>
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>

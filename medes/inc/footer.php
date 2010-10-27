@@ -1,8 +1,5 @@
 </div> <!-- content -->
 
-<!-- This is the standard footer of the page -->
-<?php $refToThisPage = createLinkToCurrentPage(); ?>
-
 <footer id="bottom">
 
 	<nav>
@@ -16,9 +13,9 @@
 		<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">CSS3</a>
 		<a href="http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance">Unicorn</a>
 		<a href="http://www.w3.org/2009/cheatsheet/">Cheatsheet</a>
-		<a href="http://validator.w3.org/checklink?uri=<?php echo $refToThisPage; ?>">Link Checker</a>
+		<a href="http://validator.w3.org/checklink?uri=<?php echo $pp->GetUrlToCurrentPage(); ?>">Link Checker</a>
 		<a href="http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=<?php echo $refToThisPage; ?>">i18n Checker</a>
-		<a href="http://web-sniffer.net/?url=<?php echo $refToThisPage; ?>">Check header</a>
+		<a href="http://web-sniffer.net/?url=<?php echo $pp->GetUrlToCurrentPage(); ?>">Check header</a>
 	</nav>
 	
 	<nav>
@@ -30,15 +27,15 @@
 		<a href="http://www.sqlite.org/lang.html">SQL (SQLite)</a>
 	</nav>
 
-	<div class="final">
-		<p>
-		The content on this site is licensed according to  
-		<a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a>
-		or any later version. The software phpmedes is free software, open source, licensed according to 
-		<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License version 3</a>.
-		</p>
-	</div>
+	<p class=license>
+	The content on this site is licensed according to  
+	<a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a>
+	or any later version. The software phpmedes is free software, open source, licensed according to 
+	<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License version 3</a>.
+	</p>
 	
+	<p class=medes>This site is built using <a href="http://phpmedes.org/">the free and opensource software named phpmedes</a>.</p>
+
 </footer>
 </body>
 	

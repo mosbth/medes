@@ -1,8 +1,8 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Features";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "Features";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 <article>
@@ -14,4 +14,4 @@ before that.
 </article>
 
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>

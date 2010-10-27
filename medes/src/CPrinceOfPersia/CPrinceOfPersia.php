@@ -1,9 +1,10 @@
 <?php
 // ===========================================================================================
 //
-// File: CConfigSite.php
+// File: CPrinceOfPersia.php
 //
-// Description: A global config-object containing values and method used all over the site.
+// Description: The master of phpmedes. Controls configuration and setup. 
+// It does a lot of things, just like a real Prince should do.
 //
 // Author: Mikael Roos
 //
@@ -11,13 +12,13 @@
 // 2010-10-21: Created
 //
 
-class CConfigSite {
+class CPrinceOfPersia {
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Protected internal variables
+	// Internal variables
 	//
-	protected static $iInstance = NULL;
+	protected static $iInstance = null;
 		
 	
 	// ------------------------------------------------------------------------------------
@@ -30,6 +31,9 @@ class CConfigSite {
 	
 	// site-related
 	public $siteUrl;
+
+	// current page-related
+	protected static $currentUrl = null; // get this value though the method GetUrlToCurrentPage()
 
 	// page-related
 	public $pageTitle;
@@ -59,7 +63,7 @@ class CConfigSite {
 		session_start();
 
 		// path to medes installation directory
-		$this->medesPath = realpath(dirname(__FILE__).'/../');
+		$this->medesPath = realpath(dirname(__FILE__).'/../../');
 
 		// Set default values to be empty
 		$this->pageTitle='';
@@ -68,9 +72,6 @@ class CConfigSite {
 		$this->pageAuthor='';
 		$this->pageCopyright='';
 		$this->googleAnalytics='';
-
-		// Replace this to methods in this object
-		include("functions.php");
 	
 	}
 	
@@ -84,13 +85,13 @@ class CConfigSite {
 	
 	// ------------------------------------------------------------------------------------
 	//
-	// Get the instance of the latest created object or create a new one. 
 	// Singleton pattern.
+	// Get the instance of the latest created object or create a new one. 
 	//
 	public static function GetInstance() {
 	
 		if(self::$iInstance == NULL) {
-			self::$iInstance = new CConfigSite();
+			self::$iInstance = new CPrinceOfPersia();
 		}
 		return self::$iInstance;
 	}
@@ -114,14 +115,55 @@ class CConfigSite {
 	//
 	// Get the link to the current page. 
 	//
-	public function GetLinkToCurrentPage() {
-		$link = "http";
-		$link .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
-		$link .= "://";
-		$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
-		(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
-		$link .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
-		return $link;
+	public static function GetUrlToCurrentPage() {
+		if(!$self->currentUrl) {
+			$self->currentUrl = "http";
+			$self->currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
+			$self->currentUrl .= "://";
+			$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
+			(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
+			$self->currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
+		}
+		return $self->currentUrl;
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Manages to gain or loose the admin access. 
+	//
+	public function GainOrLooseAdminAccess() {
+
+		// Try to gain admin access
+		if(isset($_GET['doGainAdminAccess'])) {
+			$html = <<<EOD
+<form action=? method=post>
+	<fieldset class=standard>
+		<legend>gain admin access</legend>
+		<input type=password name=password>
+		<input type=submit name=doCheckAdminPassword value=Login>
+	</fieldset>
+</form>
+EOD;
+			return $html;		
+		}
+
+		// Check the admin password and set admin access if correct
+		if(isset($_POST['doCheckAdminPassword'])) {
+			// check pwd 
+			$_SESSION['hasAdminAccess'] = true;
+		}
+
+		// Loose admin access
+		if(isset($_GET['doLooseAdminAccess'])) {
+			$_SESSION['hasAdminAccess'] = false;			
+		}
+
+		// Does user already has admin access?
+		if(isset($_SESSION['hasAdminAccess']) && $_SESSION['hasAdminAccess'] === true) {
+			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
+		}
+		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
 	}
 
 

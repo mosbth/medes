@@ -16,11 +16,11 @@ function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassNa
 //
 // Create a $cfg-object for this site and and set its values
 //
-$cfg = CConfigSite::GetInstance();
+$pp = CConfigSite::GetInstance();
 
 // Set the link to this site. Can this be figured out dynamically?
 // Leave empty-string if site is on top of website
-$cfg->siteUrl = "/medes";
+$pp->siteUrl = "/medes";
 
 
 // -------------------------------------------------------------------------------------------
@@ -36,10 +36,10 @@ $cfg->siteUrl = "/medes";
 //
 // Review the file inc/header.php to see how the variables are used.
 //
-$cfg->pageKeywords 		= 'General keywords for this site/page';
-$cfg->pageDescription	= 'General description for this site/page';
-$cfg->pageAuthor 			= 'Author of this site/page';
-$cfg->pageCopyright 	= 'Copyright for this site/page';
+$pp->pageKeywords 		= 'General keywords for this site/page';
+$pp->pageDescription	= 'General description for this site/page';
+$pp->pageAuthor 			= 'Author of this site/page';
+$pp->pageCopyright 		= 'Copyright for this site/page';
 
 
 // -------------------------------------------------------------------------------------------

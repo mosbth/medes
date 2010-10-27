@@ -1,8 +1,8 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "Addons";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "Addons";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 
@@ -20,4 +20,4 @@ will be included in phpmedes and used as an example on how to build an addon.
 </p>
 </article>
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>

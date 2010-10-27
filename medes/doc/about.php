@@ -1,8 +1,8 @@
 <?php
 require_once("../config.php");
-$cfg->pageTitle = "About";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "About";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 <article>
@@ -17,4 +17,4 @@ built using PHP, HTML and CSS.
 </p>
 </article>
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>

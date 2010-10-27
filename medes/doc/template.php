@@ -1,8 +1,8 @@
 <?php 
 require_once("../config.php");
-$cfg->pageTitle = "Template";
-//$cfg->Dump();
-include($cfg->medesPath . "/inc/header.php");
+$pp->pageTitle = "Template";
+//$pp->Dump();
+include($pp->medesPath . "/inc/header.php");
 ?>
 
 <article>
@@ -10,4 +10,4 @@ include($cfg->medesPath . "/inc/header.php");
 <p>Copy this file, save it with a new name and edit its content to create a new webpage.
 </article>
 
-<?php include($cfg->medesPath . "/inc/footer.php"); ?>
+<?php include($pp->medesPath . "/inc/footer.php"); ?>
