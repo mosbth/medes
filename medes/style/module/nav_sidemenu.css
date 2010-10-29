@@ -2,7 +2,8 @@
 
 nav.sidemenu{}
 nav.sidemenu a{display:list-item;list-style:none;font-size:smaller;}
-nav.sidemenu a:hover,nav a#sel{background:#ccc;}
+nav.sidemenu a:hover,
+nav.sidemenu a#sel{background:#eee;}
 
-nav.sidemenu a.header{font-weight:bold;font-size:larger;}
+nav.sidemenu a.header{font-weight:bold;margin-bottom:1em;}
 nav.sidemenu a.subheader{margin-top:1em;font-weight:bold;}

@@ -6,10 +6,10 @@ header#top{overflow:auto;}
 header#top img{border:0;} /* no border when linking logo-image */
 div#content{min-height:20em;margin-bottom:2em;}
 article,aside{display:block;overflow:auto;}
-article{width:600px;text-align:justify;}
+article{width:600px;padding-right:10em;text-align:justify;}
 
-aside{float:right;}
-aside.box{width:250px;margin-top:1em;padding:1em;border-left:2px dashed #eee;}
+aside{float:right;width:250px;}
+aside.box{margin-top:1em;padding:1em;border-left:2px dashed #eee;}
 aside.box a {word-wrap:break-word;}
 
 div.color{width:20px;height:20px;float:left;}

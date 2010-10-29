@@ -64,7 +64,7 @@
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/docs.php"; ?>">docs</a> 
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/blog.php"; ?>">blog</a> 
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/adm/home.php"; ?>">adm</a> 
+	<a href="<?php echo $pp->siteUrl . "/medes/adm.php"; ?>">adm</a> 
 </nav>
 
 
