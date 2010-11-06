@@ -18,7 +18,8 @@ class CPrinceOfPersia {
 	//
 	// Internal variables
 	//
-	protected static $iInstance = null;
+	protected static $instance = null;
+	private $config;
 		
 	
 	// ------------------------------------------------------------------------------------
@@ -72,7 +73,8 @@ class CPrinceOfPersia {
 		$this->pageAuthor='';
 		$this->pageCopyright='';
 		$this->googleAnalytics='';
-	
+
+		$this->ReadConfigFromFile();
 	}
 	
 	
@@ -90,10 +92,10 @@ class CPrinceOfPersia {
 	//
 	public static function GetInstance() {
 	
-		if(self::$iInstance == NULL) {
-			self::$iInstance = new CPrinceOfPersia();
+		if(self::$instance == NULL) {
+			self::$instance = new CPrinceOfPersia();
 		}
-		return self::$iInstance;
+		return self::$instance;
 	}
 
 
@@ -116,15 +118,15 @@ class CPrinceOfPersia {
 	// Get the link to the current page. 
 	//
 	public static function GetUrlToCurrentPage() {
-		if(!$self->currentUrl) {
-			$self->currentUrl = "http";
-			$self->currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
-			$self->currentUrl .= "://";
+		if(!self::$currentUrl) {
+			self::$currentUrl = "http";
+			self::$currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
+			self::$currentUrl .= "://";
 			$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
 			(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
-			$self->currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
+			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
 		}
-		return $self->currentUrl;
+		return self::$currentUrl;
 	}
 
 
@@ -167,4 +169,43 @@ EOD;
 	}
 
 
+	// ------------------------------------------------------------------------------------
+	//
+	// Set the administrator password
+	//
+	public function SetAdminPassword($aPwd, $aFunction='md5') {
+		
+		$this->config['password'] = array('function'=>$aFunction, 'password'=>call_user_func($aEncryptionFunction, $aPwd));
+		$this->StoreConfigToFile();
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Store configuration settings to file
+	//
+	public function StoreConfigToFile() {
+		
+		if(is_writable($this->medesPath . '/data/config.php')) {
+			file_put_contents($this->medesPath . '/data/config.php', serialize($this->config));
+		} else {
+			echo "Could";
+		}	
+		();
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Read configuration settings from file
+	//
+	public function ReadConfigFromFile() {
+		
+		if(is_readable($this->medesPath . '/data/config.php')) {
+			$this->config = unserialize(file_get_contents($this->medesPath . '/data/config.php'));
+		} else {
+			// data/config.php does not exists, redirect to installation procedure
+		}	
+	}
+	
 }

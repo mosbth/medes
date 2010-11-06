@@ -14,7 +14,7 @@
 		<a href="http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance">Unicorn</a>
 		<a href="http://www.w3.org/2009/cheatsheet/">Cheatsheet</a>
 		<a href="http://validator.w3.org/checklink?uri=<?php echo $pp->GetUrlToCurrentPage(); ?>">Link Checker</a>
-		<a href="http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=<?php echo $refToThisPage; ?>">i18n Checker</a>
+		<a href="http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=<?php echo $pp->GetUrlToCurrentPage(); ?>">i18n Checker</a>
 		<a href="http://web-sniffer.net/?url=<?php echo $pp->GetUrlToCurrentPage(); ?>">Check header</a>
 	</nav>
 	

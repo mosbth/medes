@@ -45,6 +45,8 @@ body{color:#003;}
 div.logo p#label{text-shadow: 1px 1px 1px $col1, -1px -1px 1px #003;color:#005;}
 div.logo p#tagline{color:#003;}
 
+aside{border-color:#eef !important;}
+
 nav.mainmenu{background:#88f;border:1px 0px 1px 0px solid #eef;}
 nav.mainmenu a{color:#003;border-left:1px solid #aaf;}
 nav.mainmenu a:last-child{border-right:1px solid #aaf;}

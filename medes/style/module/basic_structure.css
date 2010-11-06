@@ -1,21 +1,27 @@
 /* Basic structure for the page */
 html{overflow-y:scroll;}
 body{background:white;margin:8px auto;width:850px;color:#222;}
-header,footer,nav,article,aside{display:block;}
+header,footer,nav,article,aside{display:block;overflow:auto;}
 header#top{overflow:auto;} 
 header#top img{border:0;} /* no border when linking logo-image */
 div#content{min-height:20em;margin-bottom:2em;}
-article,aside{display:block;overflow:auto;}
-article{width:600px;padding-right:10em;text-align:justify;}
 
-aside{float:right;width:250px;}
-aside.box{margin-top:1em;padding:1em;border-left:2px dashed #eee;}
-aside.box a {word-wrap:break-word;}
+/* 2 col layout with article and aside */
+div.2col article{width:592px;text-align:justify;}
+div.2col aside{width:240px;float:right;margin-top:1em;padding-left:8px;border-left:2px dashed #eee;}
 
+/* default layout of article and aside is the 2 col layout */
+div#content article{width:592px;text-align:justify;}
+div#content aside{width:232px;float:right;margin-top:1em;padding:0 8px 1em 8px;border-left:2px dashed #eee;}
+
+/*aside.box a {word-wrap:break-word;}*/
+
+/* custom to display colors */
 div.color{width:20px;height:20px;float:left;}
 div.color:after{clear:both;}
 
-a{color:inherit;}
+/* links */
+a{color:inherit;outline:0;}
 a:link{}
 a:visited{}
 a:hover{text-decoration:none;color:#222;background:#eee;}

@@ -1,0 +1,13 @@
+/* Debug stylesheet for phpmedes */
+
+@import url(stylesheet_default.css);
+
+body{border:1px solid black;}
+header{border:1px solid blue;}
+footer{border:1px solid green;}
+nav{border:1px solid yellow;}
+
+article{border:1px solid red;}
+aside{border:1px solid lime;}
+aside.box{border:1px solid plum;}
+

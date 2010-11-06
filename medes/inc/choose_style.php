@@ -41,6 +41,7 @@ $styles = Array(
 		"red" 			=> Array("title" => "phpmedes red", 		"path" => "/medes/style/stylesheet_red.css"),	
 		"green" 		=> Array("title" => "phpmedes green", 	"path" => "/medes/style/stylesheet_green.css"),	
 		"blue" 			=> Array("title" => "phpmedes blue", 		"path" => "/medes/style/stylesheet_blue.css"),	
+		"debug" 		=> Array("title" => "phpmedes debug", 	"path" => "/medes/style/stylesheet_debug.css"),	
 	);
 
 

@@ -1,0 +1,113 @@
+/* General settings for fieldset/forms */
+
+fieldset.standard {
+/*
+border: 2px #ccc solid;
+padding-top: 1em;
+*/
+}
+
+fieldset.standard output {
+	clear:both;
+	font-size:smaller;
+	font-style:italic;
+}
+
+/* Wrapper around form items */
+/*
+fieldset.standard div.form-wrapper {}
+fieldset.standard div.form-wrapper:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+}
+*/
+
+/* legend */
+fieldset.standard legend {
+/*
+border:3px solid #ccc;
+padding: 0.2em 0.4em 0.2em 0.2em;
+font-family: inherit;
+font-size: 1.2em;
+text-transform: uppercase; 
+font-weight: bold;
+*/
+}
+/*fieldset.standard legend:first-letter { font-size: 1.3em; }*/
+
+/* label */
+fieldset.standard label {
+/*
+clear: both;
+float:left;
+padding-right: 0.5em;
+text-align: left;
+*/
+}
+
+/* input */
+fieldset.standard input {
+/*
+width: 24em;
+height: 2em;
+font-size: 1.2em;
+*/
+}
+
+/* textarea */
+fieldset.standard textarea {
+font-family: inherit;
+font-size: 1.2em;
+min-width: 24em;
+padding-top: 0.5em;
+padding-bottom: 0.5em;
+}
+
+/* buttonbar, container for several buttons */
+fieldset.standard div.buttonbar {
+clear: both;
+float: right;
+margin-top: 1em;
+}
+
+/* button */
+fieldset.standard button {
+/*
+clear: left;
+height: 2em;
+font-size: 1.2em;
+text-transform: uppercase; 
+font-weight: bold;
+*/}
+
+
+/* status message */
+fieldset.standard output {
+float: left;
+margin-top: 1em;
+}
+
+fieldset.standard p { margin-bottom: 2em; }
+
+/* readonly items */
+fieldset.standard input[readonly],
+fieldset.standard textarea[readonly] { color: #999; }
+
+/* Captha, as in CCaptcha.php */
+fieldset.standard div.captcha { float: right; }
+fieldset.standard div.captcha div.image { float: left;}
+fieldset.standard div.captcha div.menu { float: right;}
+fieldset.standard div.captcha div.label { clear: both; }
+fieldset.standard div.captcha input { }
+
+
+/* ----------------------------------------------------------------------------------------------- */
+/*  labels to left, items to right, 1 item per row */
+fieldset.left-to-right-centered {padding:2em;}
+fieldset.left-to-right-centered div.wrapper{margin:auto;width:300px;}
+fieldset.left-to-right-centered label{display:block;height:1.5em;}
+fieldset.left-to-right-centered labfel:before{clear:both;}
+fieldset.left-to-right-centered input{float:right;}

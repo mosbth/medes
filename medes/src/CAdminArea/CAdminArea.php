@@ -20,9 +20,9 @@ class CAdminArea {
 	// Protected internal variables
 	//
 	protected static $menu = array(
-		"item0" => array("text"=>"/admin area/", "url"=>"", "title"=>"Administrate and configure the site and its addons"),
+		"home" => array("text"=>"/admin area/", "url"=>"adm.php", "title"=>"Administrate and configure the site and its addons"),
 		"sep0" => array("text"=>"-", "url"=>"#"),
-		"item1" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change admin password"),
+		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
 		"sep1" => array("text"=>"-", "url"=>"#"),
 		"item2" => array("text"=>"site link", "url"=>"#"),
 		"item3" => array("text"=>"meta", "url"=>"#"),
@@ -36,12 +36,8 @@ class CAdminArea {
 	);
 
 	protected static $pages = array(
-		"home" => "<h1>Admin Area</h1>
-			<p>Here you can change global settings of the site.",
-
-		"changepwd" => "<h1>Change password</h1>
-			<p>Change the administrator password. This password enables access to the admin area and
-			enables to change all site configuration.</p>",
+		"home" => array("file"=>"home.php", "title"=>"Home of admin area"),
+		"changepwd" => array("file"=>"changepwd.php", "title"=>"Admin area: change password"),
 	);
 
 
@@ -67,27 +63,36 @@ class CAdminArea {
 	
 	// ------------------------------------------------------------------------------------
 	//
-	// Frontcontroller to this object, manages what happens. 
+	// Frontcontroller. Redirect to choosen page and return the resulting html. 
 	//
 	public static function DoIt() {
+		
+		// Check and get the durrent page referer
+		$p = isset($_GET['p']) && array_key_exists($_GET['p'], self::$pages) ? $_GET['p'] : 'home'; 		
+		
+		// Set the current menu choice to active
+		self::$menu[$p]['active'] = 'active';
 
-		$p = isset($_GET['p']) ? $_GET['p'] : 'home'; 
-
+		// Prepare the html fot the page
 		$access = self::GainOrLooseAdminAccess();
 		$menu = CNavigation::GenerateMenu(self::$menu, false, 'sidemenu');
-		$page = self::$pages[$p];
-		$html = <<<EOD
+		
+		// Create a template page using nowdoc, must end with empty row
+		$template = <<<'EOT'
+echo <<<EOD
 <aside>
-	<aside class=box>
-		<p>{$access}</p>
-		{$menu}
-	</aside>
+	{$access}
+	{$menu}
 </aside>
 <article>
 	{$page}
-</article>		
+</article>	
 EOD;
-		return $html;
+
+EOT;
+
+		// Process the actutal page
+		require(dirname(__FILE__) . "/" . self::$pages[$p]['file']);
 	}
 
 
@@ -128,6 +133,19 @@ EOD;
 			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
 		}
 		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Frontcontroller to this object, manages what happens. 
+	//
+	public static function Callback_changepwd() {
+
+		$html = <<<EOD
+moped
+EOD;
+		return $html;
 	}
 
 

@@ -7,6 +7,7 @@
 @import url(module/nav_sidemenu.css);
 @import url(module/nav_breadcrumb.css);
 @import url(module/footer.css);
+@import url(module/form.css);
 @import url(module/blog.css);
 
 body{font-family:georgia,serif;}

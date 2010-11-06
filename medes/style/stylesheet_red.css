@@ -44,6 +44,8 @@ body{color:#300;}
 div.logo p#label{text-shadow: 1px 1px 1px $col1, -1px -1px 1px #300;color:#500;}
 div.logo p#tagline{color:#300;}
 
+aside{border-color:#fee !important;}
+
 nav.mainmenu{background:#f88;border:1px 0px 1px 0px solid #fee;}
 nav.mainmenu a{color:#300;border-left:1px solid #faa;}
 nav.mainmenu a:last-child{border-right:1px solid #faa;}
