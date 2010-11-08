@@ -19,7 +19,7 @@ class CPrinceOfPersia {
 	// Internal variables
 	//
 	protected static $instance = null;
-	private $config;
+	public $config;
 		
 	
 	// ------------------------------------------------------------------------------------
@@ -45,6 +45,7 @@ class CPrinceOfPersia {
 	
 	// various
 	public $googleAnalytics;
+	public $navbar;
 	
 	
 	// ------------------------------------------------------------------------------------
@@ -56,15 +57,21 @@ class CPrinceOfPersia {
 		// Full error reporting
 		error_reporting(-1); 
 
-		// Change to real sitelink when knowing how to extract it...
-		$this->siteUrl = $_SERVER["SERVER_NAME"];
+		// set default exception handler
+		set_exception_handler(array($this, 'DefaultExceptionHandler'));
 
 		// Start a named session
-		session_name(preg_replace('/[:\.\/-_]/', '', $this->siteUrl));
+		session_name(preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]));
 		session_start();
 
 		// path to medes installation directory
 		$this->medesPath = realpath(dirname(__FILE__).'/../../');
+
+		// Get defaults from the configuration file
+		$this->ReadConfigFromFile();
+
+		// Set the siteurl from the stored configuration
+		$this->siteUrl = $this->config['siteurl'];
 
 		// Set default values to be empty
 		$this->pageTitle='';
@@ -74,7 +81,22 @@ class CPrinceOfPersia {
 		$this->pageCopyright='';
 		$this->googleAnalytics='';
 
-		$this->ReadConfigFromFile();
+
+		$this->navbar = array(
+			"1" => array("text"=>"home", "url"=>"medes/doc/home.php", "title"=>"Go home"),
+			"2" => array("text"=>"showcase", "url"=>"medes/doc/showcase.php", "title"=>"See some live sites showing off"),
+			"3" => array("text"=>"features", "url"=>"medes/doc/features.php", "title"=>"features"),
+			"4" => array("text"=>"style", "url"=>"medes/doc/style.php", "title"=>"style"),
+			"5" => array("text"=>"addons", "url"=>"medes/doc/addons.php", "title"=>"addons"),
+			"6" => array("text"=>"download", "url"=>"medes/doc/download.php", "title"=>"download"),
+			"7" => array("text"=>"contribute", "url"=>"medes/doc/contribute.php", "title"=>"contribute"),
+			"8" => array("text"=>"docs", "url"=>"medes/doc/docs.php", "title"=>"docs"),
+			"9" => array("text"=>"blog", "url"=>"medes/doc/blog.php", "title"=>"blog"),
+			"10" => array("text"=>"about", "url"=>"medes/doc/about.php", "title"=>"about"),
+			"11" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"adm"),
+		);
+
+
 	}
 	
 	
@@ -104,13 +126,37 @@ class CPrinceOfPersia {
 	// Dump current settings. 
 	//
 	public function Dump() {
-		echo "<pre>"; 
+		$html = "<pre>"; 
     foreach($this as $key => $val) {
-    	echo "$key = " . htmlentities($val) . "\n";
+   		if(is_array($val)) {
+    		$html .= "$key = " . htmlentities(print_r($val, true)) . "\n";
+    	} else {
+    		$html .= "$key = " . htmlentities($val) . "\n";
+    	}
     }
-    print_r($_SERVER);
-    echo "</pre>";
+    $html .= "</pre>";
+    
+    return $html;
 	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Create a common exception handler 
+	//
+	public static function DefaultExceptionHandler($aException) {
+  	die("<p>File " . $aException->getFile() . " at line" . $aException->getLine() ."<br>Uncaught exception: " . $aException->getMessage());
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get html for navbar 
+	//
+	public function GetHTMLForNavbar() {
+		//self::$menu[$p]['active'] = 'active';
+		return CNavigation::GenerateMenu($this->config['navbar'], false, 'mainmenu');		
+  }
 
 
 	// ------------------------------------------------------------------------------------
@@ -172,10 +218,44 @@ EOD;
 	// ------------------------------------------------------------------------------------
 	//
 	// Set the administrator password
+	//  $aPwd: the password in plain text
+	//  $aEncryptionFunction: a function that encrypts the password
 	//
-	public function SetAdminPassword($aPwd, $aFunction='md5') {
+	public function SetAdminPassword($aPwd, $aEncryptionFunction='sha1') {
 		
-		$this->config['password'] = array('function'=>$aFunction, 'password'=>call_user_func($aEncryptionFunction, $aPwd));
+		$timestamp = md5(microtime());
+		$this->config['password'] = array(
+			'function'=>$aEncryptionFunction,
+			'timestamp'=>$timestamp,
+			'password'=>call_user_func($aEncryptionFunction, $timestamp.$aPwd.$timestamp),
+		);
+		$this->StoreConfigToFile();
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Set the siteurl
+	//  $aSiteUrl: string
+	// 
+	public function SetSiteUrl($aSiteUrl) {
+		
+		$this->config['siteurl'] = $aSiteUrl;
+		$this->siteUrl = $aSiteUrl;
+		$this->StoreConfigToFile();
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Update configuration information and save it
+	//  $aArray: an array with configuration values to save
+	//
+	public function UpdateConfiguration($aArray) {
+		
+		foreach($aArray as $key => $val) {
+			$this->config[$key] = $val;
+		}
 		$this->StoreConfigToFile();
 	}
 
@@ -186,12 +266,12 @@ EOD;
 	//
 	public function StoreConfigToFile() {
 		
-		if(is_writable($this->medesPath . '/data/config.php')) {
-			file_put_contents($this->medesPath . '/data/config.php', serialize($this->config));
+		$className = get_class($this) ;
+		if(is_writable($this->medesPath . '/data/')) {
+			file_put_contents($this->medesPath . "/data/{$className}_config.php", serialize($this->config));
 		} else {
-			echo "Could";
+			throw new Exception('Failed to store CPrinceOfPercia configuration to file.');
 		}	
-		();
 	}
 
 
@@ -201,8 +281,9 @@ EOD;
 	//
 	public function ReadConfigFromFile() {
 		
-		if(is_readable($this->medesPath . '/data/config.php')) {
-			$this->config = unserialize(file_get_contents($this->medesPath . '/data/config.php'));
+		$className = get_class($this) ;
+		if(is_readable($this->medesPath . "/data/{$className}_config.php")) {
+			$this->config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config.php"));
 		} else {
 			// data/config.php does not exists, redirect to installation procedure
 		}	

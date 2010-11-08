@@ -24,20 +24,27 @@ class CAdminArea {
 		"sep0" => array("text"=>"-", "url"=>"#"),
 		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
 		"sep1" => array("text"=>"-", "url"=>"#"),
-		"item2" => array("text"=>"site link", "url"=>"#"),
-		"item3" => array("text"=>"meta", "url"=>"#"),
-		"item4" => array("text"=>"tracker", "url"=>"#"),
+		"sitelink" => array("text"=>"site link", "url"=>"?p=sitelink", "title"=>"Set the main link to the site"),
+		"meta" => array("text"=>"meta",  "url"=>"?p=meta", "title"=>"Set default meta tags to enhace search enginge visibility"),
+		"tracker" => array("text"=>"tracker",  "url"=>"?p=tracker", "title"=>"Track site using Google Analytics"),
 		"sep2" => array("text"=>"-", "url"=>"#"),
-		"item5" => array("text"=>"top-left navigation", "url"=>"#"),
-		"item6" => array("text"=>"navigation bar", "url"=>"#"),
-		"item7" => array("text"=>"footer", "url"=>"#"),
-		"sep3" => array("text"=>"-", "url"=>"#"),
-		"item8" => array("text"=>"addons enable/disable", "url"=>"#"),
+//		"item5" => array("text"=>"top-left navigation", "url"=>"#"),
+		"navbar" => array("text"=>"navigation bar", "url"=>"?p=navbar", "title"=>"Define the navigation bar (main menu) of the site"),
+//		"item7" => array("text"=>"footer", "url"=>"#"),
+//		"sep3" => array("text"=>"-", "url"=>"#"),
+//		"item8" => array("text"=>"addons enable/disable", "url"=>"#"),
+		"sep4" => array("text"=>"-", "url"=>"#"),
+		"debug" => array("text"=>"debug", "url"=>"?p=debug", "title"=>"Print out debug information and current configuration"),
 	);
 
 	protected static $pages = array(
 		"home" => array("file"=>"home.php", "title"=>"Home of admin area"),
 		"changepwd" => array("file"=>"changepwd.php", "title"=>"Admin area: change password"),
+		"sitelink" => array("file"=>"sitelink.php", "title"=>"Admin area: set sitelink"),
+		"meta" => array("file"=>"meta.php", "title"=>"Admin area: set meta information"),
+		"tracker" => array("file"=>"tracker.php", "title"=>"Admin area: enable tracking using Google Analytics"),
+		"navbar" => array("file"=>"navbar.php", "title"=>"Admin area: set navigation bar, the main menu)"),
+		"debug" => array("file"=>"debug.php", "title"=>"Admin area: print out debug and config information"),
 	);
 
 
@@ -67,19 +74,24 @@ class CAdminArea {
 	//
 	public static function DoIt() {
 		
+		$pp = CPrinceOfPersia::GetInstance();
+		
 		// Check and get the durrent page referer
 		$p = isset($_GET['p']) && array_key_exists($_GET['p'], self::$pages) ? $_GET['p'] : 'home'; 		
 		
 		// Set the current menu choice to active
 		self::$menu[$p]['active'] = 'active';
 
-		// Prepare the html fot the page
-		$access = self::GainOrLooseAdminAccess();
+		// Prepare the html for the page
+		$pp->pageTitle = self::$pages[$p]['title'];
+		$access = $pp->GainOrLooseAdminAccess();
 		$menu = CNavigation::GenerateMenu(self::$menu, false, 'sidemenu');
 		
-		// Create a template page using nowdoc, must end with empty row
-		$template = <<<'EOT'
-echo <<<EOD
+		// Process the actual page and fill in $page
+		require(dirname(__FILE__) . "/" . self::$pages[$p]['file']);
+
+		// Return the resulting page
+		$html = <<<EOD
 <aside>
 	{$access}
 	{$menu}
@@ -89,62 +101,6 @@ echo <<<EOD
 </article>	
 EOD;
 
-EOT;
-
-		// Process the actutal page
-		require(dirname(__FILE__) . "/" . self::$pages[$p]['file']);
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Manages to gain or loose the admin access. 
-	//
-	public static function GainOrLooseAdminAccess() {
-
-		// Try to gain admin access
-		if(isset($_GET['doGainAdminAccess'])) {
-			$html = <<<EOD
-<form action=? method=post>
-	<fieldset class=standard>
-		<legend>gain admin access</legend>
-		<input type=password name=password>
-		<input type=submit name=doCheckAdminPassword value=Login>
-		<input type=submit name=noAction value=Cancel>
-	</fieldset>
-</form>
-EOD;
-			return $html;		
-		}
-
-		// Check the admin password and set admin access if correct
-		if(isset($_POST['doCheckAdminPassword'])) {
-			// check pwd 
-			$_SESSION['hasAdminAccess'] = true;
-		}
-
-		// Loose admin access
-		if(isset($_GET['doLooseAdminAccess'])) {
-			$_SESSION['hasAdminAccess'] = false;			
-		}
-
-		// Does user already has admin access?
-		if(isset($_SESSION['hasAdminAccess']) && $_SESSION['hasAdminAccess'] === true) {
-			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
-		}
-		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Frontcontroller to this object, manages what happens. 
-	//
-	public static function Callback_changepwd() {
-
-		$html = <<<EOD
-moped
-EOD;
 		return $html;
 	}
 

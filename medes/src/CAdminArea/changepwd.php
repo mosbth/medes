@@ -23,6 +23,7 @@ if(isset($_POST['doChangePassword'])) {
 
 	// Change the current password
 	else {
+		CPrinceOfPersia::GetInstance()->SetAdminPassword($pwd1);
 		$output = "The password is changed.";
 	}
 }
@@ -30,19 +31,19 @@ if(isset($_POST['doChangePassword'])) {
 
 // ------------------------------------------------------------------------------
 //
-// Create and echo the html using the available template
+// Set $page to contain html for the page
 //
 $page = <<<EOD
 <h1>Change password</h1>
 <p>Change the administrator password. The password enables access to the admin area and
 enables to change all site configuration.</p>
 <form action='?p=changepwd' method=post>
-	<fieldset class='standard left-to-right-centered'>
+	<fieldset class='std type1'>
 		<!-- <legend></legend> -->
-		<div class=wrapper>
-			<label>Password:<input class=password type=password name=password1></label>
-			<label>Password (again):<input class=password type=password name=password2></label>
-			<div class='buttonbar'>
+		<div class='wrap wrap60'>
+			<label>Password:<input type=password name=password1></label>
+			<label>Password (again):<input type=password name=password2></label>
+			<div class=buttonbar>
 				<input type=submit name=doChangePassword value='Change password'>
 			</div> 
 			<output>{$output}</output> 
@@ -51,4 +52,3 @@ enables to change all site configuration.</p>
 </form>
 EOD;
 
-eval($template);

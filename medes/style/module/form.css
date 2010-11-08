@@ -1,10 +1,59 @@
 /* General settings for fieldset/forms */
+fieldset.std{}
+fieldset.std legend{}
+fieldset.std div.wrap{}
+fieldset.std div.buttonbar{clear:both;margin-top:1em;}
+fieldset.std output{clear:both;display:block;padding:1em 0 1em 0;font-size:smaller;font-style:italic;}
+
+fieldset.std label{text-align:left;}
+
+fieldset.std select,
+fieldset.std input,
+fieldset.std textarea{font:inherit;}
+
+/*fieldset.std textarea.code{font:small lucida console,monaco,monospace;height:10em;}*/
+fieldset.std textarea.code{font:small courier new,courier,monospace;height:10em;}
+
+fieldset.std input[readonly],
+fieldset.std textarea[readonly] {color:#999;}
+
+/* Standard width */
+fieldset.std div.wrap50{width:50%;}
+fieldset.std div.wrap60{width:60%;}
+fieldset.std div.wrap70{width:70%;}
+
+/* Type1, standard form layout */
+fieldset.type1 div.wrap{margin:auto;margin-top:1em;}
+fieldset.type1 input{float:right;}
+fieldset.type1 label{display:block;height:2em;}
+
+/* Type2, standard form layout */
+fieldset.type2 div.wrap{margin:auto;margin-top:1em;}
+fieldset.type2 input[type=text],
+fieldset.type2 textarea {width:100%;font-size:larger;}
+fieldset.type2 div.buttonbar input{float:right;}
+fieldset.type2 label{display:block;margin-top:1em;font-size:smaller;}
+
+/* Type21, standard form layout */
+fieldset.type21 div.wrap{margin:auto;margin-top:1em;}
+fieldset.type21 div.wrap1{width:30%;float:left;margin-right:1em;}
+fieldset.type21 div.wrap2{width:65%;float:left;}
+fieldset.type21 select{width:100%;font-size:larger;}
+fieldset.type21 input[type=text],
+fieldset.type21 textarea {width:100%;font-size:larger;}
+fieldset.type21 div.wrap2 div.buttonbar input{float:right;}
+fieldset.type21 label{display:block;margin-top:1em;font-size:smaller;}
+
+
+
+
+/* General settings for fieldset/forms 
 
 fieldset.standard {
 /*
 border: 2px #ccc solid;
 padding-top: 1em;
-*/
+
 }
 
 fieldset.standard output {
@@ -25,7 +74,7 @@ visibility: hidden;
 }
 */
 
-/* legend */
+/* legend 
 fieldset.standard legend {
 /*
 border:3px solid #ccc;
@@ -35,10 +84,10 @@ font-size: 1.2em;
 text-transform: uppercase; 
 font-weight: bold;
 */
-}
+
 /*fieldset.standard legend:first-letter { font-size: 1.3em; }*/
 
-/* label */
+/* label 
 fieldset.standard label {
 /*
 clear: both;
@@ -46,9 +95,9 @@ float:left;
 padding-right: 0.5em;
 text-align: left;
 */
-}
 
-/* input */
+
+/* input 
 fieldset.standard input {
 /*
 width: 24em;
@@ -57,34 +106,34 @@ font-size: 1.2em;
 */
 }
 
-/* textarea */
-fieldset.standard textarea {
-font-family: inherit;
-font-size: 1.2em;
+/* textarea 
+fieldset.standard textarea{font-family: inherit;}
+xfieldset.standard textarea.large{width:100%;}
+/*font-size: 1.2em;
 min-width: 24em;
 padding-top: 0.5em;
 padding-bottom: 0.5em;
-}
+*/
 
 /* buttonbar, container for several buttons */
-fieldset.standard div.buttonbar {
+/*div.buttonbar {
 clear: both;
 float: right;
 margin-top: 1em;
 }
-
+*/
 /* button */
-fieldset.standard button {
+/*div.buttonbar button {}
 /*
 clear: left;
 height: 2em;
 font-size: 1.2em;
 text-transform: uppercase; 
 font-weight: bold;
-*/}
+*/
 
 
-/* status message */
+/* status message 
 fieldset.standard output {
 float: left;
 margin-top: 1em;
@@ -92,22 +141,32 @@ margin-top: 1em;
 
 fieldset.standard p { margin-bottom: 2em; }
 
-/* readonly items */
+/* readonly items 
 fieldset.standard input[readonly],
 fieldset.standard textarea[readonly] { color: #999; }
 
-/* Captha, as in CCaptcha.php */
+/* Captha, as in CCaptcha.php 
 fieldset.standard div.captcha { float: right; }
 fieldset.standard div.captcha div.image { float: left;}
 fieldset.standard div.captcha div.menu { float: right;}
 fieldset.standard div.captcha div.label { clear: both; }
 fieldset.standard div.captcha input { }
-
+*/
 
 /* ----------------------------------------------------------------------------------------------- */
-/*  labels to left, items to right, 1 item per row */
+/*  labels to left, items to right, 1 item per row 
 fieldset.left-to-right-centered {padding:2em;}
 fieldset.left-to-right-centered div.wrapper{margin:auto;width:300px;}
 fieldset.left-to-right-centered label{display:block;height:1.5em;}
 fieldset.left-to-right-centered labfel:before{clear:both;}
-fieldset.left-to-right-centered input{float:right;}
+fieldset.left-to-right-centered input,
+fieldset.left-to-right-centered textarea{float:right;}
+
+/* ----------------------------------------------------------------------------------------------- */
+/*  labels to left, items below, full width 
+fieldset.label-value-below {padding:2em;}
+fieldset.label-value-below div.wrapper{margin:auto;width:300px;}
+fieldset.label-value-below label{display:block;height:1.5em;}
+fieldset.label-value-below input,
+fieldset.label-value-below textarea{width:100%;}
+*/

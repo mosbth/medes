@@ -10,8 +10,23 @@ addon blog
 addon pageeditor
 addon stylesheet chooser
 
+# current
+CNavigation (navbar:selected, admin-menu:class per item, admin-menu:separator)
+install empty system 
+topmenu left
+topmenu right (login/logout as admin)
+footer menu
+logo links to sitelink
+change the look of the header with logo/navbar (compact, page, full width)
+change the look of the footer (page, full width)
+addon blog
+addon stylesheet chooser
+
+checker, check whats installed and not (filter_input_array)
+
+
 # v0.1 First development version (2010-10-22)
-First relelase ever.
+First release ever.
 
 #
 # Persia is an improved and more technical version of Medes

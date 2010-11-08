@@ -50,10 +50,10 @@
 </header>
 
 <!-- Top navigation bar -->
-<nav class=mainmenu>
+<?php echo $pp->GetHTMLForNavbar(); ?>
 <!--
+<nav class=mainmenu>
 	<a href="<?php echo $pp->siteUrl . "/blog"; ?>">blog</a> 
--->
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/home.php"; ?>">home</a> 
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/showcase.php"; ?>">showcase</a> 
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/features.php"; ?>">features</a> 
@@ -66,6 +66,7 @@
 	<a href="<?php echo $pp->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
 	<a href="<?php echo $pp->siteUrl . "/medes/adm.php"; ?>">adm</a> 
 </nav>
+-->
 
 
 <!-- Here is the actual content of the page-->
