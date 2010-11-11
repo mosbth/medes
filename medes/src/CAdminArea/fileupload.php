@@ -59,17 +59,12 @@ if(!(is_dir($dir) && is_writable($dir))) {
 //	http://php.net/manual/en/features.file-upload.post-method.php
 //	
 if(!empty($_POST['doFileUpload'])) {
-	$uploaddir = dirname(__FILE__) . "/$imageDir/";
-	$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-
+	$uploadfile = "$dir/" . basename($_FILES['userfile']['name']);
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
     $output .= "Filen laddas upp. ";
 	} else {
     $output .= "Något gick fel när filen laddades upp. ";
 	}
-	
-	// To debug
-	//echo "<pre>"; print_r($_FILES); echo "</pre>";
 }
 
 
@@ -79,7 +74,6 @@ if(!empty($_POST['doFileUpload'])) {
 // Delete images from the server.
 //	
 if(!empty($_GET['doRemoveImage'])) {
-	$dir 	= dirname(__FILE__) . "/$imageDir/";
 	$file = basename(strip_tags($_GET['doRemoveImage']));
 	if(is_file("$dir/$file")) {
 		unlink("$dir/$file");
@@ -93,7 +87,6 @@ if(!empty($_GET['doRemoveImage'])) {
 // DISPLAY LIST OF IMAGES
 // Display the images that were uploaded.
 //
-$dir = dirname(__FILE__) . "/$imageDir/";
 $files = readDirectory($dir);
 sort($files);
 
@@ -103,9 +96,9 @@ foreach($files as $val) {
 	if(is_file("$dir/$val") && isset($parts['extension']) && $parts['extension'] != 'php') {
 		$del = "";
 		if(is_writeable("$dir/$val")) {
-			$del = " <a href='?doRemoveImage=$val' title='Radera bilden'>x</a>";
+			$del = " <a href='?p={$p}&amp;doRemoveImage=$val' title='Radera bilden'>x</a>";
 		}
-		$images	.= "<a href='$imageDir/$val' title='Visa bilden $imageDir/$val'>$val</a>{$del}<br>";
+		$images	.= "<a href='{$pp->siteUrl}/$imageDir/$val' title='Visa bilden {$pp->siteUrl}/$imageDir/$val'>$val</a>{$del}<br>";
 	}
 }
 
@@ -119,7 +112,7 @@ $page = <<<EOD
 <p><a href="{$pp->siteUrl}/{$imageDir}">Följande bilder finns sparade</a>
 <p>{$images}</p>
 
-<form enctype="multipart/form-data" action="?" method=post>
+<form enctype="multipart/form-data" action="?p={$p}" method=post>
  <fieldset>
 	<legend>Upload files and images</legend>
 
