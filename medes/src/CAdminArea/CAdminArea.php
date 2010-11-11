@@ -36,6 +36,8 @@ class CAdminArea {
 //		"sep3" => array("text"=>"-", "url"=>"#"),
 //		"item8" => array("text"=>"addons enable/disable", "url"=>"#"),
 		"sep4" => array("text"=>"-", "url"=>"#"),
+		"fileupload" => array("text"=>"fileupload", "url"=>"?p=fileupload", "title"=>"Upload files and images"),
+		"sep5" => array("text"=>"-", "url"=>"#"),
 		"debug" => array("text"=>"debug", "url"=>"?p=debug", "title"=>"Print out debug information and current configuration"),
 	);
 
@@ -48,6 +50,7 @@ class CAdminArea {
 		"header" => array("file"=>"header.php", "title"=>"Admin area: define the header of the site)"),
 		"navbar" => array("file"=>"navbar.php", "title"=>"Admin area: set navigation bar, the main menu)"),
 		"footer" => array("file"=>"footer.php", "title"=>"Admin area: define the footer of the site)"),
+		"fileupload" => array("file"=>"fileupload.php", "title"=>"Admin area: upload files and images)"),
 		"debug" => array("file"=>"debug.php", "title"=>"Admin area: print out debug and config information"),
 	);
 

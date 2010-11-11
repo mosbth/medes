@@ -28,7 +28,8 @@ class CPrinceOfPersia {
 	//
 	
 	// medes installation related
-	public $medesPath;
+	public $medesPath; // the root of the installation directory and adding medes
+	public $installPath; // the root of the installation directory
 	
 	// site-related
 	public $siteUrl;
@@ -66,6 +67,7 @@ class CPrinceOfPersia {
 
 		// path to medes installation directory
 		$this->medesPath = realpath(dirname(__FILE__).'/../../');
+		$this->installPath = realpath(dirname(__FILE__).'/../../../');
 
 		// Get defaults from the configuration file
 		$this->ReadConfigFromFile();
