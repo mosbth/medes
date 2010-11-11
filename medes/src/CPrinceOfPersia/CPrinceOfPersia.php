@@ -158,8 +158,8 @@ class CPrinceOfPersia {
 	public function GetHTMLForHeader() {
 		//$GLOBALS['GetHTMLForHeader'] = $this->config['header'];
 		//include "var://GetHTMLForHeader";
-		/*return eval("?>" . $this->config['footer'] . "<?php");*/
-		return $this->config['header'];
+		//return $this->config['header'];
+		return eval("?>" . $this->config['header'] . "<?php");
   }
 
 
