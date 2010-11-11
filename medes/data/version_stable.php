@@ -1,0 +1,1 @@
+There is currently no stable version. phpmedes 0.2 is scheduled to be the first stable version with a release date as 2010-12-23.

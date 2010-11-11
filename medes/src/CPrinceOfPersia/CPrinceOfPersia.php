@@ -151,11 +151,32 @@ class CPrinceOfPersia {
 
 	// ------------------------------------------------------------------------------------
 	//
+	// Get html for header 
+	//
+	public function GetHTMLForHeader() {
+		//$GLOBALS['GetHTMLForHeader'] = $this->config['header'];
+		//include "var://GetHTMLForHeader";
+		/*return eval("?>" . $this->config['footer'] . "<?php");*/
+		return $this->config['header'];
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Get html for navbar 
 	//
 	public function GetHTMLForNavbar() {
 		//self::$menu[$p]['active'] = 'active';
 		return CNavigation::GenerateMenu($this->config['navbar'], false, 'mainmenu');		
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get html for footer 
+	//
+	public function GetHTMLForFooter() {
+		return eval("?>" . $this->config['footer'] . "<?php");
   }
 
 

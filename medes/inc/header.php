@@ -32,42 +32,14 @@
 </head>
 <body>
 
-<!-- Top header with logo and navigation -->
-<header id="top">
+<!-- Use PHP to print the form to choose style -->
+<?php echo $formChooseStyle; ?>
 
-	<!-- Use PHP to print the form to choose style -->
-	<?php echo $formChooseStyle; ?>
-
-	<!-- Default phpmedes-logo -->
-	<div class=logo>
-		<p id=label>phpmedes
-		<p id=tagline>dbwebb.se
-	</div>
-
-	<!-- Use an image as logo -->
-	<!-- <img src="img/logo.png" alt="Logo" width=200 height=100> -->
-	
-</header>
+<!-- Get the header of the site, including the main navbar -->
+<?php echo $pp->GetHTMLForHeader(); ?>
 
 <!-- Top navigation bar -->
 <?php echo $pp->GetHTMLForNavbar(); ?>
-<!--
-<nav class=mainmenu>
-	<a href="<?php echo $pp->siteUrl . "/blog"; ?>">blog</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/home.php"; ?>">home</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/showcase.php"; ?>">showcase</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/features.php"; ?>">features</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/style.php"; ?>">style</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/addons.php"; ?>">addons</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/download.php"; ?>">download</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/contribute.php"; ?>">contribute</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/docs.php"; ?>">docs</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/blog.php"; ?>">blog</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/doc/about.php"; ?>">about</a> 
-	<a href="<?php echo $pp->siteUrl . "/medes/adm.php"; ?>">adm</a> 
-</nav>
--->
-
 
 <!-- Here is the actual content of the page-->
 <div id=content>

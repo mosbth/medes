@@ -13,6 +13,7 @@ fieldset.std textarea{font:inherit;}
 
 /*fieldset.std textarea.code{font:small lucida console,monaco,monospace;height:10em;}*/
 fieldset.std textarea.code{font:small courier new,courier,monospace;height:10em;}
+fieldset.std textarea.code-large{font:small courier new,courier,monospace;height:20em;}
 
 fieldset.std input[readonly],
 fieldset.std textarea[readonly] {color:#999;}
