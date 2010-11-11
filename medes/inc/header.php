@@ -32,14 +32,8 @@
 </head>
 <body>
 
-<!-- Use PHP to print the form to choose style -->
-<?php echo $formChooseStyle; ?>
-
 <!-- Get the header of the site, including the main navbar -->
 <?php echo $pp->GetHTMLForHeader(); ?>
-
-<!-- Top navigation bar -->
-<?php echo $pp->GetHTMLForNavbar(); ?>
 
 <!-- Here is the actual content of the page-->
 <div id=content>
