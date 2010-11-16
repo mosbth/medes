@@ -171,7 +171,15 @@ class CPrinceOfPersia {
 	//
 	public function GetHTMLForNavbar() {
 		//self::$menu[$p]['active'] = 'active';
-		return CNavigation::GenerateMenu($this->config['navbar'], false, 'mainmenu');		
+		
+		// treat all relative links as relative to sitelink, therefore prepens sitelink
+		$nav = $this->config['navbar'];
+		foreach($nav as $key => $val) {
+			if(!(strstr('://', $nav[$key]['url']) || $nav[$key]['url'][0] == '/')) {
+				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
+			}
+		}
+		return CNavigation::GenerateMenu($nav, false, 'mainmenu');		
   }
 
 
