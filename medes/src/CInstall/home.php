@@ -13,8 +13,8 @@ $check = "";
 //
 // Create default settings for configuration
 //
-$config['header'] 		= file_get_contents(dirname(__FILE__) . "/data/default/header.php");
-$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/data/default/footer.php");
+$config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
+$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['stylesheet'] = 'stylesheet_compatibility.css';
 
 
