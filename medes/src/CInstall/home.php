@@ -16,6 +16,10 @@ $check = "";
 $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['stylesheet'] = 'stylesheet_compatibility.css';
+$config['navbar'] = array(
+	"template" => array("text"=>"home", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+	"adm" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
+);
 
 if(!isset($pp->config['header'])) {
 	$pp->config['header'] = $config['header'];
@@ -23,6 +27,14 @@ if(!isset($pp->config['header'])) {
 
 if(!isset($pp->config['footer'])) {
 	$pp->config['footer'] = $config['footer'];
+}
+
+if(!isset($pp->config['stylesheet'])) {
+	$pp->config['stylesheet'] = $config['stylesheet'];
+}
+
+if(!isset($pp->config['navbar'])) {
+	$pp->config['navbar'] = $config['navbar'];
 }
 
 
