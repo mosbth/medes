@@ -17,6 +17,14 @@ $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['stylesheet'] = 'stylesheet_compatibility.css';
 
+if(!isset($pp->config['header'])) {
+	$pp->config['header'] = $config['header'];
+}
+
+if(!isset($pp->config['footer'])) {
+	$pp->config['footer'] = $config['footer'];
+}
+
 
 // ------------------------------------------------------------------------------
 //
