@@ -24,6 +24,11 @@ addon stylesheet chooser
 
 checker, check whats installed and not (filter_input_array)
 
+simple style supporting older browsers
+
+check latest version (stable, development)
+link to central download of latest versions
+
 
 # v0.1 First development version (2010-10-22)
 First release ever.

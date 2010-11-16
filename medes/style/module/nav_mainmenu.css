@@ -5,8 +5,10 @@ nav.mainmenu{
 	margin:0;
 	padding:2px 90px 2px 25px;
 	font:12px verdana,geneva,sans-serif;
-	background:#aaa;
-	border:1px 0px 1px 0px solid #eee;
+	background-color:#aaa;
+	border:1px solid #eee;
+	border-left:0;
+	border-right:0;
 }
 nav.mainmenu a{
 	float:left;
@@ -17,11 +19,4 @@ nav.mainmenu a{
 }
 nav.mainmenu a:last-child{border-right:1px solid #ccc;}
 nav.mainmenu a:hover,nav a#sel{background:#ccc;}
-
-/* gradient background if supported */
-nav.mainmenu{
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#999'); 
-background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#999)); 
-background: -moz-linear-gradient(top,  #ccc,  #999); 
-}
 

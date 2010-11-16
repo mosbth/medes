@@ -7,13 +7,16 @@ header#top img{border:0;} /* no border when linking logo-image */
 div#content{min-height:20em;margin-bottom:2em;}
 
 /* 2 col layout with article and aside */
-div.2col article{width:592px;text-align:justify;}
-div.2col aside{width:240px;float:right;margin-top:1em;padding-left:8px;border-left:2px dashed #eee;}
+div.col2 article{width:592px;text-align:justify;}
+div.col2 aside{width:240px;float:right;margin-top:1em;padding-left:8px;border-left:2px dashed #eee;}
 
 /* default layout of article and aside is the 2 col layout */
-div#content article{width:592px;text-align:justify;}
-div#content article.fullwidth{width:824px;text-align:justify;}
+div#content article{width:592px;}
+div#content article.fullwidth{width:824px}
 div#content aside{width:232px;float:right;margin-top:1em;padding:0 8px 1em 8px;border-left:2px dashed #eee;}
+
+/* Different types of article styling */
+div#content article.type1{text-align:justify;}
 
 /*aside.box a {word-wrap:break-word;}*/
 

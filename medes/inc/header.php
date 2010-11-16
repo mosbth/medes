@@ -12,7 +12,7 @@
  		
 	<!-- Stylesheets -->
 	<?php include($pp->medesPath . "/inc/choose_style.php"); ?>
-	<link rel="stylesheet" media="all"   type="text/css" href="<?php echo $pp->siteUrl . $stylePath; ?>"  		title="<?php echo $styleTitle; ?>">
+	<link rel="stylesheet" media="all"   type="text/css" href="<?php echo $pp->PrependWithSiteUrl($stylePath); ?>" title="<?php echo $styleTitle; ?>">
 	<link rel="stylesheet" media="print" type="text/css" href="style/print.css">
 
 	<!-- The small icon displayed by the browser next to the link -->
@@ -20,6 +20,9 @@
 
 	<!-- Use PHP to set the page title dynamic -->
  	<?php echo "<title>$pp->pageTitle</title>"; ?>
+ 	
+	<!-- Set inline style if defined -->
+ 	<?php if(!empty($pp->pageInlineStyle)) echo "<style type='text/css'>{$pp->pageInlineStyle}</style>"; ?>
  	
 	<!-- Help Internet Explorer understand HTML5 elements http://code.google.com/p/html5shiv/ -->
 	<!--[if lt IE 9]>

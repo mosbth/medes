@@ -32,6 +32,7 @@ class CAdminArea {
 		"header" => array("text"=>"header", "url"=>"?p=header", "title"=>"Define the header and logo of the site"),
 		"navbar" => array("text"=>"navigation bar", "url"=>"?p=navbar", "title"=>"Define the navigation bar (main menu) of the site"),
 		"footer" => array("text"=>"footer", "url"=>"?p=footer", "title"=>"Define the footer of the site"),
+		"stylesheet" => array("text"=>"stylesheet", "url"=>"?p=stylesheet", "title"=>"Set and edit the stylesheet"),
 //		"item7" => array("text"=>"footer", "url"=>"#"),
 //		"sep3" => array("text"=>"-", "url"=>"#"),
 //		"item8" => array("text"=>"addons enable/disable", "url"=>"#"),
@@ -47,10 +48,11 @@ class CAdminArea {
 		"sitelink" => array("file"=>"sitelink.php", "title"=>"Admin area: set sitelink"),
 		"meta" => array("file"=>"meta.php", "title"=>"Admin area: set meta information"),
 		"tracker" => array("file"=>"tracker.php", "title"=>"Admin area: enable tracking using Google Analytics"),
-		"header" => array("file"=>"header.php", "title"=>"Admin area: define the header of the site)"),
-		"navbar" => array("file"=>"navbar.php", "title"=>"Admin area: set navigation bar, the main menu)"),
-		"footer" => array("file"=>"footer.php", "title"=>"Admin area: define the footer of the site)"),
-		"fileupload" => array("file"=>"fileupload.php", "title"=>"Admin area: upload files and images)"),
+		"header" => array("file"=>"header.php", "title"=>"Admin area: define the header of the site"),
+		"navbar" => array("file"=>"navbar.php", "title"=>"Admin area: set navigation bar, the main menu"),
+		"footer" => array("file"=>"footer.php", "title"=>"Admin area: define the footer of the site"),
+		"stylesheet" => array("file"=>"stylesheet.php", "title"=>"Admin area: set and edit the stylesheet"),
+		"fileupload" => array("file"=>"fileupload.php", "title"=>"Admin area: upload files and images"),
 		"debug" => array("file"=>"debug.php", "title"=>"Admin area: print out debug and config information"),
 	);
 

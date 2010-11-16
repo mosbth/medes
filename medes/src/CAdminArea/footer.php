@@ -6,9 +6,10 @@
 //
 $output = '';
 $pp = CPrinceOfPersia::GetInstance();
-$footer = $pp->config['footer'];
+$footer = htmlentities($pp->config['footer']);
+//$footer = htmlentities($pp->config['footer'], ENT_NOQUOTES, 'UTF-8', false);
 		
-if(isset($_POST['doSaveHeader'])) {
+if(isset($_POST['doSaveFooter'])) {
 	
 	// Get and validate the incoming parameters
 	$footer = isset($_POST['footer']) ? $_POST['footer'] : "";
@@ -39,7 +40,7 @@ $page = <<<EOD
 		<div class='wrap'>
 			<label>Footer:<textarea class=code-large name=footer>{$footer}</textarea></label>
 			<div class='buttonbar'>
-				<input type=submit name=doSaveHeader value='Save footer html'>
+				<input type=submit name=doSaveFooter value='Save footer html'>
 			</div> 
 			<output>{$output}</output> 
 		</div>

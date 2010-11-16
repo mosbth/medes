@@ -43,6 +43,7 @@ class CPrinceOfPersia {
 	public $pageDescription;
 	public $pageAuthor;
 	public $pageCopyright;
+	public $pageInlineStyle;
 	
 	// various
 	public $googleAnalytics;
@@ -81,6 +82,7 @@ class CPrinceOfPersia {
 		$this->pageDescription='';
 		$this->pageAuthor='';
 		$this->pageCopyright='';
+		$this->pageInlineStyle='';
 		$this->googleAnalytics='';
 
 
@@ -159,7 +161,7 @@ class CPrinceOfPersia {
 		//$GLOBALS['GetHTMLForHeader'] = $this->config['header'];
 		//include "var://GetHTMLForHeader";
 		//return $this->config['header'];
-		return eval("?>" . $this->config['header'] . "<?php");
+		return eval("?>" . $this->config['header']);
   }
 
 
@@ -178,8 +180,23 @@ class CPrinceOfPersia {
 	// Get html for footer 
 	//
 	public function GetHTMLForFooter() {
-		return eval("?>" . $this->config['footer'] . "<?php");
+		return eval("?>" . $this->config['footer']);
   }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Set a link by adding the siteurl
+	//  $aUrl: a link to a resource
+	// 
+	public function PrependWithSiteUrl($aUrl) {
+		
+		$url = $aUrl;
+		if($url[0] == '/') {
+			$url = substr($url, 1, strlen($url)-1);
+		}
+		return $this->config['siteurl'] . $url;
+	}
 
 
 	// ------------------------------------------------------------------------------------
@@ -196,6 +213,30 @@ class CPrinceOfPersia {
 			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
 		}
 		return self::$currentUrl;
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Create an array of files in a directory. 
+	// $aPath: a direct path to a directory
+	//
+	public static function ReadDirectory($aPath) {
+		$ignore = array('.htaccess', '.git', '.svn');
+		
+		$list = Array();
+		if(is_dir($aPath)) {
+			if ($dh = opendir($aPath)) {
+				while (($file = readdir($dh)) !== false) {
+					if(is_file("$aPath/$file") && !in_array($file, $ignore)) {
+						$list[$file] = "$file";
+					}
+				}
+				closedir($dh);
+			}
+		}
+		sort($list, SORT_NUMERIC);
+		return $list;
 	}
 
 

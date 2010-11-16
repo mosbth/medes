@@ -1,0 +1,53 @@
+/* Default stylesheet for phpmedes */
+
+@import url(stylesheet_default.css);
+
+/* color sheme silver: from darkest to lightest */
+/* color sheme silver: fonts */
+/* font ordinary font1 #222 */
+/* font lighter  font2 #999 */
+/* font inverted font3 #fff */
+
+/* color silver, from darkest to lightest */
+/* col1 #222 */
+/* col2 #444 */
+/* col3 #999 */
+/* col4 #aaa */
+/* col5 #ccc */
+/* col6 #eee */
+
+/* color red: background & borders */
+/* col1 #300 */
+/* col2 #500 */
+/* col3 #f55 */
+/* col4 #f88 */
+/* col5 #faa */
+/* col6 #fee */
+
+/* color green: background & borders */
+/* col1 #030 */
+/* col2 #050 */
+/* col3 #5f5 */
+/* col4 #8f8 */
+/* col5 #afa */
+/* col6 #efe */
+
+/* color blue: background & borders */
+/* col1 #003 */
+/* col2 #005 */
+/* col3 #55f */
+/* col4 #88f */
+/* col5 #aaf */
+/* col6 #eef */
+
+nav.mainmenu{
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#999'); 
+	background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#999)); 
+	background: -moz-linear-gradient(top,  #ccc,  #999); 
+}
+
+footer#bottom{
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#eee'); 
+	background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee)); 
+	background: -moz-linear-gradient(top,  #ccc,  #eee);
+}
