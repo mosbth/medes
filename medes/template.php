@@ -1,5 +1,5 @@
 <?php 
-require_once("../config.php");
+require_once("config.php");
 $pp->pageTitle = "Template";
 //$pp->Dump();
 include($pp->medesPath . "/inc/header.php");
