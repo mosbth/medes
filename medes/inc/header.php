@@ -11,9 +11,9 @@
  	<meta name="copyright"   content="<?php echo $pp->pageCopyright; ?>">	
  		
 	<!-- Stylesheets -->
-	<?php include($pp->medesPath . "/inc/choose_style.php"); ?>
-	<link rel="stylesheet" media="all"   type="text/css" href="<?php echo $pp->PrependWithSiteUrl($stylePath); ?>" title="<?php echo $styleTitle; ?>">
-	<link rel="stylesheet" media="print" type="text/css" href="style/print.css">
+	<?php //include($pp->medesPath . "/inc/choose_style.php"); ?>
+	<link rel="stylesheet" media="all"   type="text/css" href="<?php echo $pp->GetLinkToStylesheet(); ?>">
+	<link rel="stylesheet" media="print" type="text/css" href="<?php echo $pp->PrependWithSiteUrl('medes/style/print.css'); ?>">
 
 	<!-- The small icon displayed by the browser next to the link -->
 	<link rel="shortcut icon" href="img/favicon.ico">

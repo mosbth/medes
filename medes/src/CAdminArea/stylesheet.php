@@ -9,14 +9,51 @@ $pp = CPrinceOfPersia::GetInstance();
 $styleDir = $pp->medesPath . "/style/";
 $stylesheet = $pp->config['stylesheet'];
 $stylelist = isset($_POST['stylelist']) ? strip_tags($_POST['stylelist']) : -1; 
+$files = $pp->ReadDirectory($styleDir);
+
+
+// ------------------------------------------------------------------------------
+//
+// Check and set stylesheet of the site
+//		
+if(isset($_POST['doSaveStylesheet'])) {
+	
+	$file 						= "{$styleDir}/{$files[$stylelist]}";
+	$styleCode 				= htmlentities(file_get_contents($file));
+	$styleIsWritable 	= is_writable($file) ? "" : "disabled";
+
+	// Get and validate the incoming parameters
+	$styleCode = isset($_POST['styleCode']) ? $_POST['styleCode'] : "";
+
+	// Perhaps check if the information is reasonable, validate script?
+	if(!is_writable($file)) {
+		$output .= "The file is not writable, could not save file.";
+	}
+		
+	// Save the information
+	else {
+		file_put_contents($file, $styleCode);
+		$output .= "The stylesheet was saved to disk.";
+	}
+}
+
+
+// ------------------------------------------------------------------------------
+//
+// Use this stylesheet
+//
+if(isset($_POST['doSetStylesheet'])) {
+	
+	$pp->UpdateConfiguration(array("stylesheet"=>$files[$stylelist]));
+	$stylesheet = $pp->config['stylesheet'];
+	$output .= "This stylesheet is now the current style.";
+}
 
 
 // ------------------------------------------------------------------------------
 //
 // Get a select/option with all stylesheets
 //
-$files = $pp->ReadDirectory($styleDir);
-
 $select  = "<select name=stylelist onChange='submit();'><option value=-1>Choose stylesheet</option>";
 foreach($files as $key => $val) {
   $select .= "<option value='{$key}'" . ($key == $stylelist ? " selected " : "") . ">{$val}" . ($stylesheet == $val ? " [current]" : "") . "</option>";
@@ -42,39 +79,6 @@ if($stylelist >= 0 && $stylelist < count($files)) {
 	if(!empty($styleIsDefault)) {
 		$output .= "This stylesheet is the current style.";
 	}
-}
-
-
-// ------------------------------------------------------------------------------
-//
-// Check and set stylesheet of the site
-//		
-if(isset($_POST['doSaveStylesheet'])) {
-	
-	// Get and validate the incoming parameters
-	$stylesheet = isset($_POST['stylesheet']) ? $_POST['stylesheet'] : "";
-
-	// Perhaps check if the information is reasonable, validate script?
-	if(false) {
-		;
-	}
-		
-	// Save the information
-	else {
-		$pp->UpdateConfiguration(array("stylesheet"=>"$stylesheet"));
-		$output .= "The stylesheet is changed.";
-	}
-}
-
-
-// ------------------------------------------------------------------------------
-//
-// Use this stylesheet
-//
-if(isset($_POST['doSetStylesheet'])) {
-	
-	$pp->UpdateConfiguration(array("stylesheet"=>$files[$stylelist]));
-	$output .= "This stylesheet is now the current style.";
 }
 
 

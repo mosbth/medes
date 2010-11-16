@@ -189,6 +189,16 @@ class CPrinceOfPersia {
 	// Set a link by adding the siteurl
 	//  $aUrl: a link to a resource
 	// 
+	public function GetLinkToStylesheet() {
+		return $this->PrependWithSiteUrl("medes/style/{$this->config['stylesheet']}");
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Set a link by adding the siteurl
+	//  $aUrl: a link to a resource
+	// 
 	public function PrependWithSiteUrl($aUrl) {
 		
 		$url = $aUrl;

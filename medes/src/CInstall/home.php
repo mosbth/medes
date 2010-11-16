@@ -17,7 +17,9 @@ $check = "";
 $case 	= "The directory <code>medes/data</code> is writable by the webserver.";
 $class 	= "ok";
 $result = "";
+$dataDirectoryIsWritable = true;
 if(!is_writable(dirname(__FILE__) . "/../../data/")) {
+	$dataDirectoryIsWritable = false;
 	$result = "Create the directory and chmod to make it writable by the webserver.";
 	$class = "fail";
 }
@@ -68,11 +70,16 @@ EOD;
 $case 	= "Setting the sitelink to this website (starting from the root of this server).";
 $class 	= "ok";
 $result = "";
-
 $siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/install.php"));
-$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
+$pp->config['siteurl'] = $siteUrl;
 
-$result = "Sitelink = {$siteUrl}";
+if($dataDirectoryIsWritable) {
+	$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
+	$result = "Sitelink = {$siteUrl}";
+} else {
+	$class 	= "fail";
+	$result = "The data-directory is not writable and the configuration can not be stored.";
+}
 
 $check .= <<<EOD
 <p>
