@@ -66,7 +66,10 @@ EOD;
 $case 	= "Fresh install without an existing config-file <code>medes/data/CPrinceOfPersia_config.php</code>.";
 $class 	= "ok";
 $result = "";
+$configFileExistsChecked = true;
+
 if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
+	$configFileExistsChecked = false;
 	$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
 	$class = "fail";
 }
@@ -101,7 +104,7 @@ $result = "";
 $siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/install.php"));
 $pp->config['siteurl'] = $siteUrl;
 
-if($dataDirectoryIsWritable) {
+if($dataDirectoryIsWritable && $configFileExistsChecked) {
 	$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
 	$result = "Sitelink = {$siteUrl}";
 } else {
