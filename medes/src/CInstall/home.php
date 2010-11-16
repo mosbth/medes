@@ -109,7 +109,7 @@ if($dataDirectoryIsWritable && $configFileExistsChecked) {
 	$result = "Sitelink = {$siteUrl}";
 } else {
 	$class 	= "fail";
-	$result = "The data-directory is not writable and the configuration can not be stored.";
+	$result = "The configuration can not be stored.";
 }
 
 $check .= <<<EOD
