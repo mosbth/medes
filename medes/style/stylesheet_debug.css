@@ -1,6 +1,6 @@
 /* phpmedes: debug stylesheet displaying borders around divs */
 
-@import url(stylesheet_default.css);
+@import url(stylesheet_compatibility.css);
 
 body{border:1px solid black;}
 header{border:1px solid blue;}
