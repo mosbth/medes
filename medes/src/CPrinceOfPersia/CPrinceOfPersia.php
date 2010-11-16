@@ -86,6 +86,7 @@ class CPrinceOfPersia {
 		$this->googleAnalytics='';
 
 
+/*
 		$this->navbar = array(
 			"1" => array("text"=>"home", "url"=>"medes/doc/home.php", "title"=>"Go home"),
 			"2" => array("text"=>"showcase", "url"=>"medes/doc/showcase.php", "title"=>"See some live sites showing off"),
@@ -99,7 +100,7 @@ class CPrinceOfPersia {
 			"10" => array("text"=>"about", "url"=>"medes/doc/about.php", "title"=>"about"),
 			"11" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"adm"),
 		);
-
+*/
 
 	}
 	

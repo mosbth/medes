@@ -31,8 +31,7 @@ if(isset($_POST['doSetSiteUrl'])) {
 $page = <<<EOD
 <h1>Set the site link</h1>
 <p>Set the main link to the site. The link should point to the directory, not to a page.
-The link ends with a slash. You may leave out the protocol and server. Leave the field empty if the link is 
-the root of the server.</p>
+The link ends with a slash. You may leave out the protocol and server.</p>
 <form action='?p={$p}' method=post>
 	<fieldset class='std type2'>
 		<!-- <legend></legend> -->

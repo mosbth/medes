@@ -20,6 +20,13 @@ $config['navbar'] = array(
 	"template" => array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
 	"adm" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
 );
+$config['meta'] = array(
+	"author"=>"",
+	"copyright"=>"",
+	"description"=>"",
+	"keywords"=>"",
+);
+$config['tracker'] = "";
 
 if(!isset($pp->config['header'])) {
 	$pp->config['header'] = $config['header'];
@@ -35,6 +42,14 @@ if(!isset($pp->config['stylesheet'])) {
 
 if(!isset($pp->config['navbar'])) {
 	$pp->config['navbar'] = $config['navbar'];
+}
+
+if(!isset($pp->config['meta'])) {
+	$pp->config['meta'] = $config['meta'];
+}
+
+if(!isset($pp->config['tracker'])) {
+	$pp->config['tracker'] = $config['tracker'];
 }
 
 
