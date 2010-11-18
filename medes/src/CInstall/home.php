@@ -17,8 +17,8 @@ $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['stylesheet'] = 'stylesheet_compatibility.css';
 $config['navbar'] = array(
-	"template" => array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-	"adm" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
+	array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+	array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
 );
 $config['meta'] = array(
 	"author"=>"",
