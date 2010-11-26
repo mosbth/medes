@@ -17,7 +17,8 @@ $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['navbar'] = array(
 	"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-	"2"=>array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
+	"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
+	"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"user control panel"),
 );
 $config['relatedsites'] = array(
 	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
