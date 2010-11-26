@@ -163,7 +163,7 @@ $page = <<<EOD
 <h2>Done</h2>
 <p>Proceed to the admin area to set the admin password and start configuring
 your medes website.</p>
-<p><a href="adm.php?p=changepwd">Admin area: change password</a>.</p>
+<p><a href="acp.php?p=changepwd">Admin area: change password</a>.</p>
 <p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
 EOD;
 
