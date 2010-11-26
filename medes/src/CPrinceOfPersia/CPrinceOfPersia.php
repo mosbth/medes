@@ -45,8 +45,10 @@ class CPrinceOfPersia implements iSingleton {
 	//
 	protected static $instance = null;
 	public $config;
-	public $timePageGeneration;
-		
+	protected $timePageGeneration;
+
+	// CUserController
+	protected $uc;
 	
 	// ------------------------------------------------------------------------------------
 	//
@@ -106,6 +108,9 @@ class CPrinceOfPersia implements iSingleton {
 
 		// Set the siteurl from the stored configuration
 		$this->siteUrl = $this->config['siteurl'];
+
+		// Get hold of the controllers, just in case
+		$this->uc = CUserController::GetInstance();
 
 		// Set default values to be empty
 		$this->pageTitle='';
@@ -231,10 +236,15 @@ EOD;
 	// Get html for login/logout/profile menu
 	//
 	public function GetHTMLForProfileMenu() {
-		// treat all relative links as relative to sitelink, therefore prepend sitelink
 		$nav = array(
-			"1"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("/medes/ucp.php?p=login"), "title"=>"Login"),
+			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=login"), "title"=>"Login"),
+			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=logout"), "title"=>"Logout"),
+			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/ucp.php"), "title"=>"Change your settings"),
 		);
+		/*
+		if($this->uc->IsAuthenticated()) {
+			$nav['settings']['text'] = $this->uc->
+		}*/
 		foreach($nav as $key => $val) {
 			if(!(strstr('://', $nav[$key]['url']) || $nav[$key]['url'][0] == '/')) {
 				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
@@ -333,12 +343,14 @@ EOD;
 	//  $aUrl: a link to a resource
 	// 
 	public function PrependWithSiteUrl($aUrl) {
-		
-		$url = $aUrl;
-		if($url[0] == '/') {
-			$url = substr($url, 1, strlen($url)-1);
+	
+		if(strstr('://', $aUrl)) {
+			return $aUrl;
 		}
-		return $this->config['siteurl'] . $url;
+		if($aUrl[0] == '/') {
+			$aUrl = substr($url, 1, strlen($url)-1);
+		}
+		return $this->config['siteurl'] . $aUrl;
 	}
 
 
