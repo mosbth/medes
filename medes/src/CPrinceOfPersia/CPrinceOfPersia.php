@@ -348,7 +348,7 @@ EOD;
 			return $aUrl;
 		}
 		if($aUrl[0] == '/') {
-			$aUrl = substr($url, 1, strlen($url)-1);
+			$aUrl = substr($aUrl, 1, strlen($aUrl)-1);
 		}
 		return $this->config['siteurl'] . $aUrl;
 	}
