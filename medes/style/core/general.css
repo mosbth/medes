@@ -1,0 +1,192 @@
+/* phpmedes: style/core/general.css 
+-------------------------------------------------------- 
+
+
+*/
+
+
+/* html, html5, body, etc 
+--------------------------------------------------------
+
+   Basic structural settings
+
+*/
+html{overflow-y:scroll;background:#eee;}
+header,footer,nav,article,aside{display:block;}
+
+
+/* move to grid.css */
+/* default layout of article and aside is the 2 col layout */
+/*
+div#content article{width:592px;}
+div#content article.fullwidth{width:824px}
+div#content aside{width:232px;float:right;margin-top:1em;padding:0 8px 1em 8px;border-left:2px dashed #eee;}
+*/
+
+/* header#top-above, nav.relatedlinks, nav.profile
+--------------------------------------------------------
+
+   Style the header above the header, usually containing 
+   related sitelinks and login/profile menu. 
+
+*/
+header#top-above{border-bottom:1px solid #ccc;padding:0.5em 1em 0.5em 1em;background:#fff;color:#555;}
+nav.relatedlinks{float:left;} /* related links, usually top-left menu */
+nav.profile{float:right;} /* nav profile, login, logout menu, usually top-left menu */
+
+
+/* header#top
+--------------------------------------------------------
+
+	Header area with logo
+	
+*/
+header#top{}
+
+
+
+/* nav.mainmenu
+--------------------------------------------------------
+
+	Main navigation bar
+	
+*/
+nav.mainmenu{overflow:auto;margin:0;padding:2px 90px 2px 25px;background-color:#aaa;
+border:1px solid #eee;border-left:0;border-right:0;}
+
+nav.mainmenu a{float:left;text-decoration:none;padding:7px 10px 7px 10px;color:#222;
+border-left:1px solid #ccc;}
+nav.mainmenu a:last-child{border-right:1px solid #ccc;}
+nav.mainmenu a:hover,nav a#sel{background:#ccc;}
+
+
+
+/* div#content
+--------------------------------------------------------
+
+	Main content container
+
+*/
+div#content{min-height:20em;}
+
+
+
+/* footer#bottom
+--------------------------------------------------------
+
+   Footer and related elements
+
+*/
+footer#bottom-wrap{border-top:1px solid #ccc;background:#eee;}
+
+footer#bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
+/*footer#bottom{padding:1em;border-top:1px solid #999;background:#eee;color:#999;}*/
+
+footer#bottom nav{float:left;margin-bottom:2em;}
+footer#bottom nav a{display:list-item;list-style:none;}
+footer#bottom nav a.nav-h1{font-weight:bold;margin-bottom:0.5em;}
+
+footer#bottom a{text-decoration:none;}
+footer#bottom a:hover{text-decoration:underline;}
+
+footer#bottom p.license {clear:both;}
+
+
+
+/* figure, figcaption, img
+--------------------------------------------------------
+
+	Style for figure/pictures/images
+
+*/
+figure 						{display:block;margin:2em 0 1em 0;padding:0.5em;}
+figure.right 			{float:right;}
+figure.standard 	{border:4px ridge #999999;}
+figure.strict 		{border:2px solid #eee;}
+figure.inline 		{margin:8px;margin-top:1em;padding:5px;}
+figure.w300 			{width:300px;}
+figure.w550 			{max-width:550px;}
+
+figure img {display:block;margin:auto;max-width:100%;max-height:400px;}
+
+figure figcaption 					{display:block;margin:0 auto;padding:0.5em;}
+figure.standard figcaption 	{text-align:center;font-style:italic;}
+
+
+/* a
+--------------------------------------------------------
+
+
+*/
+a{color:inherit;}
+a:link{}
+a:visited{}
+a:hover{text-decoration:none;color:#222;background:#eee;}
+a:active{}
+
+/* a element without href */
+a.nolink,a.nolink:link,a.nolink:visited,a.nolink:hover,a.nolink:active
+{text-decoration:none !important;color:inherit;background:transparent;}
+
+
+/* nav sidemenu */
+nav.sidemenu{}
+nav.sidemenu a{display:list-item;list-style:none;}
+nav.sidemenu a:hover,
+nav.sidemenu a.active{background:#eee;}
+nav.sidemenu a.nav-h1{font-weight:bold;margin-bottom:1em;}
+nav.sidemenu a.nav-h2{margin-top:1em;font-weight:bold;}
+
+
+/* breadcrumb */
+nav.breadcrumb {display:inline;margin:0;padding:1em 0 0 0;}
+nav.breadcrumb {font:smaller arial,helvetica,sans-serif;color:#999;}
+nav.breadcrumb a {color:inherit;content:" \00BB ";}
+nav.breadcrumb a:after {content:" \00BB ";}
+nav.breadcrumb a:hover {color:#555;}
+
+
+
+/* Nice to have classe for styling
+--------------------------------------------------------
+
+
+*/
+.justify{text-align:justify;}
+
+output{display:inline;font-style:italic;}
+
+
+
+/* phpmedes logotype */
+/*
+div.logo{position:relative;font-family:serif;font-weight:bold;width:300px;height:70px;line-height:1px;}
+div.logo p#label{position:absolute;top:-20px;left:0;font-size:50px;text-shadow: 1px 1px 1px #222, -1px -1px 1px #222;color:#444;}
+div.logo p#tagline{position:absolute;top:40px;left:100px;color:#222;font-size:14px;}
+*/
+
+
+/* Basic settings */
+/*body{background:white;margin:8px auto;width:850px;color:#222;}*/
+/*header,footer,nav,article,aside{display:block;overflow:auto;}*/
+/*
+header#top{overflow:auto;} 
+header#top img{border:0;} 
+*/
+
+/* 2 col layout with article and aside */
+/*
+div.col2 article{width:592px;text-align:justify;}
+div.col2 aside{width:240px;float:right;margin-top:1em;padding-left:8px;border-left:2px dashed #eee;}
+*/
+
+/*aside.box a {word-wrap:break-word;}*/
+
+/* custom to display colors */
+/*
+div.color{width:20px;height:20px;float:left;}
+div.color:after{clear:both;}
+*/
+
+
+
