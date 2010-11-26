@@ -1,9 +1,0 @@
-/* nav sidemenu */
-
-nav.sidemenu{}
-nav.sidemenu a{padding-left:1em;display:list-item;list-style:none;font-size:smaller;}
-nav.sidemenu a:hover,
-nav.sidemenu a.active{background:#eee;}
-
-nav.sidemenu a.header{font-weight:bold;margin-bottom:1em;}
-nav.sidemenu a.subheader{margin-top:1em;font-weight:bold;}

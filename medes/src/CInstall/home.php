@@ -1,7 +1,7 @@
 <?php
 
 $pp = CPrinceOfPersia::GetInstance();
-$pp->pageInlineStyle .= <<<EOD
+$pp->pageStyle .= <<<EOD
 span.ok{color:green;text-transform:uppercase;}
 span.fail{color:red;text-transform:uppercase;}
 p.fix{padding-left:3em;}
@@ -15,10 +15,19 @@ $check = "";
 //
 $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
-$config['stylesheet'] = 'stylesheet_compatibility.css';
 $config['navbar'] = array(
-	1=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-	2=>array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
+	"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+	"2"=>array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"Administrate and configure the site and its addons"),
+);
+$config['relatedsites'] = array(
+	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
+	"2"=>array("text"=>"dbwebb", "url"=>"http://dbwebb.se/", "title"=>"Databases and Webb, it´s all about html, css, php and sql"),
+);
+$config['styletheme'] = array(
+	"name"=>"core",
+	"stylesheet"=>"screen_compatibility.css",
+	"print"=>"print.css",
+	"ie"=>"ie.css",
 );
 $config['meta'] = array(
 	"author"=>"",
@@ -36,12 +45,16 @@ if(!isset($pp->config['footer'])) {
 	$pp->config['footer'] = $config['footer'];
 }
 
-if(!isset($pp->config['stylesheet'])) {
-	$pp->config['stylesheet'] = $config['stylesheet'];
+if(!isset($pp->config['styletheme'])) {
+	$pp->config['styletheme'] = $config['styletheme'];
 }
 
 if(!isset($pp->config['navbar'])) {
 	$pp->config['navbar'] = $config['navbar'];
+}
+
+if(!isset($pp->config['relatedsites'])) {
+	$pp->config['relatedsites'] = $config['relatedsites'];
 }
 
 if(!isset($pp->config['meta'])) {

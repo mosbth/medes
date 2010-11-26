@@ -1,6 +1,0 @@
-/* breadcrumb */
-nav.breadcrumb {display:inline;margin:0;padding:1em 0 0 0;}
-nav.breadcrumb {font:x-small arial,helvetica,sans-serif;color:#999;}
-nav.breadcrumb a {color:inherit;content:" \00BB ";}
-nav.breadcrumb a:after {content:" \00BB ";}
-nav.breadcrumb a:hover {color:#555;}

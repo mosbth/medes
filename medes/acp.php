@@ -1,7 +1,7 @@
 <?php 
 require_once("config.php");
-$pp->pageTitle = "Admin Area";
-$page = CAdminArea::DoIt();
+$pp->pageTitle = "Admin Control Panel";
+$page = CAdminControlPanel::DoIt();
 
 include($pp->medesPath . "/inc/header.php");
 echo $page;

@@ -10,20 +10,15 @@
  	<meta name="author"      content="<?php echo $pp->pageAuthor; ?>">	
  	<meta name="copyright"   content="<?php echo $pp->pageCopyright; ?>">	
  		
-	<!-- Stylesheets -->
-	<?php //include($pp->medesPath . "/inc/choose_style.php"); ?>
-	<link rel="stylesheet" media="all"   type="text/css" href="<?php echo $pp->GetLinkToStylesheet(); ?>">
-	<link rel="stylesheet" media="print" type="text/css" href="<?php echo $pp->PrependWithSiteUrl('medes/style/print.css'); ?>">
-
-	<!-- The small icon displayed by the browser next to the link -->
-	<link rel="shortcut icon" href="img/favicon.ico">
-
 	<!-- Use PHP to set the page title dynamic -->
  	<?php echo "<title>$pp->pageTitle</title>"; ?>
  	
-	<!-- Set inline style if defined -->
- 	<?php if(!empty($pp->pageInlineStyle)) echo "<style type='text/css'>{$pp->pageInlineStyle}</style>"; ?>
- 	
+	<!-- Stylesheets and style-->
+	<?php echo $pp->GetHTMLForStyle(); ?>
+
+	<!-- The small icon displayed by the browser next to the link -->
+	<link rel="shortcut icon" type="img/png" href="<?php echo $pp->PrependWithSiteUrl('img/favicon.png'); ?>">
+
 	<!-- Help Internet Explorer understand HTML5 elements http://code.google.com/p/html5shiv/ -->
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

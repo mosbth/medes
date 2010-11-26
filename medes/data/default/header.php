@@ -1,16 +1,24 @@
-<!-- Top header with logo and navigation -->
-<header id="top">
+<?php 
+$pp = CPrinceOfPersia::GetInstance(); 
+$relatedSites = $pp->GetHTMLForRelatedSitesMenu();
+$profile = $pp->GetHTMLForProfileMenu();
+$logo = $pp->PrependWithSiteUrl('img/logo_medes_350x70.png');
+$navbar = $pp->GetHTMLForNavbar();
 
-	<!-- Default phpmedes-logo -->
-	<div class=logo>
-		<p id=label>phpmedes
-		<p id=tagline>dbwebb.se
-	</div>
-
-	<!-- Use an image as logo -->
-	<!-- <img src="img/logo.png" alt="Logo" width=200 height=100> -->
-	
+$html = <<<EOD
+<header id=top-above>
+	{$profile}
+	{$relatedSites}
 </header>
 
-<!-- Top navigation bar -->
-<?php echo $GLOBALS['pp']->GetHTMLForNavbar(); ?>
+<header id=top class="container showgrid" style="overflow:visible;">
+	<img src="{$logo}" alt="Logo" width=350 height=70 style="margin-left:0px;">
+{$navbar}
+</header>
+
+<!-- Here is the actual content of the page-->
+<div id=content class="container showgrid prepend-top append-bottom">
+
+EOD;
+
+echo $html;

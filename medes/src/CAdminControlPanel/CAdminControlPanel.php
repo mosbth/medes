@@ -1,9 +1,9 @@
 <?php
 // ===========================================================================================
 //
-// File: CAdminArea.php
+// File: CAdminControlPanel.php
 //
-// Description: The admin intervafe to CPrinceOfPersia and all modules. It manages settings
+// Description: The admin interface to CPrinceOfPersia and all modules. It manages settings
 // by providing a webinterface where the user can change the settings and configrations
 // available in the $pp-object
 //
@@ -13,7 +13,7 @@
 // 2010-10-28: Created
 //
 
-class CAdminArea {
+class CAdminControlPanel {
 
 	// ------------------------------------------------------------------------------------
 	//
@@ -29,6 +29,7 @@ class CAdminArea {
 		"tracker" => array("text"=>"tracker",  "url"=>"?p=tracker", "title"=>"Track site using Google Analytics"),
 		"sep2" => array("text"=>"-", "url"=>"#"),
 //		"item5" => array("text"=>"top-left navigation", "url"=>"#"),
+		"relatedsites" => array("text"=>"related sites", "url"=>"?p=relatedsites", "title"=>"Use and define related sites"),
 		"header" => array("text"=>"header", "url"=>"?p=header", "title"=>"Define the header and logo of the site"),
 		"navbar" => array("text"=>"navigation bar", "url"=>"?p=navbar", "title"=>"Define the navigation bar (main menu) of the site"),
 		"footer" => array("text"=>"footer", "url"=>"?p=footer", "title"=>"Define the footer of the site"),
@@ -48,6 +49,7 @@ class CAdminArea {
 		"sitelink" => array("file"=>"sitelink.php", "title"=>"Admin area: set sitelink"),
 		"meta" => array("file"=>"meta.php", "title"=>"Admin area: set meta information"),
 		"tracker" => array("file"=>"tracker.php", "title"=>"Admin area: enable tracking using Google Analytics"),
+		"relatedsites" => array("file"=>"relatedsites.php", "title"=>"Admin area: use and define related sites"),
 		"header" => array("file"=>"header.php", "title"=>"Admin area: define the header of the site"),
 		"navbar" => array("file"=>"navbar.php", "title"=>"Admin area: set navigation bar, the main menu"),
 		"footer" => array("file"=>"footer.php", "title"=>"Admin area: define the footer of the site"),
