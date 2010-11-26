@@ -46,7 +46,7 @@ class CNavigation {
 	// $list = present menu as list
 	// $class = class of nav-element
 	//
-	public static function GenerateMenu($array, $list, $class){
+	public static function GenerateMenu($array, $list=false, $class=''){
 		$html = "<nav class=\"{$class}\">\n";
 		if($list) {
 			$html .= "\t<ul>\n";
@@ -59,12 +59,22 @@ class CNavigation {
 				$html .= "\t";
 			}
 			
-			$active = '';
-			if(isset($value['active'])) {
-				$active = " class=active";
-			}
+            $classes = ' class="';
+			if(isset($value['active'])) 
+				$classes .= "active";
+			if(isset($value['class']))
+				$classes .= " {$value['class']}";
+            $classes .= '"';
+
+			$title = '';
+			if(isset($value['title']))
+				$title = " title=\"{$value['title']}\"";
 			
-			$html .= "<a href=\"{$value['url']}\"{$active}>{$value['text']}</a>";
+			if(isset($value['url']))
+				$html .= "<a href=\"{$value['url']}\"{$title}{$classes}>{$value['text']}</a>";
+			else
+				$html .= "<a{$title}{$classes}>".$value['text']."</a>";
+
 			if($list) {
 				$html .= "</li>\n";
 			} else {
