@@ -343,13 +343,9 @@ EOD;
 	//  $aUrl: a link to a resource
 	// 
 	public function PrependWithSiteUrl($aUrl) {
-	
-		if(strstr('://', $aUrl)) {
-			return $aUrl;
-		}
-		if($aUrl[0] == '/') {
-			$aUrl = substr($aUrl, 1, strlen($aUrl)-1);
-		}
+		if(empty($aUrl)) { return false; }
+		if(strstr('://', $aUrl)) { return $aUrl; }
+		if($aUrl[0] == '/') { $aUrl = substr($aUrl, 1, strlen($aUrl)-1); }
 		return $this->config['siteurl'] . $aUrl;
 	}
 
