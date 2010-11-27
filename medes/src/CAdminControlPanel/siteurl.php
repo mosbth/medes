@@ -6,18 +6,18 @@
 //
 $remember = $pp->GetAndClearRememberFromSession(array('output'=>'', 'output-type'=>''));
 $disabled = $pp->uc->IsAdministrator() ? "" : "disabled";
-$tracker = $pp->config['tracker'];
+$siteurl = $pp->siteUrl;
 
 
 // ------------------------------------------------------------------------------
 //
 // Check and set the sitelink
 //
-if(isset($_POST['doSaveTracker'])) {
+if(isset($_POST['doSetSiteUrl'])) {
 	
 	// Get, sanitize and validate incomings
 	$inputs = filter_input_array(INPUT_POST, array(
-		'tracker' => array('filter'	=> FILTER_UNSAFE_RAW),
+		'siteurl' => array('filter'	=> FILTER_SANITIZE_URL),
 		)
 	);
 
@@ -33,8 +33,8 @@ if(isset($_POST['doSaveTracker'])) {
 		
 	// Set the siteurl
 	else {
-		$pp->UpdateConfiguration(array("tracker"=>$inputs['tracker']));
-		$pp->ReloadPageAndRemember(array("output"=>"The tracker-information is changed.", "output-type"=>"success"));
+		$pp->UpdateConfiguration(array("siteurl"=>$inputs['siteurl']));
+		$pp->ReloadPageAndRemember(array("output"=>"The sitelink is changed.", "output-type"=>"success"));
 	}
 }
 
@@ -44,20 +44,26 @@ if(isset($_POST['doSaveTracker'])) {
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<h1>Set tracker</h1>
-<p>Use Google Analytics (GA) to track visits to site. Copy the javascript from GA and save it here.</p>
+<h1>Set the site link</h1>
+<p>Set the main link to the site. The link should point to the directory, not to a page.
+The link ends with a slash. You may leave out the protocol and server. 
+</p>
+<p>
+The sitelink is set
+automatically during the installation procedure.
+</p>
 <form action='?p={$p}' method=post>
 	<fieldset>
 		<!-- <legend></legend> -->
 		<p class=right><output class="span-6 {$remember['output-type']}">{$remember['output']}</output></p>
-		
+
 		<p>
-			<label for=input1>Tracker code:</label><br>
-			<textarea id=input1 class="text" name=tracker>{$tracker}</textarea>
+			<label for=input1>Site link:</label><br>
+			<input id=input1 class="text" type=text name=siteurl value={$siteurl}>
 		</p>
 		
 		<p>
-			<input type=submit name=doSaveTracker value='Save tracker code' {$disabled}>
+			<input type=submit name=doSetSiteUrl value='Save meta information' {$disabled}>
 			<input type=reset value='Reset'>
 		</p>
 		
@@ -65,3 +71,4 @@ $page = <<<EOD
 </form>
 
 EOD;
+

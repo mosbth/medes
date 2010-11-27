@@ -126,7 +126,7 @@ a:active{}
 
 /* a element without href */
 a.nolink,a.nolink:link,a.nolink:visited,a.nolink:hover,a.nolink:active
-{text-decoration:none !important;color:inherit;background:transparent;}
+{text-decoration:none !important;color:inherit;background:transparent !important;}
 
 
 /* nav sidemenu */
@@ -134,7 +134,7 @@ nav.sidemenu{}
 nav.sidemenu a{display:list-item;list-style:none;}
 nav.sidemenu a:hover,
 nav.sidemenu a.active{background:#eee;}
-nav.sidemenu a.nav-h1{font-weight:bold;margin-bottom:1em;}
+nav.sidemenu a.nav-h1{font-size: 1.2em;font-weight:bold;margin-bottom:1em;}
 nav.sidemenu a.nav-h2{margin-top:1em;font-weight:bold;}
 
 

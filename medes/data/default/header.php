@@ -1,4 +1,8 @@
 <?php 
+// ---------------------------------------------------------------------
+//
+// php-code to create html-header of the site
+//
 $pp = CPrinceOfPersia::GetInstance(); 
 $relatedSites = $pp->GetHTMLForRelatedSitesMenu();
 $profile = $pp->GetHTMLForProfileMenu();

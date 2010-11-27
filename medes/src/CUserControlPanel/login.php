@@ -4,7 +4,7 @@
 //
 // Do general settings
 //
-$remember = $pp->GetAndClearRememberFromSession(array('output'=>'','account'=>''));
+$remember = $pp->GetAndClearRememberFromSession(array('output'=>'', 'output-type'=>'', 'account'=>''));
 
 // Get, sanitize and validate incomings
 $inputs = filter_input_array(INPUT_POST, array(
@@ -24,9 +24,12 @@ if(isset($_POST['doLogin'])) {
 	if(false) {
 		Throw new Exception("Check if something is very wrong?");
 	} else if(in_array($inputs['account'], array('adm', 'admin', 'root')) && $pp->CheckAdminPassword($inputs['password'])) {
-		$pp->ReloadPageAndRemember(array("output"=>"You are now logged in as administrator.", "account"=>$inputs['account']));
+		$uc = CUserController::GetInstance();
+		$uc->Populate($inputs['account'], 1);
+		$uc->StoreInSession();		
+		$pp->ReloadPageAndRemember(array("output"=>"You are now logged in as administrator.", "output-type"=>"success", "account"=>$inputs['account']));
 	}	else {
-		$pp->ReloadPageAndRemember(array("output"=>"You failed to login. The account does not exists or the password does not match the account."));
+		$pp->ReloadPageAndRemember(array("output"=>"You failed to login. The account does not exists or the password does not match the account.", "output-type"=>"notice"));
 	}
 }
 
@@ -38,19 +41,24 @@ if(isset($_POST['doLogin'])) {
 $page = <<<EOD
 <h1>Login</h1>
 <p>Login using your userid or email together with the password.</p>
-<form class=inline action='?p={$p}' method=post>
+<form action='?p={$p}' method=post>
 	<fieldset>
 		<!-- <legend></legend> -->
-		<label for=account class="span-4">Account or email:</label>
-		<input id=account class="text span-8" type=text name=account value={$remember['account']}>		
-		
-		<label for=password class="clear span-4">Password:</label>
-		<input id=password class="text span-8" type=password name=password>
+		<p class="right"><output class="span-7 {$remember['output-type']}">{$remember['output']}</output></p>
 
-		<div class='buttonbar clear prepend-4 span-8'>
-			<input class="right span-2 large" type=submit name=doLogin value='Login'>
-		</div> 
-		<output class="clear span-16 last">{$remember['output']}</output> 
+		<p>
+			<label for=account>Account or email:</label><br>
+			<input id=account class="text" type=text name=account value={$remember['account']}>		
+		</p>
+		
+		<p>
+			<label for=password>Password:</label><br>
+			<input id=password class="text" type=password name=password>
+		</p>
+		
+		<p>
+			<input type=submit name=doLogin value='Login'>
+		</p>
 	</fieldset>
 </form>
 EOD;

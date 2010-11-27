@@ -21,13 +21,14 @@ class CUserControlPanel implements iFrontController {
 	protected static $menu = array(
 		"home" => array("text"=>"/user control panel/", "url"=>"ucp.php", "title"=>"Manage the settings of the account", "class"=>"nav-h1"),
 		"login" => array("text"=>"login", "url"=>"?p=login", "title"=>"Login"),
-		"logout" => array("text"=>"logout", "url"=>"?p=logout", "title"=>"Logout"),
-		//"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
+		"logout" => array("text"=>"logout", "url"=>"?p=dologout", "title"=>"Logout"),
+		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change your password"),
 	);
 
 	protected static $pages = array(
 		"home" => array("file"=>"home.php", "title"=>"User Control Panel"),
 		"login" => array("file"=>"login.php", "title"=>"Login as a registrered user"),
+		"dologout" => array("file"=>"dologout.php", "title"=>"Logout"),
 		"logout" => array("file"=>"logout.php", "title"=>"Logout"),
 		"changepwd" => array("file"=>"changepwd.php", "title"=>"Change password"),
 	);

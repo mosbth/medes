@@ -1,4 +1,8 @@
 <?php 
+// ---------------------------------------------------------------------
+//
+// php-code to create html-footer of the site
+//
 $pp = CPrinceOfPersia::GetInstance(); 
 $developer = $pp->GetHTMLForDeveloperMenu();
 

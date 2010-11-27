@@ -22,6 +22,7 @@ interface ISingleton {
 }
 
 interface IFrontController {
+
 	// ------------------------------------------------------------------------------------
 	//
 	// Frontcontroller. Redirect to choosen page and return the resulting html. 
@@ -48,7 +49,7 @@ class CPrinceOfPersia implements iSingleton {
 	protected $timePageGeneration;
 
 	// CUserController
-	protected $uc;
+	public $uc;
 	
 	// ------------------------------------------------------------------------------------
 	//
@@ -222,11 +223,6 @@ EOD;
 	public function GetHTMLForRelatedSitesMenu() {
 		// treat all relative links as relative to sitelink, therefore prepend sitelink
 		$nav = $this->config['relatedsites'];
-		foreach($nav as $key => $val) {
-			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
-				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
-			}
-		}
 		return CNavigation::GenerateMenu($nav, false, 'relatedsites');		
   }
 
@@ -238,18 +234,18 @@ EOD;
 	public function GetHTMLForProfileMenu() {
 		$nav = array(
 			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=login"), "title"=>"Login"),
-			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=logout"), "title"=>"Logout"),
 			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/ucp.php"), "title"=>"Change your settings"),
+			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=dologout"), "title"=>"Logout"),
 		);
-		/*
+
 		if($this->uc->IsAuthenticated()) {
-			$nav['settings']['text'] = $this->uc->
-		}*/
-		foreach($nav as $key => $val) {
-			if(!(strstr('://', $nav[$key]['url']) || $nav[$key]['url'][0] == '/')) {
-				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
-			}
+			unset($nav['login']);
+			$nav['settings']['text'] = $this->uc->GetAccountName();
+		} else {
+			unset($nav['settings']);
+			unset($nav['logout']);			
 		}
+
 		return CNavigation::GenerateMenu($nav, false, 'profile');		
   }
 
@@ -272,14 +268,12 @@ EOD;
 	//
 	public function GetHTMLForNavbar() {
 		//self::$menu[$p]['active'] = 'active';
-		
-		// treat all relative links as relative to sitelink, therefore prepend sitelink
 		$nav = $this->config['navbar'];
 		foreach($nav as $key => $val) {
-			if(!(strstr('://', $nav[$key]['url']) || $nav[$key]['url'][0] == '/')) {
+			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
 				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
 			}
-		}
+		}		
 		return CNavigation::GenerateMenu($nav, false, 'mainmenu');		
   }
 
@@ -298,6 +292,7 @@ EOD;
 	// Get html for debug menu, usually used during development 
 	//
 	public function GetHTMLForDeveloperMenu() {
+		$url = $this->GetUrlToCurrentPage();
 		$nav1 = array(
 			"phpmedes"	=>array("text"=>"PhpMedes", "class"=>"nav-h1 nolink"),			
 			"site"	=>array("text"=>"phpmedes.org", "url"=>"http://phpmedes.org/", "title"=>"home of phpmedes project"),			
@@ -309,8 +304,8 @@ EOD;
 			"css3"					=>array("text"=>"css3", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&ucn_task=conformance", "title"=>"unicorn html and css validator"),			
 			"cheatsheet"		=>array("text"=>"cheatsheet", "url"=>"http://www.w3.org/2009/cheatsheet/", "title"=>"html cheatsheet, lookup html-tags"),			
-			"link-checker"	=>array("text"=>"Link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $this->GetUrlToCurrentPage(), "title"=>"css3 validator"),			
-			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&docAddr=" . $this->GetUrlToCurrentPage(), "title"=>"css3 validator"),			
+			"link-checker"	=>array("text"=>"Link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
+			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&docAddr=" . $url, "title"=>"css3 validator"),			
 			"check-header"	=>array("text"=>"Check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 		);
 
@@ -343,9 +338,14 @@ EOD;
 	//  $aUrl: a link to a resource
 	// 
 	public function PrependWithSiteUrl($aUrl) {
-		if(empty($aUrl)) { return false; }
-		if(strstr('://', $aUrl)) { return $aUrl; }
-		if($aUrl[0] == '/') { $aUrl = substr($aUrl, 1, strlen($aUrl)-1); }
+		if(empty($aUrl)) {
+			return false;
+		}
+			
+		if(strstr('://', $aUrl) || $aUrl[0] == '/') {
+			return $aUrl;
+		}
+
 		return $this->config['siteurl'] . $aUrl;
 	}
 
@@ -426,45 +426,6 @@ EOD;
 
 
 	// ------------------------------------------------------------------------------------
-	// OBSOLETE to be replaced by real login
-	// Manages to gain or loose the admin access. 
-	//
-	public function GainOrLooseAdminAccess() {
-
-		// Try to gain admin access
-		if(isset($_GET['doGainAdminAccess'])) {
-			$html = <<<EOD
-<form action=? method=post>
-	<fieldset class=standard>
-		<legend>gain admin access</legend>
-		<input type=password name=password>
-		<input type=submit name=doCheckAdminPassword value=Login>
-	</fieldset>
-</form>
-EOD;
-			return $html;		
-		}
-
-		// Check the admin password and set admin access if correct
-		if(isset($_POST['doCheckAdminPassword'])) {
-			// check pwd 
-			$_SESSION['hasAdminAccess'] = true;
-		}
-
-		// Loose admin access
-		if(isset($_GET['doLooseAdminAccess'])) {
-			$_SESSION['hasAdminAccess'] = false;			
-		}
-
-		// Does user already has admin access?
-		if(isset($_SESSION['hasAdminAccess']) && $_SESSION['hasAdminAccess'] === true) {
-			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
-		}
-		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
-	}
-
-
-	// ------------------------------------------------------------------------------------
 	//
 	// Set the administrator password
 	//  $aPwd: the password in plain text
@@ -484,7 +445,7 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Check if passwrod matches the administrator password
+	// Check if password matches the administrator password
 	//  $aPwd: the password in plain text
 	//
 	public function CheckAdminPassword($aPwd) {
@@ -553,4 +514,45 @@ EOD;
 	}
 	
 }
+
+
+/*
+	// ------------------------------------------------------------------------------------
+	// OBSOLETE to be replaced by real login
+	// Manages to gain or loose the admin access. 
+	//
+	public function GainOrLooseAdminAccess() {
+
+		// Try to gain admin access
+		if(isset($_GET['doGainAdminAccess'])) {
+			$html = <<<EOD
+<form action=? method=post>
+	<fieldset class=standard>
+		<legend>gain admin access</legend>
+		<input type=password name=password>
+		<input type=submit name=doCheckAdminPassword value=Login>
+	</fieldset>
+</form>
+EOD;
+			return $html;		
+		}
+
+		// Check the admin password and set admin access if correct
+		if(isset($_POST['doCheckAdminPassword'])) {
+			// check pwd 
+			$_SESSION['hasAdminAccess'] = true;
+		}
+
+		// Loose admin access
+		if(isset($_GET['doLooseAdminAccess'])) {
+			$_SESSION['hasAdminAccess'] = false;			
+		}
+
+		// Does user already has admin access?
+		if(isset($_SESSION['hasAdminAccess']) && $_SESSION['hasAdminAccess'] === true) {
+			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
+		}
+		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
+	}
+*/
 

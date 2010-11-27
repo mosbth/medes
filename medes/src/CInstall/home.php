@@ -1,6 +1,6 @@
 <?php
 
-$pp = CPrinceOfPersia::GetInstance();
+//$pp = CPrinceOfPersia::GetInstance();
 $pp->pageStyle .= <<<EOD
 span.ok{color:green;text-transform:uppercase;}
 span.fail{color:red;text-transform:uppercase;}
@@ -8,64 +8,6 @@ p.fix{padding-left:3em;}
 EOD;
 
 $check = "";
-
-// ------------------------------------------------------------------------------
-//
-// Create default settings for configuration
-//
-$config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
-$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
-$config['navbar'] = array(
-	"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-	"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
-	"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
-	"4"=>array("text"=>"article", "url"=>"medes/article.php", "title"=>"Article editor"),
-);
-$config['relatedsites'] = array(
-	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
-	"2"=>array("text"=>"dbwebb", "url"=>"http://dbwebb.se/", "title"=>"Databases and Webb, it´s all about html, css, php and sql"),
-);
-$config['styletheme'] = array(
-	"name"=>"core",
-	"stylesheet"=>"screen_compatibility.css",
-	"print"=>"print.css",
-	"ie"=>"ie.css",
-);
-$config['meta'] = array(
-	"author"=>"",
-	"copyright"=>"",
-	"description"=>"",
-	"keywords"=>"",
-);
-$config['tracker'] = "";
-
-if(!isset($pp->config['header'])) {
-	$pp->config['header'] = $config['header'];
-}
-
-if(!isset($pp->config['footer'])) {
-	$pp->config['footer'] = $config['footer'];
-}
-
-if(!isset($pp->config['styletheme'])) {
-	$pp->config['styletheme'] = $config['styletheme'];
-}
-
-if(!isset($pp->config['navbar'])) {
-	$pp->config['navbar'] = $config['navbar'];
-}
-
-if(!isset($pp->config['relatedsites'])) {
-	$pp->config['relatedsites'] = $config['relatedsites'];
-}
-
-if(!isset($pp->config['meta'])) {
-	$pp->config['meta'] = $config['meta'];
-}
-
-if(!isset($pp->config['tracker'])) {
-	$pp->config['tracker'] = $config['tracker'];
-}
 
 
 // ------------------------------------------------------------------------------
@@ -151,6 +93,66 @@ EOD;
 
 
 // Save sitelink, reload page and it should work, if not...
+
+// ------------------------------------------------------------------------------
+//
+// Create default settings for configuration
+//
+$config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
+$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
+$config['navbar'] = array(
+	"1"=>array("text"=>"template", "url"=>$pp->PrependWithSiteUrl("medes/template.php"), "title"=>"A default template page to start with"),
+	"2"=>array("text"=>"acp", "url"=>$pp->PrependWithSiteUrl("medes/acp.php"), "title"=>"Administrate and configure the site and its addons"),
+	"3"=>array("text"=>"ucp", "url"=>$pp->PrependWithSiteUrl("medes/ucp.php"), "title"=>"User control panel"),
+	"4"=>array("text"=>"article", "url"=>$pp->PrependWithSiteUrl("medes/article.php"), "title"=>"Article editor"),
+);
+$config['relatedsites'] = array(
+	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
+	"2"=>array("text"=>"dbwebb", "url"=>"http://dbwebb.se/", "title"=>"Databases and Webb, it´s all about html, css, php and sql"),
+);
+$config['styletheme'] = array(
+	"name"=>"core",
+	"stylesheet"=>"screen_compatibility.css",
+	"print"=>"print.css",
+	"ie"=>"ie.css",
+);
+$config['meta'] = array(
+	"author"=>"",
+	"copyright"=>"",
+	"description"=>"",
+	"keywords"=>"",
+);
+$config['tracker'] = "";
+
+if(!isset($pp->config['header'])) {
+	$pp->config['header'] = $config['header'];
+}
+
+if(!isset($pp->config['footer'])) {
+	$pp->config['footer'] = $config['footer'];
+}
+
+if(!isset($pp->config['styletheme'])) {
+	$pp->config['styletheme'] = $config['styletheme'];
+}
+
+if(!isset($pp->config['navbar'])) {
+	$pp->config['navbar'] = $config['navbar'];
+}
+
+if(!isset($pp->config['relatedsites'])) {
+	$pp->config['relatedsites'] = $config['relatedsites'];
+}
+
+if(!isset($pp->config['meta'])) {
+	$pp->config['meta'] = $config['meta'];
+}
+
+if(!isset($pp->config['tracker'])) {
+	$pp->config['tracker'] = $config['tracker'];
+}
+
+$pp->UpdateConfiguration($config);
 
 
 // ------------------------------------------------------------------------------

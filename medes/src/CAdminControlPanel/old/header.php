@@ -6,18 +6,18 @@
 //
 $remember = $pp->GetAndClearRememberFromSession(array('output'=>'', 'output-type'=>''));
 $disabled = $pp->uc->IsAdministrator() ? "" : "disabled";
-$tracker = $pp->config['tracker'];
+$header = $pp->config['header'];
 
 
 // ------------------------------------------------------------------------------
 //
 // Check and set the sitelink
 //
-if(isset($_POST['doSaveTracker'])) {
+if(isset($_POST['doSaveHeader'])) {
 	
 	// Get, sanitize and validate incomings
 	$inputs = filter_input_array(INPUT_POST, array(
-		'tracker' => array('filter'	=> FILTER_UNSAFE_RAW),
+		'header' => array('filter'	=> FILTER_UNSAFE_RAW),
 		)
 	);
 
@@ -33,8 +33,8 @@ if(isset($_POST['doSaveTracker'])) {
 		
 	// Set the siteurl
 	else {
-		$pp->UpdateConfiguration(array("tracker"=>$inputs['tracker']));
-		$pp->ReloadPageAndRemember(array("output"=>"The tracker-information is changed.", "output-type"=>"success"));
+		$pp->UpdateConfiguration(array("header"=>$inputs['header']));
+		$pp->ReloadPageAndRemember(array("output"=>"The header is changed.", "output-type"=>"success"));
 	}
 }
 
@@ -44,24 +44,25 @@ if(isset($_POST['doSaveTracker'])) {
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<h1>Set tracker</h1>
-<p>Use Google Analytics (GA) to track visits to site. Copy the javascript from GA and save it here.</p>
+<h1>Edit the site header and logo</h1>
+<p>Change the look of the site header by editing the html below.</p>
 <form action='?p={$p}' method=post>
 	<fieldset>
-		<!-- <legend></legend> -->
-		<p class=right><output class="span-6 {$remember['output-type']}">{$remember['output']}</output></p>
-		
+		<!-- <legend></legend> -->		
 		<p>
-			<label for=input1>Tracker code:</label><br>
-			<textarea id=input1 class="text" name=tracker>{$tracker}</textarea>
+			<label for=input1>HTML for page-header:</label><br>
+			<textarea id=input1 class="wide" name=header>{$header}</textarea>
 		</p>
 		
-		<p>
-			<input type=submit name=doSaveTracker value='Save tracker code' {$disabled}>
+		<p class=left>
+			<input type=submit name=doSaveHeader value='Save header html' {$disabled}>
 			<input type=reset value='Reset'>
 		</p>
-		
+
+		<p class=right><output class="span-6 {$remember['output-type']}">{$remember['output']}</output></p>
+
 	</fieldset>
 </form>
 
 EOD;
+

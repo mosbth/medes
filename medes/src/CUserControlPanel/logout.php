@@ -2,13 +2,6 @@
 
 // ------------------------------------------------------------------------------
 //
-// Logout and destroy the session
-//
-require_once(dirname(__FILE__) . "/destroysession.php");
-
-
-// ------------------------------------------------------------------------------
-//
 // Set $page to contain html for the page
 //
 $page = <<<EOD

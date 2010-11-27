@@ -89,6 +89,4 @@ class CNavigation {
 		
 		return $html;
 	}
-
-	
 }

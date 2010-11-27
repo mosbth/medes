@@ -1,14 +1,36 @@
 <?php
 
+//
+// Notes.
+// $output is not used? neither $remember.
+//
+
 // ------------------------------------------------------------------------------
 //
-// Check and set the navigation bar
+// Do general settings
 //
-$output = '';
+$remember = $pp->GetAndClearRememberFromSession(array('output'=>'', 'output-type'=>'', 'outputItem'=>'', 'outputItem-type'=>''));
+$disabled = $pp->uc->IsAdministrator() ? "" : "disabled";
+
 $outputItem = '';
-$pp = CPrinceOfPersia::GetInstance();
-$navbar = $pp->config['navbar'];
-//$navbar = $pp->navbar;
+
+// What is the current choice?
+$selectedLevel1 = isset($_POST['selectLevel1']) ? $_POST['selectLevel1'] : -1;
+
+// Create an array of all navigational menus
+$items = isset($pp->config['navigation']) ? $pp->config['navigation'] : array();
+$items['-1'] = array("text"=>"Choose navigational menu...", "nav"=>array());
+$items['navbar'] = array("text"=>"Main navigation bar", "nav"=>$pp->config['navbar']);
+$items['relatedsites'] = array("text"=>"Top left menu for related sites", "nav"=>$pp->config['relatedsites']);
+
+$currentNav = $items[$selectedLevel1];
+$navbar = $currentNav['nav'];
+
+$selectLevel1  = "<select name=selectLevel1 class=span-5 onChange='form.navbarlist.selectedIndex=-1;submit();'>";
+foreach($items as $key=>$val) {
+  $selectLevel1 .= "<option value='{$key}'" . ($key == $selectedLevel1 ? " selected " : "") . ">{$val['text']}</option>";
+}
+$selectLevel1 .= "</select>";
 
 
 // ------------------------------------------------------------------------------
@@ -31,7 +53,7 @@ if(isset($_POST['doSaveItem'])) {
 	// Save the information
 	else {
 		$navbar[$current] = $item;
-		$pp->UpdateConfiguration(array("navbar"=>$navbar));
+		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
 		$outputItem = "The information was saved.";
 	}
 }
@@ -60,7 +82,7 @@ else if(isset($_POST['doAddItem'])) {
 		Throw new Exception("doAddItem, selected item ($current) is out of range.");
 	} else {
 		$newItem['text'] 	= "new item";
-		$newItem['url'] 	= "medes/doc/template.php";
+		$newItem['url'] 	= "medes/template.php";
 		$newItem['title'] = "new item title";
 
 		// Move all items +1 from $current
@@ -71,7 +93,7 @@ else if(isset($_POST['doAddItem'])) {
 		// Add item and save
 		$navbar[$current+1] = $newItem;
 		$_POST['navbarlist'] = $current+1;
-		$pp->UpdateConfiguration(array("navbar"=>$navbar));
+		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
 	}
 }
 
@@ -104,7 +126,7 @@ else if(isset($_POST['doDelItem'])) {
 		}
 		unset($navbar[$noItems]);
 		$_POST['navbarlist'] = 0;
-		$pp->UpdateConfiguration(array("navbar"=>$navbar));
+		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
 	}
 }
 
@@ -137,7 +159,7 @@ else if(isset($_POST['doMoveItemUp'])) {
 		$navbar[$current-1] = $navbar[$current];
 		$navbar[$current] = $tmp;
 		$_POST['navbarlist'] = $current-1;
-		$pp->UpdateConfiguration(array("navbar"=>$navbar));
+		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
 	}
 }
 
@@ -170,7 +192,7 @@ else if(isset($_POST['doMoveItemDown'])) {
 		$navbar[$current+1] = $navbar[$current];
 		$navbar[$current] = $tmp;
 		$_POST['navbarlist'] = $current+1;
-		$pp->UpdateConfiguration(array("navbar"=>$navbar));
+		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
 	}
 }
 
@@ -180,8 +202,9 @@ else if(isset($_POST['doMoveItemDown'])) {
 // Create a SELECT/OPTION list of the current navbar
 //
 $current = isset($_POST['navbarlist']) ? strip_tags($_POST['navbarlist']) : 0;
+$select = "";
 $size = count($navbar);
-$select = "<select size={$size} name=navbarlist onclick='form.submit();'>";
+$select = "<select size=12 class=span-5 name=navbarlist onclick='form.submit();'>";
 foreach($navbar as $key => $val) {
 	$selected = $key == $current ? "selected " : "";
 	$select .= "<option value='{$key}' {$selected}>{$val['text']}</option>";
@@ -197,13 +220,23 @@ $editItem = "<p>Select an item to edit it.</p>";
 if($current) {
 
 	$editItem = <<<EOD
-<label>Text:<input type=text name=text value="{$navbar[$current]['text']}"></label>
-<label>Link:<input type=text name=url value="{$navbar[$current]['url']}"></label>
-<label>Title:<input type=text name=title value="{$navbar[$current]['title']}"></label>
-<div class='buttonbar'>
-	<input type=submit name=doSaveItem value='Save'>
-</div> 
-<output>{$outputItem}</output> 
+<p>
+	<label>Text:</label><br>
+	<input type=text class=text name=text value="{$navbar[$current]['text']}">
+</p>
+<p>
+	<label>Link:</label><br>
+	<input type=text class=text name=url value="{$navbar[$current]['url']}">
+</p>
+<p>
+	<label>Title:</label><br>
+	<input type=text class=text name=title value="{$navbar[$current]['title']}">
+</p>
+<p>
+	<input type=submit name=doSaveItem value='Save' {$disabled}>
+	<input type=reset value='Reset'>
+</p> 
+<p class=right><output class="span-6 {$remember['output-type']}">{$remember['output']}</output></p>
 EOD;
 } 
 
@@ -213,24 +246,32 @@ EOD;
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<h1>Set navigation bar</h1>
-<p>Define the items on the navigation bar (main menu) of the site.</p>
+<h1>Configure navigation menus</h1>
+<p>Define the items on the navigational menus of the site.</p>
 <form action='?p={$p}' method=post>
-	<fieldset class='std type21'>
+	<fieldset>
 		<!-- <legend></legend> -->
-		<div class=wrap>
-			<div class=wrap1>
-				<label>Items on navigation bar:{$select}</label>
-				<div class='buttonbar'>
-					<input type=submit name=doAddItem title="Add a new item" value='+'>
-					<input type=submit name=doDelItem title="Remove an item from the list" value='-'>
-					<input type=submit name=doMoveItemUp title="Move item up" value='&uarr;'>
-					<input type=submit name=doMoveItemDown title="Move item down" value='&darr;'>
-				</div> 
-			</div>
-			<div class=wrap2>{$editItem}</div>
-			<output>{$output}</output> 
-		</div>
+		<fieldset class=span-5>
+			<legend>Menu</legend>
+			<p>
+				{$selectLevel1}<br>
+				{$select}
+			</p>
+			
+			<p class=clear>
+				<input type=submit name=doAddItem title="Add a new item" value='+' {$disabled}>
+				<input type=submit name=doDelItem title="Remove an item from the list" value='-' {$disabled}>
+				<input type=submit name=doMoveItemUp title="Move item up" value='&uarr;' {$disabled}>
+				<input type=submit name=doMoveItemDown title="Move item down" value='&darr;' {$disabled}>
+			</p>
+		</fieldset>
+		
+		<fieldset class="span-10 last">
+			<legend>Menu item</legend>
+			{$editItem}
+		</fieldset>
+			
+		<p class=right><output class="span-6 {$remember['output-type']}">{$remember['output']}</output></p>
 	</fieldset>
 </form>
 EOD;
