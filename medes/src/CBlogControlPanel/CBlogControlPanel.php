@@ -20,6 +20,7 @@ class CBlogControlPanel implements IFrontController {
 	protected static $menu = array(
 		"home" => array("text"=>"/blog control panel/", "url"=>"blog.php", "title"=>"Administrate and configure the site and its addons", "class"=>"nav-h1"),
 
+/*
 		"site" => array("text"=>"Configure site", "title"=>"Configure and define site related items", "class"=>"nav-h2 nolink"),
 		"siteurl" => array("text"=>"site link", "url"=>"?p=siteurl", "title"=>"Set the main link to the site"),
 		"meta" => array("text"=>"meta",  "url"=>"?p=meta", "title"=>"Set default meta tags to enhace search enginge visibility"),
@@ -34,6 +35,7 @@ class CBlogControlPanel implements IFrontController {
 
 		"other" => array("text"=>"Other", "title"=>"Other things, to be removed?", "class"=>"nav-h2 nolink"),
 		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
+*/
 	);
 
 	protected static $pages = array(
