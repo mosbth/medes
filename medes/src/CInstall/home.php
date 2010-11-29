@@ -38,9 +38,9 @@ EOD;
 $case 	= "Fresh install without an existing config-file <code>medes/data/CPrinceOfPersia_config.php</code>.";
 $class 	= "ok";
 $result = "";
-$configFileExistsChecked = true;
+$configFileExists = false;
 if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
-	$configFileExistsChecked = false;
+	$configFileExists = true;
 	$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
 	$class = "fail";
 } 
@@ -151,7 +151,7 @@ if(!isset($pp->config['tracker'])) {
 	$pp->config['tracker'] = $config['tracker'];
 }
 
-if($dataDirectoryIsWritable && !$configFileExistsChecked) {
+if($dataDirectoryIsWritable && !$configFileExists) {
 	echo "storing"; 
 	$pp->UpdateConfiguration($config);
 }
