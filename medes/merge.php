@@ -1,7 +1,7 @@
 <?php 
 require_once("config.php");
 
-$config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config_backup.php"));
+$config = unserialize(file_get_contents($this->medesPath . "/data/CPrinceOfPersia_config_backup.php"));
 
 $pp->config['header'] = $config['header'];
 $pp->config['footer'] = $config['footer'];
