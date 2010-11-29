@@ -6,7 +6,7 @@
 $pp = CPrinceOfPersia::GetInstance(); 
 $relatedSites = $pp->GetHTMLForRelatedSitesMenu();
 $profile = $pp->GetHTMLForProfileMenu();
-$logo = $pp->PrependWithSiteUrl('img/logo_medes_350x70.png');
+$logo = $pp->PrependWithSiteUrl('img/logo_medes_335x70.png');
 $navbar = $pp->GetHTMLForNavbar();
 
 $html = <<<EOD
@@ -16,7 +16,7 @@ $html = <<<EOD
 </header>
 
 <header id=top class="container showgrid" style="overflow:visible;">
-	<img src="{$logo}" alt="Logo" width=350 height=70 style="margin-left:0px;">
+	<img src="{$logo}" alt="Logo" width=335 height=70 style="margin-left:0px;">
 {$navbar}
 </header>
 
