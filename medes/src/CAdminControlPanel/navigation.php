@@ -15,22 +15,89 @@ $disabled = $pp->uc->IsAdministrator() ? "" : "disabled";
 $outputItem = '';
 
 // What is the current choice?
-$selectedLevel1 = isset($_POST['selectLevel1']) ? $_POST['selectLevel1'] : -1;
+$selectedLevel1 = isset($_POST['selectLevel1']) ? $_POST['selectLevel1'] : "none-choosen";
 
 // Create an array of all navigational menus
-$items = isset($pp->config['navigation']) ? $pp->config['navigation'] : array();
-$items['-1'] = array("text"=>"Choose navigational menu...", "nav"=>array());
-$items['navbar'] = array("text"=>"Main navigation bar", "nav"=>$pp->config['navbar']);
-$items['relatedsites'] = array("text"=>"Top left menu for related sites", "nav"=>$pp->config['relatedsites']);
+$configItem = 'navigation';
+$items = $pp->config[$configItem];
 
-$currentNav = $items[$selectedLevel1];
-$navbar = $currentNav['nav'];
+$options = array("none-choosen"=>array("text"=>"Choose navigational menu...", "nav"=>array()));
+$options = array_merge($options, $items);
+
+// current choice
+$navbar = $options[$selectedLevel1]['nav'];
 
 $selectLevel1  = "<select name=selectLevel1 class=span-5 onChange='form.navbarlist.selectedIndex=-1;submit();'>";
-foreach($items as $key=>$val) {
+foreach($options as $key=>$val) {
   $selectLevel1 .= "<option value='{$key}'" . ($key == $selectedLevel1 ? " selected " : "") . ">{$val['text']}</option>";
 }
 $selectLevel1 .= "</select>";
+
+
+// ------------------------------------------------------------------------------
+//
+// Add a custom menu
+//
+if(isset($_GET['addMenu'])) {
+	
+	// Get and validate the incoming parameters
+	$inputs = filter_input_array(INPUT_GET, array(
+		'key' => array('filter'	=> FILTER_UNSAFE_RAW),
+		'text' => array('filter'	=> FILTER_UNSAFE_RAW),
+		)
+	);
+
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+
+	// Check that all values are there
+	else if(!(isset($inputs['key']) && isset($inputs['text']))) {
+		Throw new Exception("addMenu: You must set both 'key' and 'text' for the menu.");		
+	}	
+
+	// Save the information
+	else {
+		$items[$inputs['key']] = array(
+			"text"=>$inputs['key'],
+			"nav"=>array()
+		);
+		$pp->UpdateConfiguration(array($configItem=>$items));
+		$outputItem = "The menu was added.";
+	}
+}
+
+
+// ------------------------------------------------------------------------------
+//
+// Delete a custom menu
+//
+if(isset($_GET['delMenu'])) {
+	
+	// Get and validate the incoming parameters
+	$inputs = filter_input_array(INPUT_GET, array(
+		'key' => array('filter'	=> FILTER_UNSAFE_RAW),
+		)
+	);
+
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+
+	// Check that all values are there
+	else if(!(isset($inputs['key']))) {
+		Throw new Exception("addMenu: You must set 'key'.");		
+	}	
+
+	// Save the information
+	else {
+		unset($items[$inputs['key']]);
+		$pp->UpdateConfiguration(array($configItem=>$items));
+		$outputItem = "The menu was deleted.";
+	}
+}
 
 
 // ------------------------------------------------------------------------------
@@ -45,15 +112,21 @@ if(isset($_POST['doSaveItem'])) {
 	$item['url'] 		= isset($_POST['url']) ? strip_tags($_POST['url']) : "";
 	$item['title'] 	= isset($_POST['title']) ? strip_tags($_POST['title']) : "";
 
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+	
 	// Needs to have an item selected to be able to save it
-	if(!$current) {
+	else if(!$current) {
 		Throw new Exception("Item is not selected and con not be saved. This should not happen. Report this as an error.");		
 	}	
 
 	// Save the information
 	else {
 		$navbar[$current] = $item;
-		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
+		$items[$selectedLevel1]['nav'] = $navbar;
+		$pp->UpdateConfiguration(array($configItem=>$items));
 		$outputItem = "The information was saved.";
 	}
 }
@@ -77,8 +150,13 @@ else if(isset($_POST['doAddItem'])) {
 	//$current = $inputs['navbarlist']; // http://bugs.php.net/50632 fails to set default value when POST is not set
 	$current = $inputs['navbarlist'] === null ? $noItems : $inputs['navbarlist'];
 	
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+	
 	// Do whats to be done
-	if($current === false) {
+	else if($current === false) {
 		Throw new Exception("doAddItem, selected item ($current) is out of range.");
 	} else {
 		$newItem['text'] 	= "new item";
@@ -93,7 +171,8 @@ else if(isset($_POST['doAddItem'])) {
 		// Add item and save
 		$navbar[$current+1] = $newItem;
 		$_POST['navbarlist'] = $current+1;
-		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
+		$items[$selectedLevel1]['nav'] = $navbar;
+		$pp->UpdateConfiguration(array($configItem=>$items));
 	}
 }
 
@@ -115,8 +194,13 @@ else if(isset($_POST['doDelItem'])) {
 	$inputs = filter_input_array(INPUT_POST, $args);
 	$current = $inputs['navbarlist'];
 	
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+	
 	// Do whats to be done
-	if($current === false) {
+	else if($current === false) {
 		Throw new Exception("doDelItem, selected item ($current) is out of range.");
 	} else if($current === null) {
 		$output = "Select an item from the list and try again.";
@@ -126,7 +210,8 @@ else if(isset($_POST['doDelItem'])) {
 		}
 		unset($navbar[$noItems]);
 		$_POST['navbarlist'] = 0;
-		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
+		$items[$selectedLevel1]['nav'] = $navbar;
+		$pp->UpdateConfiguration(array($configItem=>$items));
 	}
 }
 
@@ -147,8 +232,13 @@ else if(isset($_POST['doMoveItemUp'])) {
 	$inputs = filter_input_array(INPUT_POST, $args);
 	$current = $inputs['navbarlist'];
 	
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+	
 	// Do whats to be done
-	if($current === false) {
+	else if($current === false) {
 		Throw new Exception("doMoveItemUp, selected item ({$current}) is out of range ({$noItems}).");
 	} else if($current === null) {
 		$output = "Select an item from the list and try again.";
@@ -159,7 +249,8 @@ else if(isset($_POST['doMoveItemUp'])) {
 		$navbar[$current-1] = $navbar[$current];
 		$navbar[$current] = $tmp;
 		$_POST['navbarlist'] = $current-1;
-		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
+		$items[$selectedLevel1]['nav'] = $navbar;
+		$pp->UpdateConfiguration(array($configItem=>$items));
 	}
 }
 
@@ -180,8 +271,13 @@ else if(isset($_POST['doMoveItemDown'])) {
 	$inputs = filter_input_array(INPUT_POST, $args);
 	$current = $inputs['navbarlist'];
 	
+	// Check if logged in as admin
+	if (!$pp->uc->IsAdministrator()) {
+		$pp->ReloadPageAndRemember(array("output"=>"You must be logged in as administrator to do this.", "output-type"=>"error"));		
+	} 
+	
 	// Do whats to be done
-	if($current === false) {
+	else if($current === false) {
 		Throw new Exception("doMoveItemDown, selected item ({$current}) is out of range ({$noItems}).");
 	} else if($current === null) {
 		$output = "Select an item from the list and try again.";
@@ -192,7 +288,8 @@ else if(isset($_POST['doMoveItemDown'])) {
 		$navbar[$current+1] = $navbar[$current];
 		$navbar[$current] = $tmp;
 		$_POST['navbarlist'] = $current+1;
-		$pp->UpdateConfiguration(array($selectedLevel1=>$navbar));
+		$items[$selectedLevel1]['nav'] = $navbar;
+		$pp->UpdateConfiguration(array($configItem=>$items));
 	}
 }
 

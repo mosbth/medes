@@ -222,7 +222,7 @@ EOD;
 	//
 	public function GetHTMLForRelatedSitesMenu() {
 		// treat all relative links as relative to sitelink, therefore prepend sitelink
-		$nav = $this->config['relatedsites'];
+		$nav = $this->config['navigation']['relatedsites']['nav'];
 		return CNavigation::GenerateMenu($nav, false, 'relatedsites');		
   }
 
@@ -268,7 +268,7 @@ EOD;
 	//
 	public function GetHTMLForNavbar() {
 		//self::$menu[$p]['active'] = 'active';
-		$nav = $this->config['navbar'];
+		$nav = $this->config['navigation']['navbar']['nav'];
 		foreach($nav as $key => $val) {
 			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
 				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
@@ -304,9 +304,9 @@ EOD;
 			"css3"					=>array("text"=>"css3", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&ucn_task=conformance", "title"=>"unicorn html and css validator"),			
 			"cheatsheet"		=>array("text"=>"cheatsheet", "url"=>"http://www.w3.org/2009/cheatsheet/", "title"=>"html cheatsheet, lookup html-tags"),			
-			"link-checker"	=>array("text"=>"Link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
+			"link-checker"	=>array("text"=>"link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
 			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&docAddr=" . $url, "title"=>"css3 validator"),			
-			"check-header"	=>array("text"=>"Check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
+			"check-header"	=>array("text"=>"check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 		);
 
 		$nav3 = array(
@@ -324,7 +324,7 @@ EOD;
 		$item3 = CNavigation::GenerateMenu($nav3, false, "span-3 last");
 		$time = round(microtime(true) - $this->timePageGeneration, 5);
 		$html = <<<EOD
-<p><em>Page generated in {$time} seconds.</em></p>
+<p class=clear><em>Page generated in {$time} seconds.</em></p>
 {$item1}{$item2}{$item3}
 EOD;
 
@@ -490,7 +490,7 @@ EOD;
 	//
 	public function StoreConfigToFile() {
 		
-		$className = get_class($this) ;
+		$className = get_class($this);
 		if(is_writable($this->medesPath . '/data/')) {
 			file_put_contents($this->medesPath . "/data/{$className}_config.php", serialize($this->config));
 		} else {
@@ -505,7 +505,7 @@ EOD;
 	//
 	public function ReadConfigFromFile() {
 		
-		$className = get_class($this) ;
+		$className = get_class($this);
 		if(is_readable($this->medesPath . "/data/{$className}_config.php")) {
 			$this->config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config.php"));
 		} else {
@@ -516,43 +516,24 @@ EOD;
 }
 
 
-/*
 	// ------------------------------------------------------------------------------------
-	// OBSOLETE to be replaced by real login
-	// Manages to gain or loose the admin access. 
 	//
-	public function GainOrLooseAdminAccess() {
-
-		// Try to gain admin access
-		if(isset($_GET['doGainAdminAccess'])) {
-			$html = <<<EOD
-<form action=? method=post>
-	<fieldset class=standard>
-		<legend>gain admin access</legend>
-		<input type=password name=password>
-		<input type=submit name=doCheckAdminPassword value=Login>
-	</fieldset>
-</form>
-EOD;
-			return $html;		
+	// Merge configuration settings from a backup file
+	//
+	public function MergeWithConfigFile($filename, $translate=array()) {
+		
+		$className = get_class($this);
+		if(!is_readable($filename)) {
+			Throw("File [{$filename}] does not exists or is not readable.");
 		}
 
-		// Check the admin password and set admin access if correct
-		if(isset($_POST['doCheckAdminPassword'])) {
-			// check pwd 
-			$_SESSION['hasAdminAccess'] = true;
-		}
-
-		// Loose admin access
-		if(isset($_GET['doLooseAdminAccess'])) {
-			$_SESSION['hasAdminAccess'] = false;			
-		}
-
-		// Does user already has admin access?
-		if(isset($_SESSION['hasAdminAccess']) && $_SESSION['hasAdminAccess'] === true) {
-			return "<p>You have admin access. <a href='?doLooseAdminAccess'>Loose it</a>.</p>";
-		}
-		return "<p>You need admin access. <a href='?doGainAdminAccess'>Get it</a>.</p>";		
+		$this->config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config.php"));
+		foreach($translate as $key=>$val) {
+			echo "<p>$key -> $val";
+		
+		}			
 	}
-*/
+	
+	
+}
 

@@ -93,16 +93,24 @@ EOD;
 //
 $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
-$config['navbar'] = array(
-	"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-	"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
-	"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
-	"4"=>array("text"=>"article", "url"=>"medes/article.php", "title"=>"Article editor"),
-	"5"=>array("text"=>"blog", "url"=>"medes/blog.php", "title"=>"Blog"),
-);
-$config['relatedsites'] = array(
-	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
-	"2"=>array("text"=>"dbwebb", "url"=>"http://dbwebb.se/", "title"=>"Databases and Webb, it´s all about html, css, php and sql"),
+$config['navigation'] = array(
+	"navbar"=>array(
+		"text"=>"Main navigation bar",
+		"nav"=>array(
+			"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+			"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
+			"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
+			"4"=>array("text"=>"article", "url"=>"medes/article.php", "title"=>"Article editor"),
+			"5"=>array("text"=>"blog", "url"=>"medes/blog.php", "title"=>"Blog"),
+		),
+	),
+	"relatedsites"=>array(
+		"text"=>"Top left menu",
+		"nav"=>array(
+			"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),
+			"2"=>array("text"=>"dbwebb", "url"=>"http://dbwebb.se/", "title"=>"Databases and Webb, it´s all about html, css, php and sql"),
+		),
+	),
 );
 $config['styletheme'] = array(
 	"name"=>"core",
@@ -118,37 +126,19 @@ $config['meta'] = array(
 );
 $config['tracker'] = "";
 
-if(!isset($pp->config['header'])) {
-	$pp->config['header'] = $config['header'];
-}
 
-if(!isset($pp->config['footer'])) {
-	$pp->config['footer'] = $config['footer'];
-}
-
-if(!isset($pp->config['styletheme'])) {
-	$pp->config['styletheme'] = $config['styletheme'];
-}
-
-if(!isset($pp->config['navbar'])) {
-	$pp->config['navbar'] = $config['navbar'];
-}
-
-if(!isset($pp->config['relatedsites'])) {
-	$pp->config['relatedsites'] = $config['relatedsites'];
-}
-
-if(!isset($pp->config['meta'])) {
-	$pp->config['meta'] = $config['meta'];
-}
-
-if(!isset($pp->config['tracker'])) {
-	$pp->config['tracker'] = $config['tracker'];
-}
-
+$done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes failed. Correct the errors above and reload this page.</strong></p>";
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
-}
+	$done = <<<EOD
+<h2>Done</h2>
+<p>Proceed to the admin area to set the admin password and start configuring
+your medes website.</p>
+<p><a href="acp.php?p=changepwd">Admin area: change password</a>.</p>
+<p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
+	
+EOD;
+} 
 
 
 // ------------------------------------------------------------------------------
@@ -160,10 +150,6 @@ $page = <<<EOD
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
 <h2>Checking the environment</h2>
 {$check}
-<h2>Done</h2>
-<p>Proceed to the admin area to set the admin password and start configuring
-your medes website.</p>
-<p><a href="acp.php?p=changepwd">Admin area: change password</a>.</p>
-<p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
+{$done}
 EOD;
 
