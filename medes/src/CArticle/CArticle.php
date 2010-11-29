@@ -1,114 +1,102 @@
 <?php
-class CArticle{
-  // file to include...
-  protected static $pages = array(
-    "view" => array("file"=>"view.php", "title"=>"View Article"),
-    "new" => array("file"=>"new.php", "title"=>"New Article"),
-    "edit" => array("file"=>"edit.php", "title"=>"Edit Article"),
-    "install" => array("file"=>"install.php", "title"=>"Install Articles"),
-    "delete" => array("file"=>"delete.php"),
-    "debug" => array("file"=>"debug.php", "title"=>"Article: print out debug and config information"),
-  );
+class CArticle implements ISingleton{
+  public $attribute;
+  public $db;
 
-  // array of the article's attributes
-  public static $attribute = array(
-    "title"=>array("type"=>"text"),
-    "author"=>array("type"=>"text"),
-    "copyright"=>array("type"=>"text"),
-    "description"=>array("type"=>"text"),
-    "keywords"=>array("type"=>"text"),
-    "article"=>array("type"=>"text")
-  );
+  protected static $instance = null;
 
-  public static $db;
-
-  protected function __construct() {;}
-  public function __destruct() {;}
-
-  public static function DoIt(){
-    // init database in data folder.
-    self::$db = new PDO("sqlite:data/CArticle.db");
-    self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+  protected function __construct() {
     $pp = CPrinceOfPersia::GetInstance();
-    // Check and get the durrent page referer
-    $p = isset($_GET['p']) && array_key_exists($_GET['p'], self::$pages) ? $_GET['p'] : 'view'; 		
+    $this->attribute = array(
+      "title"=>array("type"=>"text"),
+      "author"=>array("type"=>"text"),
+      "copyright"=>array("type"=>"text"),
+      "description"=>array("type"=>"text"),
+      "keywords"=>array("type"=>"text"),
+      "article"=>array("type"=>"text"),
+      "owner"=>array("type"=>"text")
+    );
+    $this->db = new PDO("sqlite:{$pp->installPath}/medes/data/CArticle.db");
+    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  }
+  public function __destruct() {unset($this->db);}
 
-    // Prepare the html for the page
-    $pp->pageTitle = self::$pages[$p]['title'];
-
-    // Process the actual page and fill in $page
-    require(dirname(__FILE__) . "/" . self::$pages[$p]['file']);
-
-    // Return the resulting page
-    $html = <<<EOD
-<article>
-  {$page}
-</article>	
-EOD;
-    return $html;
+  public static function GetInstance(){
+    if(self::$instance == NULL)
+      self::$instance = new CArticle();
+    return self::$instance;
   }
 
   // create a new article based on the incoming post-variables
-  public static function SaveNew(){
+  public function SaveNew($attributes){
     $q = 'insert into article values(';
-    foreach(self::$attribute as $key=>$value)
+    foreach($this->attribute as $key=>$value)
       $q .= ':'.$key.', ';
     $q .= 'datetime("now"), null, null);';
-    $stmt = self::$db->prepare($q);
-    foreach(self::$attribute as $key=>$value)
-      $stmt->bindParam(':'.$key, $_POST[$key]);
+    $stmt = $this->db->prepare($q);
+    foreach($this->attribute as $key=>$value)
+      $stmt->bindParam(':'.$key, $attributes[$key]);
     $stmt->execute();
   }
 
   // update an existing article
-  public static function Save(){
+  public function Save($attributes){
     $q = 'update article set ';
-    foreach(self::$attribute as $key=>$value)
+    foreach($this->attribute as $key=>$value)
       $q .= $key . '=:' . $key . ', ';
     $q .= 'modified=datetime("now") where rowid = :id;';
-    $stmt = self::$db->prepare($q);
-    $stmt->bindParam(':id', $_POST['id']);
+    $stmt = $this->db->prepare($q);
+    $stmt->bindParam(':id', $attributes['id']);
   
-    foreach(self::$attribute as $key=>$value)
-      $stmt->bindParam(':'.$key, $_POST[$key]);
+    foreach($this->attribute as $key=>$value)
+      $stmt->bindParam(':'.$key, $attributes[$key]);
     $stmt->execute();
   }
 
   // set the deleted datetime
-  public static function Delete(){
+  public function Delete($id){
     $q = 'update article set deleted=datetime("now") where rowid = :id;';
-    $stmt = self::$db->prepare($q);
-    $stmt->bindParam(':id', $_GET['id']);
+    $stmt = $this->db->prepare($q);
+    $stmt->bindParam(':id', $id);
     $stmt->execute();
   }
 
-  // returns html for an edit form based on $attributes
-  public static function Edit(){
+  public function GetArticles($attributes=array('*'), $order=array(), $range=array('range'=>10), $where=array()){
     $q = 'select ';
-    foreach(self::$attribute as $key=>$value)
-      $q .= $key.',';
-    $q = substr($q, 0, -1).' from article where rowid = :id;';
-    $stmt = self::$db->prepare($q);
-    $stmt->bindParam(':id', $_GET['id']);
+    foreach($attributes as $value)
+      $q .= $value.', ';
+    $q = substr($q, 0, -2).' from article';
+    if(sizeof($where) > 0){
+      $q .= ' where ';
+      foreach($where as $key=>$value)
+        $q .= $key . ' ' . $value;
+    }
+    if(sizeof($order) > 0)
+      $q .= ' order by '.$order['by'].' '.(isset($order['sort']) ? $order['sort'] : '');
+    if(sizeof($range) > 0)
+      $q .= ' limit '.(isset($range['offset']) ? $range['offset'].', ' : '').(isset($range['limit']) ? $range['limit'] : '').';';
+
+    $stmt = $this->db->prepare($q);
     $stmt->execute();
-    $row = $stmt->fetch();
-    $page = '<form method=post>';
-    foreach(self::$attribute as $key=>$value)
-      $page .= $key.': <textarea name='.$key.'>'.$row[$key].'</textarea><br>';
-    $page .= "<input type=hidden value={$_GET['id']} name=id><input type=submit name=doSaveArticle value=Submit></form>";
-    return $page;
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $row;
   }
 
-  // returns a list of all articles that are not deleted with options to view/edit/delete/create new
-  public static function ListAll(){
-    $q = 'select rowid, title from article where deleted is null;';
-    $stmt = self::$db->query($q);
-    $page = '';
-    while($res = $stmt->fetch()){
-      $page .= $res['rowid'].': '.'<a href="?p=view&id='.$res['rowid'].'">'.$res['title'].'</a> <a href="?p=edit&id='.$res['rowid'].'">e</a> <a href="?p=delete&id='.$res['rowid'].'">x</a><br>';
-    }
-    $page .= '<a href="?p=new">Create a new article</a>';
+  // create table and insert a sample home-article
+  public function Install(){
+    $q = 'create table if not exists article(';
+    foreach($this->attribute as $key=>$value)
+      $q .= $key.' '.$value['type'].',';
+    $q .= 'created datetime, modified datetime, deleted datetime);';
+    $stmt = $this->db->prepare($q);
+    $page = "<p>Executing install of articles db: <br><pre>".$stmt->queryString."</pre>";
+    $stmt->execute();
+
+    $q = 'insert into article values(';
+    $q .= '"home", "admin", "&copy;2k10, all rights reserved", "description", "home, phpmedes", "<p>Welcome to phpmedes!</p>", "article", datetime("now"), null, null);';
+    $stmt = $this->db->prepare($q);
+    $page .= "<p>Executing install of articles db: <br><pre>".$stmt->queryString."</pre>";
+    $stmt->execute();
     return $page;
   }
 }
