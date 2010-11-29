@@ -152,7 +152,6 @@ if(!isset($pp->config['tracker'])) {
 }
 
 if($dataDirectoryIsWritable && !$configFileExists) {
-	echo "storing"; 
 	$pp->UpdateConfiguration($config);
 }
 
