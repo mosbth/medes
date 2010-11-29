@@ -22,7 +22,7 @@ if(!is_writable(dirname(__FILE__) . "/../../data/")) {
 	$dataDirectoryIsWritable = false;
 	$result = "Create the directory and chmod to make it writable by the webserver.";
 	$class = "fail";
-}
+} 
 $check .= <<<EOD
 <p>
 <span class={$class}>[{$class}]</span> 
@@ -39,12 +39,11 @@ $case 	= "Fresh install without an existing config-file <code>medes/data/CPrince
 $class 	= "ok";
 $result = "";
 $configFileExistsChecked = true;
-
 if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 	$configFileExistsChecked = false;
 	$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
 	$class = "fail";
-}
+} 
 $check .= <<<EOD
 <p>
 <span class={$class}>[{$class}]</span> 
@@ -152,7 +151,9 @@ if(!isset($pp->config['tracker'])) {
 	$pp->config['tracker'] = $config['tracker'];
 }
 
-$pp->UpdateConfiguration($config);
+if($dataDirectoryIsWritable && !$configFileExistsChecked) {
+	$pp->UpdateConfiguration($config);
+}
 
 
 // ------------------------------------------------------------------------------
