@@ -1,18 +1,18 @@
 <?php 
-require_once("config.php");
+$config1 = unserialize(file_get_contents("data/CPrinceOfPersia_config.php"));
+$config2 = unserialize(file_get_contents("data/CPrinceOfPersia_config_backup.php"));
 
-$config = unserialize(file_get_contents($this->medesPath . "/data/CPrinceOfPersia_config_backup.php"));
+$config1['header'] = $config2['header'];
+$config1['footer'] = $config2['footer'];
+$config1['password'] = $config2['password'];
 
-$pp->config['header'] = $config['header'];
-$pp->config['footer'] = $config['footer'];
-$pp->config['password'] = $config['password'];
-
-$pp->config['navigation']['navbar'] = array(
+$config1['navigation']['navbar'] = array(
 	"text"=>"Main navigation",
-	"nav"=>$config['navbar'],
+	"nav"=>$config2['navbar'],
 );
-$pp->config['navigation']['relatedsites'] = array(
+$config1['navigation']['relatedsites'] = array(
 	"text"=>"Top left menu",
-	"nav"=>$config['relatedsites'],
+	"nav"=>$config2['relatedsites'],
 );
-$pp->Dump;
+
+file_put_contents("CPrinceOfPersia_config.php", serialize($config1));
