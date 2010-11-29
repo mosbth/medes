@@ -75,7 +75,7 @@ $result = "";
 $siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/install.php"));
 $pp->config['siteurl'] = $siteUrl;
 
-if($dataDirectoryIsWritable && $configFileExistsChecked) {
+if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
 	$result = "Sitelink = {$siteUrl}";
 } else {
