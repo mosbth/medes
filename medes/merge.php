@@ -9,10 +9,10 @@ $pp->config['password'] = $config['password'];
 
 $pp->config['navigation']['navbar'] = array(
 	"text"=>"Main navigation",
-	"nav"=>$config['navbar'];
+	"nav"=>$config['navbar'],
 );
 $pp->config['navigation']['relatedsites'] = array(
 	"text"=>"Top left menu",
-	"nav"=>$config['relatedsites'];
+	"nav"=>$config['relatedsites'],
 );
 $pp->Dump;
