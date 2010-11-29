@@ -94,11 +94,11 @@ EOD;
 $config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
 $config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
 $config['navbar'] = array(
-	"template"=>array("text"=>"template", "url"=>$pp->PrependWithSiteUrl("medes/template.php"), "title"=>"A default template page to start with"),
-	"acp"=>array("text"=>"acp", "url"=>$pp->PrependWithSiteUrl("medes/acp.php"), "title"=>"Administrate and configure the site and its addons"),
-	"ucp"=>array("text"=>"ucp", "url"=>$pp->PrependWithSiteUrl("medes/ucp.php"), "title"=>"User control panel"),
-	"article"=>array("text"=>"article", "url"=>$pp->PrependWithSiteUrl("medes/article.php"), "title"=>"Article editor"),
-	"blog"=>array("text"=>"blog", "url"=>$pp->PrependWithSiteUrl("medes/blog.php"), "title"=>"Blog"),
+	"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+	"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
+	"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
+	"4"=>array("text"=>"article", "url"=>"medes/article.php", "title"=>"Article editor"),
+	"5"=>array("text"=>"blog", "url"=>"medes/blog.php", "title"=>"Blog"),
 );
 $config['relatedsites'] = array(
 	"1"=>array("text"=>"phpmedes", "url"=>"http://phpmedes.org/", "title"=>"Home of phpmedes"),

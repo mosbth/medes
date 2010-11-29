@@ -149,7 +149,7 @@ else if(isset($_POST['doMoveItemUp'])) {
 	
 	// Do whats to be done
 	if($current === false) {
-		Throw new Exception("doMoveItemUp, selected item ($current) is out of range.");
+		Throw new Exception("doMoveItemUp, selected item ({$current}) is out of range ({$noItems}).");
 	} else if($current === null) {
 		$output = "Select an item from the list and try again.";
 	}	else if($current == 1) {
@@ -182,7 +182,7 @@ else if(isset($_POST['doMoveItemDown'])) {
 	
 	// Do whats to be done
 	if($current === false) {
-		Throw new Exception("doMoveItemDown, selected item ($current) is out of range.");
+		Throw new Exception("doMoveItemDown, selected item ({$current}) is out of range ({$noItems}).");
 	} else if($current === null) {
 		$output = "Select an item from the list and try again.";
 	}	else if($current == $noItems) {
