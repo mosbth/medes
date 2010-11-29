@@ -11,6 +11,10 @@ addon pageeditor
 addon stylesheet chooser
 
 # current
+config navigation, change how its stored.
+update procedure should work when site is already installed, instead of doing a fresh install
+
+
 CNavigation (navbar:selected, admin-menu:class per item, admin-menu:separator)
 install empty system 
 topmenu left
