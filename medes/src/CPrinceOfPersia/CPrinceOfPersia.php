@@ -515,25 +515,3 @@ EOD;
 	
 }
 
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Merge configuration settings from a backup file
-	//
-	public function MergeWithConfigFile($filename, $translate=array()) {
-		
-		$className = get_class($this);
-		if(!is_readable($filename)) {
-			Throw("File [{$filename}] does not exists or is not readable.");
-		}
-
-		$this->config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config.php"));
-		foreach($translate as $key=>$val) {
-			echo "<p>$key -> $val";
-		
-		}			
-	}
-	
-	
-}
-
