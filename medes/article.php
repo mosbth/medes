@@ -1,7 +1,7 @@
 <?php 
 require_once("config.php");
 $pp->pageTitle = "Article";
-$page = CArticle::DoIt();
+$page = CArticleEditor::DoIt();
 
 include($pp->medesPath . "/inc/header.php");
 echo $page;
