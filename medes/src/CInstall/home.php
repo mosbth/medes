@@ -78,20 +78,14 @@ $pp->config['siteurl'] = $siteUrl;
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
 	$result = "Sitelink = {$siteUrl}";
-} else {
-	$class 	= "fail";
-	$result = "The configuration can not be stored.";
+	$check .= <<<EOD
+	<p>
+	<span class={$class}>[{$class}]</span> 
+	{$case}
+	<p class=fix><em>{$result}</em></p>
+EOD;
 }
 
-$check .= <<<EOD
-<p>
-<span class={$class}>[{$class}]</span> 
-{$case}
-<p class=fix><em>{$result}</em></p>
-EOD;
-
-
-// Save sitelink, reload page and it should work, if not...
 
 // ------------------------------------------------------------------------------
 //
