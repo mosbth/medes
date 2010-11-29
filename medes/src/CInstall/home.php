@@ -20,7 +20,7 @@ $result = "";
 $dataDirectoryIsWritable = true;
 if(!is_writable(dirname(__FILE__) . "/../../data/")) {
 	$dataDirectoryIsWritable = false;
-	$result = "Create the directory and chmod to make it writable by the webserver.";
+	$result = "Make the directory writable (for example chmod 777) by the webserver.";
 	$class = "fail";
 } 
 $check .= <<<EOD
@@ -152,6 +152,7 @@ if(!isset($pp->config['tracker'])) {
 }
 
 if($dataDirectoryIsWritable && !$configFileExistsChecked) {
+	echo "storing"; 
 	$pp->UpdateConfiguration($config);
 }
 
