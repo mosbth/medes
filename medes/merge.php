@@ -15,4 +15,4 @@ $config1['navigation']['relatedsites'] = array(
 	"nav"=>$config2['relatedsites'],
 );
 
-file_put_contents("CPrinceOfPersia_config.php", serialize($config1));
+file_put_contents("data/CPrinceOfPersia_config.php", serialize($config1));
