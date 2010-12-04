@@ -100,6 +100,9 @@ class CPrinceOfPersia implements iSingleton {
 		session_name(preg_replace('/[:\.\/-_]/', '', $this->sessionName));
 		session_start();
 
+		// Set default date/time-zone
+		date_default_timezone_set('Europe/Stockholm');
+
 		// path to medes installation directory
 		$this->medesPath = realpath(dirname(__FILE__).'/../../');
 		$this->installPath = realpath(dirname(__FILE__).'/../../../');
