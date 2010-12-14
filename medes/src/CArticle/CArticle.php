@@ -14,7 +14,8 @@ class CArticle implements ISingleton{
       "description"=>array("type"=>"text"),
       "keywords"=>array("type"=>"text"),
       "article"=>array("type"=>"text"),
-      "owner"=>array("type"=>"text")
+      "owner"=>array("type"=>"text"),
+      "key"=>array("type"=>"text unique"),
     );
     $this->db = new PDO("sqlite:{$pp->installPath}/medes/data/CArticle.db");
     $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -26,6 +27,45 @@ class CArticle implements ISingleton{
       self::$instance = new CArticle();
     return self::$instance;
   }
+
+  // create or update article with key
+  public function SaveByKey($attributes){
+  	if(!isset($attributes['key'])) {
+  		Throw(get_class() . "::SaveByKey(): Article attributes has no key.");
+  	} 	
+    $q = 'select rowid from article where key = :key';
+    $stmt = $this->db->prepare($q);
+    $stmt->bindParam(':key', $attributes['key']);
+    $stmt->execute();
+    $row = $stmt->fetchObject();
+    if(empty($row)) {
+    	$this->SaveNew($attributes);
+    } else {
+    	$attributes['id'] = $row->rowid;
+    	$this->Save($attributes);
+    }
+  }
+
+  // get article with key
+  public function GetByKey($aKey){
+    $q = 'select * from article where key = :key';
+    $stmt = $this->db->prepare($q);
+    $stmt->bindParam(':key', $aKey);
+    $stmt->execute();
+    $row = $stmt->fetchObject();
+    return $row;
+  }
+
+  // delete all by owner
+  public function DeleteAllByOwner($owner){
+    $q = 'update article set deleted=datetime("now") where owner = :owner;';
+    $stmt = $this->db->prepare($q);
+    $stmt->bindParam(':owner', $owner);
+    $stmt->execute();
+  }
+
+
+
 
   // create a new article based on the incoming post-variables
   public function SaveNew($attributes){
@@ -61,7 +101,7 @@ class CArticle implements ISingleton{
     $stmt->execute();
   }
 
-  public function GetArticles($attributes=array('*'), $order=array(), $range=array('range'=>10), $where=array()){
+  public function GetArticles($attributes=array('*'), $order=array(), $range=array('limit'=>10), $where=array()){
     $q = 'select ';
     foreach($attributes as $value)
       $q .= $value.', ';
@@ -70,18 +110,19 @@ class CArticle implements ISingleton{
       $q .= ' where ';
       foreach($where as $key=>$value)
         $q .= $key . ' ' . $value;
+        //$q .= ' ' . $value;
     }
     if(sizeof($order) > 0)
       $q .= ' order by '.$order['by'].' '.(isset($order['sort']) ? $order['sort'] : '');
     if(sizeof($range) > 0)
       $q .= ' limit '.(isset($range['offset']) ? $range['offset'].', ' : '').(isset($range['limit']) ? $range['limit'] : '').';';
-
+//echo $q;
     $stmt = $this->db->prepare($q);
     $stmt->execute();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $row;
   }
-
+  
   // create table and insert a sample home-article
   public function Install(){
     $q = 'create table if not exists article(';
@@ -93,7 +134,7 @@ class CArticle implements ISingleton{
     $stmt->execute();
 
     $q = 'insert into article values(';
-    $q .= '"home", "admin", "&copy;2k10, all rights reserved", "description", "home, phpmedes", "<p>Welcome to phpmedes!</p>", "article", datetime("now"), null, null);';
+    $q .= '"home", "admin", "&copy;2k10, all rights reserved", "description", "home, phpmedes", "<p>Welcome to phpmedes!</p>", "article", null, datetime("now"), null, null);';
     $stmt = $this->db->prepare($q);
     $page .= "<p>Executing install of articles db: <br><pre>".$stmt->queryString."</pre>";
     $stmt->execute();

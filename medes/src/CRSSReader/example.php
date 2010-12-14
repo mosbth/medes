@@ -1,6 +1,6 @@
 <?php 
 require_once("../../config.php");
-$pp->pageTitle = "Example on how to use CRSSFeed";
+$pp->pageTitle = "Example on how to use CRSSReader";
 
 // Check whats needed to use this class
 $extNeeded = array('xml', 'pcre');
@@ -17,14 +17,14 @@ foreach($extRecommended as $val) {
 }	
 
 // get some feeds
-$feed1 = CRSSFeed::GetContent("http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", 5);
-$feed2 = CRSSFeed::GetContent("http://www.bth.se/info/aktuellt.nsf/rss", 5);
-$feed3 = CRSSFeed::GetContent("http://db-o-webb.blogspot.com/feeds/posts/default?alt=rss", 5);
-$feed4 = CRSSFeed::GetContent("http://picasaweb.google.com/data/feed/base/user/programvaruteknik?alt=rss&kind=album&hl=sv", 5);
-$feed5 = CRSSFeed::GetContent("http://twitter.com/favorites/70333468.rss", 5);
-$feed6 = CRSSFeed::GetContent("http://gdata.youtube.com/feeds/base/users/mosdbwebb/uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile", 5);
-$feed7 = CRSSFeed::GetContent("http://github.com/mosbth.atom", 5);
-$feed8 = CRSSFeed::GetContent("http://internetworld.idg.se/rss/nyheterinternetworld", 5);
+$feed1 = CRSSReader::GetContent("http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", 5);
+$feed2 = CRSSReader::GetContent("http://www.bth.se/info/aktuellt.nsf/rss", 5);
+$feed3 = CRSSReader::GetContent("http://db-o-webb.blogspot.com/feeds/posts/default?alt=rss", 5);
+$feed4 = CRSSReader::GetContent("http://picasaweb.google.com/data/feed/base/user/programvaruteknik?alt=rss&kind=album&hl=sv", 5);
+$feed5 = CRSSReader::GetContent("http://twitter.com/favorites/70333468.rss", 5);
+$feed6 = CRSSReader::GetContent("http://gdata.youtube.com/feeds/base/users/mosdbwebb/uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile", 5);
+$feed7 = CRSSReader::GetContent("http://github.com/mosbth.atom", 5);
+$feed8 = CRSSReader::GetContent("http://internetworld.idg.se/rss/nyheterinternetworld", 5);
 
 $page = <<<EOD
 <div class=span-6>{$feed1}</div>
@@ -38,6 +38,4 @@ $page = <<<EOD
 
 EOD;
 
-include($pp->medesPath . "/inc/header.php");
-echo $page;
-include($pp->medesPath . "/inc/footer.php"); 
+$pp->PrintHTMLPage($page);

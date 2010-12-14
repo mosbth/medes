@@ -35,7 +35,7 @@ EOD;
 //
 // Check if the config file exists and is writable. If it exists then exit the procedure.
 //
-$case 	= "Fresh install without an existing config-file <code>medes/data/CPrinceOfPersia_config.php</code>.";
+$case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPersia_config.php</code>.";
 $class 	= "ok";
 $result = "";
 $configFileExists = false;
@@ -45,6 +45,7 @@ if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 	$class = "fail";
 } 
 $check .= <<<EOD
+<h2>Installing</h2>
 <p>
 <span class={$class}>[{$class}]</span> 
 {$case}
@@ -69,7 +70,7 @@ EOD;
 //
 // Find out the sitelink and display it. Enable to save it and redirect to admin and set admin password.
 //
-$case 	= "Setting the sitelink to this website (starting from the root of this server).";
+$case 	= "Setting the sitelink to this website (starting from the docroot of this webserver).";
 $class 	= "ok";
 $result = "";
 $siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/install.php"));
@@ -91,17 +92,21 @@ EOD;
 //
 // Create default settings for configuration
 //
-$config['header'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/header.php");
-$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/../../data/default/footer.php");
+$config['header'] 		= file_get_contents(dirname(__FILE__) . "/default_site_header.php");
+$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/default_site_footer.php");
 $config['navigation'] = array(
 	"navbar"=>array(
 		"text"=>"Main navigation bar",
 		"nav"=>array(
-			"1"=>array("text"=>"template", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
+			"1"=>array("text"=>"home", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
 			"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
 			"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
-			"4"=>array("text"=>"article", "url"=>"medes/article.php", "title"=>"Article editor"),
-			"5"=>array("text"=>"blog", "url"=>"medes/blog.php", "title"=>"Blog"),
+			"4"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
+			"5"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
+			"6"=>array("text"=>"blog", "url"=>"medes/src/CBlog/example.php", "title"=>"CBlog"),
+			"7"=>array("text"=>"news", "url"=>"medes/src/CNews/example.php", "title"=>"CNews"),
+			"8"=>array("text"=>"rss reader", "url"=>"medes/src/CRSSReader/example.php", "title"=>"CRSSReader"),
+			"9"=>array("text"=>"install", "url"=>"medes/install.php", "title"=>"Install"),
 		),
 	),
 	"relatedsites"=>array(
@@ -131,10 +136,10 @@ $done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
 	$done = <<<EOD
-<h2>Done</h2>
+<h2>Installation complete</h2>
 <p>Proceed to the admin area to set the admin password and start configuring
 your medes website.</p>
-<p><a href="acp.php?p=changepwd">Admin area: change password</a>.</p>
+<p><a href="acp.php?p=changepwd">Admin area: change password</a></p>
 <p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
 	
 EOD;

@@ -1,18 +1,17 @@
 <?php
 // ===========================================================================================
 //
-// File: CBlog.php
+// File: CNews.php
 //
-// Description: A simple blog that uses CArticle and CArticleEditor. The blog is managed
-// using CBlogControlPanel.
+// Description: A simple newsstand that uses CArticle and CArticleEditor. 
 //
 // Author: Mikael Roos
 //
 // History:
-// 2010-11-27: Created
+// 2010-12-13: Created
 //
 
-class CBlog {
+class CNews {
 
 	// ------------------------------------------------------------------------------------
 	//
@@ -38,9 +37,9 @@ class CBlog {
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Add blogposts. 
+	// Add news articles. 
 	//
-	public function AddPosts($aSet) {
+	public function AddArticle($aSet) {
 		$a = CArticle::GetInstance();
 		foreach($aSet as $val) {
 			$val['owner'] = $this->label;
@@ -51,11 +50,20 @@ class CBlog {
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Get blogposts. 
+	// Get all articles. 
 	//
-	public function GetPosts() {
+	public function GetArticles() {
 		$p = CArticle::GetInstance()->GetArticles(array('*'), array(), array(), array(""=>"owner='{$this->label}'", "AND"=>"deleted IS NULL"));
 		return $p;
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Delete articles. 
+	//
+	public function DeleteAllArticles() {
+		CArticle::GetInstance()->DeleteAllByOwner($this->label);
 	}
 
 
@@ -68,9 +76,10 @@ class CBlog {
 
 	// ------------------------------------------------------------------------------------
 	//
-	// One blog post. 
+	// One news article. 
 	//
-	public static function GetBlogPost() {;}
+	public static function GetNewsArticle() {;}
+
 
 /*	
 	// ------------------------------------------------------------------------------------

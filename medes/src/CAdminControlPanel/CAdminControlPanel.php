@@ -23,6 +23,7 @@ class CAdminControlPanel implements IFrontController {
 		"home" => array("text"=>"/admin control panel/", "url"=>"acp.php", "title"=>"Administrate and configure the site and its addons", "class"=>"nav-h1"),
 
 		"site" => array("text"=>"Configure site", "title"=>"Configure and define site related items", "class"=>"nav-h2 nolink"),
+		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
 		"siteurl" => array("text"=>"site link", "url"=>"?p=siteurl", "title"=>"Set the main link to the site"),
 		"meta" => array("text"=>"meta",  "url"=>"?p=meta", "title"=>"Set default meta tags to enhace search enginge visibility"),
 		"tracker" => array("text"=>"tracker",  "url"=>"?p=tracker", "title"=>"Track site using Google Analytics"),
@@ -34,8 +35,7 @@ class CAdminControlPanel implements IFrontController {
 		"addons" => array("text"=>"Configure addons", "title"=>"Install, update and configure addons", "class"=>"nav-h2 nolink"),
 		"fileupload" => array("text"=>"fileupload", "url"=>"?p=fileupload", "title"=>"Upload files and images"),
 
-		"other" => array("text"=>"Other", "title"=>"Other things, to be removed?", "class"=>"nav-h2 nolink"),
-		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
+//		"other" => array("text"=>"Other", "title"=>"Other things, to be removed?", "class"=>"nav-h2 nolink"),
 //		"header" => array("text"=>"header", "url"=>"?p=header", "title"=>"Define the header and logo of the site"),
 //		"footer" => array("text"=>"footer", "url"=>"?p=footer", "title"=>"Define the footer of the site"),
 //		"relatedsites" => array("text"=>"related sites", "url"=>"?p=relatedsites", "title"=>"Use and define related sites"),

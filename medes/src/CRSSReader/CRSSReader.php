@@ -1,9 +1,9 @@
 <?php
 // ===========================================================================================
 //
-// File: CRSSFeed.php
+// File: CRSSReader.php
 //
-// Description: Provide a interface to get RSS.
+// Description: Provide a interface to get RSS feed.
 //
 // Author: Mikael Roos
 //
@@ -11,7 +11,7 @@
 // 2010-12-04: Created
 //
 
-class CRSSFeed {
+class CRSSReader {
 
 	// ------------------------------------------------------------------------------------
 	//

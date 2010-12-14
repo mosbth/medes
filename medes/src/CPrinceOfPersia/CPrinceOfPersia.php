@@ -310,6 +310,7 @@ EOD;
 			"link-checker"	=>array("text"=>"link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
 			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&docAddr=" . $url, "title"=>"css3 validator"),			
 			"check-header"	=>array("text"=>"check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
+			"browsers"			=>array("text"=>"browsers", "url"=>"http://browsershots.org/{$url}", "title"=>"check browser compatibility"),	
 		);
 
 		$nav3 = array(
@@ -332,6 +333,21 @@ EOD;
 EOD;
 
 		return $html;
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Print the complete html-page 
+	// $aPage: the html-code for the page
+	// $aHeader: html-code for the header of the page, if empty using default
+	// $aFooter: html-code for the footer of the page, if empty using default
+	//
+	public function PrintHTMLPage($aPage="", $aHeader="", $aFooter="") {
+		$pp = &$this;
+		include(empty($aHeader) ? dirname(__FILE__) . "/header.php" : $aHeader);
+		echo $aPage;
+		include(empty($aFooter) ? dirname(__FILE__) . "/footer.php" : $aFooter); 
   }
 
 
@@ -375,9 +391,14 @@ EOD;
 	// Reload current page and save some information in the session. 
 	// $aRemember: an array of values to rememer in the session
 	//
-	public static function ReloadPageAndRemember($aRemember=array()) {
+	public static function ReloadPageAndRemember($aRemember=array(), $aPage=null) {
 		$_SESSION['remember'] = $aRemember;
-		header("Location: " . self::GetUrlToCurrentPage());
+		if(empty($aPage)) {
+			header("Location: " . self::GetUrlToCurrentPage());
+		} else {
+			header("Location: " . $aPage);		
+		}
+		exit();
 	}
 
 
