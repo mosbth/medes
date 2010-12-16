@@ -19,6 +19,7 @@ interface ISingleton {
 	// Get the instance of the latest created object or create a new one. 
 	//
 	public static function GetInstance();
+	
 }
 
 interface IFrontController {
@@ -28,6 +29,17 @@ interface IFrontController {
 	// Frontcontroller. Redirect to choosen page and return the resulting html. 
 	//
 	public static function DoIt();
+	
+}
+
+interface IDatabaseObject {
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Save object to database. 
+	//
+	public function Save();
+	
 }
 
 interface IAddOn {
@@ -36,6 +48,7 @@ interface IAddOn {
 	//  
 	//
 }
+
 
 
 class CPrinceOfPersia implements iSingleton {

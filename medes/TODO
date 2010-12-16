@@ -14,6 +14,10 @@ addon stylesheet chooser
 config navigation, change how its stored.
 update procedure should work when site is already installed, instead of doing a fresh install
 
+CNews
+CNewsLetter
+CBlog
+CForum
 
 CInstall
 install as development site with grid and all modules on navbar (dev)

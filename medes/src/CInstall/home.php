@@ -1,9 +1,8 @@
 <?php
-
-//$pp = CPrinceOfPersia::GetInstance();
 $pp->pageStyle .= <<<EOD
-span.ok{color:green;text-transform:uppercase;}
+span.ok{color:green;text-transform:capitalize;}
 span.fail{color:red;text-transform:uppercase;}
+span.info{color:#205791;text-transform:capitalize;background:transparent;border:none;padding:0;}
 p.fix{padding-left:3em;}
 EOD;
 
@@ -33,7 +32,32 @@ EOD;
 
 // ------------------------------------------------------------------------------
 //
-// Check if the config file exists and is writable. If it exists then exit the procedure.
+// Install the database
+//
+$case 	= "Creating and initiating the database <code>medes/data/CDatabaseController.db</code>.";
+$class 	= "ok";
+$result = "";
+$databaseExists = false;
+if(is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
+	$databaseExists = true;
+	$result = "A database already exists. Leaving it as is. Remove it 'by hand', if needed.";
+	$class = "info";
+} else {
+	$a = new CArticle();
+	$a->Install();
+}
+$check .= <<<EOD
+<h2>Installing</h2>
+<p>
+<span class={$class}>[{$class}]</span> 
+{$case}
+<p class=fix><em>{$result}</em></p>
+EOD;
+
+
+// ------------------------------------------------------------------------------
+//
+// Check if the config file exists and is writable. 
 //
 $case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPersia_config.php</code>.";
 $class 	= "ok";
@@ -45,7 +69,6 @@ if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 	$class = "fail";
 } 
 $check .= <<<EOD
-<h2>Installing</h2>
 <p>
 <span class={$class}>[{$class}]</span> 
 {$case}
@@ -73,7 +96,7 @@ EOD;
 $case 	= "Setting the sitelink to this website (starting from the docroot of this webserver).";
 $class 	= "ok";
 $result = "";
-$siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/install.php"));
+$siteUrl = substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen("medes/page/install.php"));
 $pp->config['siteurl'] = $siteUrl;
 
 if($dataDirectoryIsWritable && !$configFileExists) {
@@ -98,15 +121,16 @@ $config['navigation'] = array(
 	"navbar"=>array(
 		"text"=>"Main navigation bar",
 		"nav"=>array(
-			"1"=>array("text"=>"home", "url"=>"medes/template.php", "title"=>"A default template page to start with"),
-			"2"=>array("text"=>"acp", "url"=>"medes/acp.php", "title"=>"Administrate and configure the site and its addons"),
-			"3"=>array("text"=>"ucp", "url"=>"medes/ucp.php", "title"=>"User control panel"),
-			"4"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
-			"5"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
-			"6"=>array("text"=>"blog", "url"=>"medes/src/CBlog/example.php", "title"=>"CBlog"),
-			"7"=>array("text"=>"news", "url"=>"medes/src/CNews/example.php", "title"=>"CNews"),
-			"8"=>array("text"=>"rss reader", "url"=>"medes/src/CRSSReader/example.php", "title"=>"CRSSReader"),
-			"9"=>array("text"=>"install", "url"=>"medes/install.php", "title"=>"Install"),
+			"1"=>array("text"=>"home", "url"=>"medes/page/template.php", "title"=>"A default template page to start with"),
+			"2"=>array("text"=>"page", "url"=>"medes/page/template_CContentPage.php", "title"=>"A template page that stores content in the database"),
+			"3"=>array("text"=>"acp", "url"=>"medes/page/acp.php", "title"=>"Administrate and configure the site and its addons"),
+			"4"=>array("text"=>"ucp", "url"=>"medes/page/ucp.php", "title"=>"User control panel"),
+			"5"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
+			"6"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
+//			"6"=>array("text"=>"blog", "url"=>"medes/src/CBlog/example.php", "title"=>"CBlog"),
+			"7"=>array("text"=>"news", "url"=>"medes/src/CContentNews/example.php", "title"=>"CContentNews"),
+//			"8"=>array("text"=>"rss reader", "url"=>"medes/src/CRSSReader/example.php", "title"=>"CRSSReader"),
+			"9"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
 		),
 	),
 	"relatedsites"=>array(
@@ -151,10 +175,12 @@ EOD;
 // Set $page to contain html for the page
 //
 $page = <<<EOD
+<article id=install>
 <h1>Do a fresh installation of medes</h1>
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
 <h2>Checking the environment</h2>
 {$check}
 {$done}
+</article>
 EOD;
 

@@ -1,143 +1,169 @@
 <?php
-class CArticle implements ISingleton{
-  public $attribute;
-  public $db;
+// ===========================================================================================
+//
+// File: CArticle.php
+//
+// Description: Store articles in the database, makes use of CArticleDB for storing in the 
+// database while still preserving a more database neutral interface to its users.
+//
+// Author: Mikael Roos
+//
+// History:
+// 2010-12-14: Created
+//
 
-  protected static $instance = null;
+class CArticle implements IDatabaseObject {
 
-  protected function __construct() {
-    $pp = CPrinceOfPersia::GetInstance();
-    $this->attribute = array(
-      "title"=>array("type"=>"text"),
-      "author"=>array("type"=>"text"),
-      "copyright"=>array("type"=>"text"),
-      "description"=>array("type"=>"text"),
-      "keywords"=>array("type"=>"text"),
-      "article"=>array("type"=>"text"),
-      "owner"=>array("type"=>"text"),
-      "key"=>array("type"=>"text unique"),
-    );
-    $this->db = new PDO("sqlite:{$pp->installPath}/medes/data/CArticle.db");
-    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  }
-  public function __destruct() {unset($this->db);}
+	// ------------------------------------------------------------------------------------
+	//
+	// Internal variables
+	//
+	protected $db;	// CDatabaseController
+	public $res;		// remember last resultset
+	
+	// columns of table article
+	public $articleCols = array(
+		// basics
+		"id",		 					// unique autoincrement id 
+		"key", 						// text unique key,
+		"type", 					// text, use to identify articles of various content types such as article, blog, news, page, etc.
+		"title",					// text, the title of the article
+		"content",				// text, the actual content of the article
 
-  public static function GetInstance(){
-    if(self::$instance == NULL)
-      self::$instance = new CArticle();
-    return self::$instance;
-  }
+		// timestamps
+		"created",				// datetime, timestamp for creating the article
+		"modified",				// datetime, timestamp when article was last modified
+		"deleted",				// datetime, timestamp when article was deleted
 
-  // create or update article with key
-  public function SaveByKey($attributes){
-  	if(!isset($attributes['key'])) {
-  		Throw(get_class() . "::SaveByKey(): Article attributes has no key.");
-  	} 	
-    $q = 'select rowid from article where key = :key';
-    $stmt = $this->db->prepare($q);
-    $stmt->bindParam(':key', $attributes['key']);
-    $stmt->execute();
-    $row = $stmt->fetchObject();
-    if(empty($row)) {
-    	$this->SaveNew($attributes);
-    } else {
-    	$attributes['id'] = $row->rowid;
-    	$this->Save($attributes);
-    }
-  }
-
-  // get article with key
-  public function GetByKey($aKey){
-    $q = 'select * from article where key = :key';
-    $stmt = $this->db->prepare($q);
-    $stmt->bindParam(':key', $aKey);
-    $stmt->execute();
-    $row = $stmt->fetchObject();
-    return $row;
-  }
-
-  // delete all by owner
-  public function DeleteAllByOwner($owner){
-    $q = 'update article set deleted=datetime("now") where owner = :owner;';
-    $stmt = $this->db->prepare($q);
-    $stmt->bindParam(':owner', $owner);
-    $stmt->execute();
-  }
+/* by userid, owner, writer */
+/* tags */
+/* category */
+/* taxeonomy */
+/* meta information
+		"author"=>array("type"=>"text"),
+		"copyright"=>array("type"=>"text"),
+		"description"=>array("type"=>"text"),
+		"keywords"=>array("type"=>"text"),
+*/
+	);
+	public $article = array();  // holder of one current article
+	
+	// Predefined SQL statements
+	const CREATE_TABLE_ARTICLE = 'create table if not exists article(id int auto_increment, key text unique, type text, title text, content text, created datetime, modified datetime, deleted datetime)';	
+	const SELECT_BY_KEY = 'select * from article where key=?';
 
 
+	// ------------------------------------------------------------------------------------
+	//
+	// Constructor
+	//
+	public function __construct() {
+		$this->db = CDatabaseController::GetInstance();
+		$this->article = array_fill_keys($this->articleCols, null);
+	}
+	
+	
+	// ------------------------------------------------------------------------------------
+	//
+	// Destructor
+	//
+	public function __destruct() {;}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Install. 
+	//
+  public function Install() {
+  	$this->db->ExecuteQuery(self::CREATE_TABLE_ARTICLE);
+	}
 
 
-  // create a new article based on the incoming post-variables
-  public function SaveNew($attributes){
-    $q = 'insert into article values(';
-    foreach($this->attribute as $key=>$value)
-      $q .= ':'.$key.', ';
-    $q .= 'datetime("now"), null, null);';
-    $stmt = $this->db->prepare($q);
-    foreach($this->attribute as $key=>$value)
-      $stmt->bindParam(':'.$key, $attributes[$key]);
-    $stmt->execute();
-  }
+	// ------------------------------------------------------------------------------------
+	//
+	// Save article to db. 
+	//
+	public function Save() {
+		if(isset($this->article['id'])) {
+			$q = "update";
+		} else {
+			$a = $this->article;
+			unset($a['id']);
+			unset($a['created']);
+			unset($a['modified']);
+			unset($a['deleted']);
+			foreach($a as $key=>$val) {
+				if(!isset($a[$key])) {
+					unset($a[$key]);
+				}
+			}
+			$q = "insert into article(".implode(",", array_keys($a)).",created,modified,deleted) values(".implode(",", array_fill(1,sizeof($a), "?")).',datetime("now"),null,null)';
+			$this->db->ExecuteQuery($q, array_values($a));
+		}
+	}
 
-  // update an existing article
-  public function Save($attributes){
-    $q = 'update article set ';
-    foreach($this->attribute as $key=>$value)
-      $q .= $key . '=:' . $key . ', ';
-    $q .= 'modified=datetime("now") where rowid = :id;';
-    $stmt = $this->db->prepare($q);
-    $stmt->bindParam(':id', $attributes['id']);
-  
-    foreach($this->attribute as $key=>$value)
-      $stmt->bindParam(':'.$key, $attributes[$key]);
-    $stmt->execute();
-  }
 
-  // set the deleted datetime
-  public function Delete($id){
-    $q = 'update article set deleted=datetime("now") where rowid = :id;';
-    $stmt = $this->db->prepare($q);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-  }
+	// ------------------------------------------------------------------------------------
+	//
+	// Get article by owner and key. 
+	//
+	public function GetByKey($aKey) {
+		$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::SELECT_BY_KEY, array($aKey));
+		return $this->res;
+	}
 
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Set the content of an article. 
+	//
+	public function SetContent($aContent) {
+		$this->article['content'] = $aContent;
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get the content of an article. 
+	//
+	public function GetContent() {
+		return $this->article['content'];
+	}
+
+
+
+
+
+
+
+
+
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get all articles. 
+	//
   public function GetArticles($attributes=array('*'), $order=array(), $range=array('limit'=>10), $where=array()){
-    $q = 'select ';
-    foreach($attributes as $value)
-      $q .= $value.', ';
-    $q = substr($q, 0, -2).' from article';
-    if(sizeof($where) > 0){
-      $q .= ' where ';
-      foreach($where as $key=>$value)
-        $q .= $key . ' ' . $value;
-        //$q .= ' ' . $value;
-    }
-    if(sizeof($order) > 0)
-      $q .= ' order by '.$order['by'].' '.(isset($order['sort']) ? $order['sort'] : '');
-    if(sizeof($range) > 0)
-      $q .= ' limit '.(isset($range['offset']) ? $range['offset'].', ' : '').(isset($range['limit']) ? $range['limit'] : '').';';
-//echo $q;
-    $stmt = $this->db->prepare($q);
-    $stmt->execute();
-    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $row;
-  }
-  
-  // create table and insert a sample home-article
-  public function Install(){
-    $q = 'create table if not exists article(';
-    foreach($this->attribute as $key=>$value)
-      $q .= $key.' '.$value['type'].',';
-    $q .= 'created datetime, modified datetime, deleted datetime);';
-    $stmt = $this->db->prepare($q);
-    $page = "<p>Executing install of articles db: <br><pre>".$stmt->queryString."</pre>";
-    $stmt->execute();
+		return $this->adb->GetArticles($attributes, $order, $range, $where);
+	}
 
-    $q = 'insert into article values(';
-    $q .= '"home", "admin", "&copy;2k10, all rights reserved", "description", "home, phpmedes", "<p>Welcome to phpmedes!</p>", "article", null, datetime("now"), null, null);';
-    $stmt = $this->db->prepare($q);
-    $page .= "<p>Executing install of articles db: <br><pre>".$stmt->queryString."</pre>";
-    $stmt->execute();
-    return $page;
-  }
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Save a new article. 
+	//
+  public function SaveNew($attributes){
+		return $this->adb->SaveNew($attributes);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Delete all articles by owner. 
+	//
+	public function DeleteAllByOwner($aOwner) {
+		$this->adb->DeleteAllByOwner($aOwner);
+	}
+
 }
