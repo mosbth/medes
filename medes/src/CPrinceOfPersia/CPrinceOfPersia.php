@@ -249,9 +249,9 @@ EOD;
 	//
 	public function GetHTMLForProfileMenu() {
 		$nav = array(
-			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=login"), "title"=>"Login"),
-			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/ucp.php"), "title"=>"Change your settings"),
-			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/ucp.php?p=dologout"), "title"=>"Logout"),
+			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=login"), "title"=>"Login"),
+			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php"), "title"=>"Change your settings"),
+			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=dologout"), "title"=>"Logout"),
 		);
 
 		if($this->uc->IsAuthenticated()) {
