@@ -25,6 +25,7 @@ $html = <<<EOD
 
 </footer> <!-- end of #bottom -->
 </footer> <!-- end of #bottom-wrap -->
+</html>
 
 EOD;
 

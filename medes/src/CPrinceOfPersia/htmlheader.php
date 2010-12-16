@@ -28,10 +28,6 @@
 	<?php if(!empty($pp->googleAnalytics)) echo $pp->googleAnalytics; ?>
 
 </head>
-<body>
 
 <!-- Get the header of the site, including the main navbar -->
 <?php echo $pp->GetHTMLForHeader(); ?>
-
-<!-- Here is the actual content of the page-->
-<div id=content>

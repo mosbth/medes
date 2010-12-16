@@ -58,8 +58,8 @@ class CDatabaseController implements ISingleton {
   public function ExecuteSelectQueryAndFetchAll($aQuery, $aParams=array()){
     $stmt = self::$db->prepare($aQuery);
     
-    if(isset($_GET['debug'])) {
-    	echo $stmt->debugDumpParams();
+    if(isset($_GET['debugCDatabaseController'])) {
+    	echo "<p>", $stmt->debugDumpParams(), print_r($aParams, true);
     }
     
     $stmt->execute($aParams);
@@ -75,11 +75,21 @@ class CDatabaseController implements ISingleton {
   public function ExecuteQuery($aQuery, $aParams=array()) {
     $stmt = self::$db->prepare($aQuery);
 
-    if(isset($_GET['debug'])) {
-    	echo $stmt->debugDumpParams();
+    if(isset($_GET['debugCDatabaseController'])) {
+    	echo "<p>", $stmt->debugDumpParams(), print_r($aParams, true);
     }
     
     $stmt->execute($aParams);
   }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+  // Return last insert id
+	//
+  public function LastInsertId() {
+	   return self::$db->lastInsertid();
+  }
+
 
 }

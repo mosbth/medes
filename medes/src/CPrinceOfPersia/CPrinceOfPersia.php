@@ -36,9 +36,34 @@ interface IDatabaseObject {
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Save object to database. 
+	// Insert new object to database. 
+	//
+	public function Insert();
+	
+	// ------------------------------------------------------------------------------------
+	//
+	// Update existing object in database. 
+	//
+	public function Update();
+	
+	// ------------------------------------------------------------------------------------
+	//
+	// Save object to database. Manage if insert or update.
 	//
 	public function Save();
+	
+	// ------------------------------------------------------------------------------------
+	//
+	// Load object from database. 
+	//
+	public function Load();
+	
+	// ------------------------------------------------------------------------------------
+	//
+	// Delete object from database. 
+	// $really: Put object in wastebasket (false) or really delete row from table (true)
+	//
+	public function Delete($really=false);
 	
 }
 
@@ -358,9 +383,13 @@ EOD;
 	//
 	public function PrintHTMLPage($aPage="", $aHeader="", $aFooter="") {
 		$pp = &$this;
-		include(empty($aHeader) ? dirname(__FILE__) . "/header.php" : $aHeader);
+		include(empty($aHeader) ? dirname(__FILE__) . "/htmlheader.php" : $aHeader);
 		echo $aPage;
-		include(empty($aFooter) ? dirname(__FILE__) . "/footer.php" : $aFooter); 
+		if(empty($aFooter)) {
+			echo $pp->GetHTMLForFooter();
+		} else {
+			include($aFooter);
+		}
   }
 
 

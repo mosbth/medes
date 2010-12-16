@@ -11,6 +11,7 @@ $logoLink = $pp->PrependWithSiteUrl('medes/template.php');
 $navbar = $pp->GetHTMLForNavbar();
 
 $html = <<<EOD
+<html>
 <header id=top-above>
 	{$profile}
 	{$relatedSites}

@@ -20,13 +20,18 @@ store content in database.
 </article>
 EOD;
 
-$cp->Save($content1);
+$cp->SaveContent($content1);
 
 
 // Get the content
+$page = $cp->GetPage();
+/*
 $content2 = $cp->GetContent();
+$menu = $cp->GetMenu();
 $page = <<<EOD
 {$content2}
+{$menu}
 EOD;
+*/
 
 $pp->PrintHTMLPage($page);
