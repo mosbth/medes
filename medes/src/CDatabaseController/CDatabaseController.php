@@ -73,7 +73,6 @@ class CDatabaseController implements ISingleton {
   // resultset (if any).
 	//
   public function ExecuteQuery($aQuery, $aParams=array()) {
-		echo "<p>", $aQuery;
     $stmt = self::$db->prepare($aQuery);
 
     if(isset($_GET['debug'])) {
