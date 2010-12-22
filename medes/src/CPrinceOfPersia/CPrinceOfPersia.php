@@ -32,6 +32,16 @@ interface IFrontController {
 	
 }
 
+interface IActionHandler {
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Manage _GET and _POST requests and redirect or return the resulting html. 
+	//
+	public function ActionHandler();
+	
+}
+
 interface IDatabaseObject {
 
 	// ------------------------------------------------------------------------------------
@@ -64,6 +74,15 @@ interface IDatabaseObject {
 	// $really: Put object in wastebasket (false) or really delete row from table (true)
 	//
 	public function Delete($really=false);
+	
+}
+
+interface IInstallable {
+	// ------------------------------------------------------------------------------------
+	//
+	//  Installation routine for this class
+	//
+	public function Install();
 	
 }
 
@@ -427,6 +446,33 @@ EOD;
 		return self::$currentUrl;
 	}
 
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Static function
+	// Get query string as string.
+	//
+	public static function GetQueryString() {
+		$qs = Array();
+		parse_str($_SERVER['QUERY_STRING'], $qs);
+		return (empty($qs) ? '' : htmlspecialchars(http_build_query($qs)));
+	}
+
+
+/*
+	// ------------------------------------------------------------------------------------
+	//
+	// Static function
+	// Parse query string and add items to it. Return the modified query string.
+	// array $aQueryStr: items to add to query string, key and values
+	//
+	public static function QueryStringAddItems(array $items=array()) {
+		$qs = Array();
+		parse_str($_SERVER['QUERY_STRING'], $qs);
+		$qs = array_merge($qs, $items);
+		return (empty($qs) ? '' : htmlspecialchars(http_build_query($qs)));
+	}
+*/
 
 	// ------------------------------------------------------------------------------------
 	//

@@ -45,6 +45,8 @@ if(is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
 } else {
 	$a = new CArticle();
 	$a->Install();
+	$a = new CContentPage();
+	$a->Install();
 }
 $check .= <<<EOD
 <h2>Installing</h2>
@@ -122,13 +124,13 @@ $config['navigation'] = array(
 		"text"=>"Main navigation bar",
 		"nav"=>array(
 			"1"=>array("text"=>"home", "url"=>"medes/page/template.php", "title"=>"A default template page to start with"),
-			"2"=>array("text"=>"page", "url"=>"medes/page/template_CContentPage.php", "title"=>"A template page that stores content in the database"),
+			"2"=>array("text"=>"page", "url"=>"medes/page/page.php?p=template-page", "title"=>"A template page that stores content in the database"),
 			"3"=>array("text"=>"acp", "url"=>"medes/page/acp.php", "title"=>"Administrate and configure the site and its addons"),
 			"4"=>array("text"=>"ucp", "url"=>"medes/page/ucp.php", "title"=>"User control panel"),
-			"5"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
-			"6"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
+//			"5"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
+//			"6"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
 //			"6"=>array("text"=>"blog", "url"=>"medes/src/CBlog/example.php", "title"=>"CBlog"),
-			"7"=>array("text"=>"news", "url"=>"medes/src/CContentNews/example.php", "title"=>"CContentNews"),
+//			"7"=>array("text"=>"news", "url"=>"medes/src/CContentNews/example.php", "title"=>"CContentNews"),
 //			"8"=>array("text"=>"rss reader", "url"=>"medes/src/CRSSReader/example.php", "title"=>"CRSSReader"),
 			"9"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
 		),

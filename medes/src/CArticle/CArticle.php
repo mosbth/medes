@@ -12,7 +12,7 @@
 // 2010-12-14: Created
 //
 
-class CArticle implements IDatabaseObject {
+class CArticle implements IDatabaseObject, IInstallable {
 
 	// ------------------------------------------------------------------------------------
 	//
@@ -35,6 +35,7 @@ class CArticle implements IDatabaseObject {
 		"owner",					// text, who owns this article, should be int and foreign key to user table later on.
 
 		// timestamps
+		"published",			// datetime, timestamp for publishing the article
 		"created",				// datetime, timestamp for creating the article
 		"modified",				// datetime, timestamp when article was last modified
 		"deleted",				// datetime, timestamp when article was deleted
@@ -52,8 +53,8 @@ class CArticle implements IDatabaseObject {
 	);
 	
 	// Predefined SQL statements
-	const CREATE_TABLE_ARTICLE = 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, content text, owner text, created datetime, modified datetime, deleted datetime)';	
-	const INSERT_NEW_ARTICLE = 'insert into article(%s,owner,created,modified,deleted) values(%s,?,datetime("now"),null,null)';
+	const CREATE_TABLE_ARTICLE = 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, content text, owner text, published datetime, created datetime, modified datetime, deleted datetime)';	
+	const INSERT_NEW_ARTICLE = 'insert into article(%s,owner,published,created,modified,deleted) values(%s,?,null,datetime("now"),null,null)';
 	const UPDATE_ARTICLE = 'update article set modified=datetime("now") %s where id=?';
 	const SELECT_ARTICLE_BY_ID = 'select * from article where id=?';
 	const SELECT_ARTICLE_BY_KEY = 'select * from article where key=?';
@@ -111,7 +112,7 @@ class CArticle implements IDatabaseObject {
 		if(empty($this->res[0]) && isset($this->current['key'])) {
 			$key = $this->current['key'];
 			$this->ClearCurrent();
-			$this->current = $key;
+			$this->current['key'] = $key;
 		} else if(empty($this->res[0])) {
 			$this->ClearCurrent();
 		} else {		
@@ -139,13 +140,16 @@ class CArticle implements IDatabaseObject {
 	//
 	public function Insert() {
 			$a = $this->current;
-			unset($a['id'], $a['created'], $a['modified'], $a['deleted']);
+			unset($a['id'], $a['published'], $a['created'], $a['modified'], $a['deleted']);
 			foreach($a as $key=>$val) {
 				if(!isset($a[$key])) {
 					unset($a[$key]);
 				}
 			}
-			$a['owner'] = CUserController::GetInstance()->GetAccountName();
+			
+			$uc = CUserController::GetInstance();
+			$a['owner'] = $uc->IsAuthenticated() ? $uc->GetAccountName() : "root";
+
 			$q = sprintf(self::INSERT_NEW_ARTICLE, implode(",", array_keys($a)), implode(",", array_fill(1,sizeof($a), "?")));
 			$this->db->ExecuteQuery($q, array_values($a));
 			$this->SetId($this->db->LastInsertId());
@@ -162,7 +166,7 @@ class CArticle implements IDatabaseObject {
 		}
 		
 		$a = $this->current;
-		unset($a['id'], $a['created'], $a['modified'], $a['deleted']);
+		unset($a['id'], $a['published'], $a['created'], $a['modified'], $a['deleted']);
 		$assign = "";
 		foreach($a as $key=>$val) {
 			if(!isset($a[$key])) {
@@ -241,6 +245,9 @@ class CArticle implements IDatabaseObject {
 	public function SetKey($value) { $this->current['key'] = $value; }
 	public function GetKey() { return $this->current['key']; }
 
+	public function SetTitle($value) { $this->current['title'] = $value; }
+	public function GetTitle() { return $this->current['title']; }
+
 	public function SetContent($value) { $this->current['content'] = $value; }
 	public function GetContent() { return $this->current['content']; }
 
@@ -248,6 +255,7 @@ class CArticle implements IDatabaseObject {
 	public function GetType() { return $this->current['type']; }
 
 	public function GetOwner() { return $this->current['owner']; }
+	public function GetPublished() { return $this->current['published']; }
 	public function GetCreated() { return $this->current['created']; }
 	public function GetModified() { return $this->current['modified']; }
 	public function GetDeleted() { return $this->current['deleted']; }

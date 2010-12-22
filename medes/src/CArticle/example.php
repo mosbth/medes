@@ -7,7 +7,14 @@ $pp->pageTitle = "Example on how to use CArticle";
 //
 // Create an instance of CArticle
 //
-$article = CArticle::GetInstance();
+$a = new CArticle();
+
+
+
+$page = "";
+$pp->PrintHTMLPage($page);
+
+/*
 $article->Install();
 $page = "<h1>Example on using CArticle</h1>";
 $owner = "CArticle_demo";
@@ -100,4 +107,3 @@ $article->SaveNew($content);
 echo "<pre>" . var_dump($articles) . "</pre>";
 */
 
-$pp->PrintHTMLPage($page);
