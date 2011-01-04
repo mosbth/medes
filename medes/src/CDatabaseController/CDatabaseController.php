@@ -18,7 +18,9 @@ class CDatabaseController implements ISingleton {
 	// Internal variables
 	//
   protected static $instance = null;
-	protected static $db;
+	protected static $db = null;
+	protected static $stmt = null;
+	public static $numQueries = 0;
 	
 	
 	// ------------------------------------------------------------------------------------
@@ -28,7 +30,7 @@ class CDatabaseController implements ISingleton {
 	public function __construct() {
     $pp = CPrinceOfPersia::GetInstance(); 
     self::$db = new PDO("sqlite:{$pp->installPath}/medes/data/CDatabaseController.db");
-    self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		
+    self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	
 	
@@ -44,8 +46,7 @@ class CDatabaseController implements ISingleton {
 	// Singleton, get the instance through this method. 
 	//
   public static function GetInstance(){
-    if(self::$instance == null)
-      self::$instance = new CDatabaseController();
+    if(self::$instance == null) self::$instance = new CDatabaseController();
     return self::$instance;
   }
 
@@ -56,14 +57,15 @@ class CDatabaseController implements ISingleton {
   // resultset.
 	//
   public function ExecuteSelectQueryAndFetchAll($aQuery, $aParams=array()){
-    $stmt = self::$db->prepare($aQuery);
+    self::$stmt = self::$db->prepare($aQuery);
     
     if(isset($_GET['debugCDatabaseController'])) {
-    	echo "<p>", $stmt->debugDumpParams(), print_r($aParams, true);
+    	echo "<p>", self::$stmt->debugDumpParams(), print_r($aParams, true);
     }
     
-    $stmt->execute($aParams);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    self::$numQueries++;
+    self::$stmt->execute($aParams);
+    return self::$stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
 
@@ -73,13 +75,14 @@ class CDatabaseController implements ISingleton {
   // resultset (if any).
 	//
   public function ExecuteQuery($aQuery, $aParams=array()) {
-    $stmt = self::$db->prepare($aQuery);
+    self::$stmt = self::$db->prepare($aQuery);
 
     if(isset($_GET['debugCDatabaseController'])) {
-    	echo "<p>", $stmt->debugDumpParams(), print_r($aParams, true);
+    	echo "<p>", self::$stmt->debugDumpParams(), print_r($aParams, true);
     }
     
-    $stmt->execute($aParams);
+    self::$numQueries++;
+    self::$stmt->execute($aParams);
   }
 
 
@@ -89,6 +92,15 @@ class CDatabaseController implements ISingleton {
 	//
   public function LastInsertId() {
 	   return self::$db->lastInsertid();
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+  // Return rows affected of last INSERT, UPDATE, DELETE
+	//
+  public function RowCount() {
+	   return is_null(self::$stmt) ? self::$stmt : self::$stmt->rowCount();
   }
 
 

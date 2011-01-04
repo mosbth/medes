@@ -12,6 +12,7 @@
 
 */
 html{overflow-y:scroll;background:#eee;}
+body{line-height:1.1em;}
 header,footer,nav,article,aside{display:block;}
 
 

@@ -31,6 +31,10 @@ class CArticle implements IDatabaseObject, IInstallable {
 		"title",					// text, the title of the article
 		"content",				// text, the actual content of the article
 
+		// drafts
+		"draftTitle",			// text, a draft title
+		"draftContent",		// text, a draft content
+
 		// timestamps
 		"owner",					// text, who owns this article, should be int and foreign key to user table later on.
 
@@ -53,12 +57,15 @@ class CArticle implements IDatabaseObject, IInstallable {
 	);
 	
 	// Predefined SQL statements
-	const CREATE_TABLE_ARTICLE = 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, content text, owner text, published datetime, created datetime, modified datetime, deleted datetime)';	
-	const INSERT_NEW_ARTICLE = 'insert into article(%s,owner,published,created,modified,deleted) values(%s,?,null,datetime("now"),null,null)';
-	const UPDATE_ARTICLE = 'update article set modified=datetime("now") %s where id=?';
-	const SELECT_ARTICLE_BY_ID = 'select * from article where id=?';
-	const SELECT_ARTICLE_BY_KEY = 'select * from article where key=?';
-	const SELECT_ARTICLE_ID_BY_KEY = 'select id from article where key=?';
+	const CREATE_TABLE_ARTICLE = 1;	
+	const INSERT_NEW_ARTICLE = 2;
+	const UPDATE_ARTICLE = 3;
+	const UPDATE_ARTICLE_AS_PUBLISHED = 4;
+	const UPDATE_ARTICLE_UNSET_DRAFT = 5;
+	const UPDATE_CHANGE_KEY = 6;
+	const SELECT_ARTICLE_BY_ID = 7;
+	const SELECT_ARTICLE_BY_KEY = 8;
+	const SELECT_ARTICLE_ID_BY_KEY = 9;
 
 
 	// ------------------------------------------------------------------------------------
@@ -80,10 +87,50 @@ class CArticle implements IDatabaseObject, IInstallable {
 
 	// ------------------------------------------------------------------------------------
 	//
+	// Get SQL that this object support. 
+	//
+  public static function GetSQL($which) {
+  	switch($which) {
+  		case self::CREATE_TABLE_ARTICLE:
+  			return 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, content text, draftTitle text, draftContent text, owner text, published datetime, created datetime, modified datetime, deleted datetime)';	
+  			break;
+  		case self::INSERT_NEW_ARTICLE:
+  			return 'insert into article(%s,owner,published,created,modified,deleted) values(%s,?,null,datetime("now"),null,null)';
+  			break;
+  		case self::UPDATE_ARTICLE:
+  			return 'update article set modified=datetime("now") %s where id=?';
+  			break;
+  		case self::UPDATE_ARTICLE_AS_PUBLISHED:
+  			return 'update article set published=datetime("now") where id=?';
+  			break;
+  		case self::UPDATE_ARTICLE_UNSET_DRAFT:
+  			return 'update article set draftTitle=null, draftContent=null where id=?';
+  			break;
+  		case self::UPDATE_CHANGE_KEY:
+  			return 'update article set key=? where key=?';
+  			break;
+			case self::SELECT_ARTICLE_BY_ID:
+  			return 'select * from article where id=?';
+  			break;
+  		case self::SELECT_ARTICLE_BY_KEY:
+  			return 'select * from article where key=?';
+  			break;
+  		case self::SELECT_ARTICLE_ID_BY_KEY:
+  			return 'select id from article where key=?';
+  			break;
+  		default:
+				throw new Exception(get_class() . " error: GetSQL() out of range.");
+				break;
+  	}
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Install. 
 	//
   public function Install() {
-  	$this->db->ExecuteQuery(self::CREATE_TABLE_ARTICLE);
+  	$this->db->ExecuteQuery(self::GetSQL(self::CREATE_TABLE_ARTICLE));
 	}
 
 
@@ -96,16 +143,16 @@ class CArticle implements IDatabaseObject, IInstallable {
 
 		// Article has id, use it
 		if(isset($this->current['id'])) {
-			$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::SELECT_ARTICLE_BY_ID, array($this->current['id']));
+			$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::GetSQL(self::SELECT_ARTICLE_BY_ID), array($this->current['id']));
 		}
 		
 		// Article has key, use it
 		else if(isset($this->current['key'])) {
-			$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::SELECT_ARTICLE_BY_KEY, array($this->current['key']));		
+			$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::GetSQL(self::SELECT_ARTICLE_BY_KEY), array($this->current['key']));
 		} 
 		
 		else {
-			Throw new Exception(get_class() . " error: Load() article without id or key.");
+			throw new Exception(get_class() . " error: Load() article without id or key.");
 		}
 		
 		// Max one item is returned, set this as current
@@ -150,7 +197,7 @@ class CArticle implements IDatabaseObject, IInstallable {
 			$uc = CUserController::GetInstance();
 			$a['owner'] = $uc->IsAuthenticated() ? $uc->GetAccountName() : "root";
 
-			$q = sprintf(self::INSERT_NEW_ARTICLE, implode(",", array_keys($a)), implode(",", array_fill(1,sizeof($a), "?")));
+			$q = sprintf(self::GetSQL(self::INSERT_NEW_ARTICLE), implode(",", array_keys($a)), implode(",", array_fill(1,sizeof($a), "?")));
 			$this->db->ExecuteQuery($q, array_values($a));
 			$this->SetId($this->db->LastInsertId());
 	}
@@ -162,7 +209,7 @@ class CArticle implements IDatabaseObject, IInstallable {
 	//
 	public function Update() {
 		if(!$this->GetId()) {
-			Throw new Exception(get_class() . " error: Update() without id set.");
+			throw new Exception(get_class() . " error: Update() without id set.");
 		}
 		
 		$a = $this->current;
@@ -176,7 +223,7 @@ class CArticle implements IDatabaseObject, IInstallable {
 			}
 		}
 		$a['id'] = $this->GetId();
-		$q = sprintf(self::UPDATE_ARTICLE, $assign);
+		$q = sprintf(self::GetSQL(self::UPDATE_ARTICLE), $assign);
 		$this->db->ExecuteQuery($q, array_values($a));
 	}
 	
@@ -184,9 +231,8 @@ class CArticle implements IDatabaseObject, IInstallable {
 	// ------------------------------------------------------------------------------------
 	//
 	// Save article to db. 
-	// $loadOnSave: Default behaviour is to reload the inserted/updated article.
 	//
-	public function Save($loadOnSave=true) {
+	public function Save() {
 
 		// Article has id, do update
 		if($this->GetId()) {
@@ -195,7 +241,7 @@ class CArticle implements IDatabaseObject, IInstallable {
 		
 		// Article has key, do update if exists or insert it
 		if($this->GetKey()) {
-			$res = $this->db->ExecuteSelectQueryAndFetchAll(self::SELECT_ARTICLE_ID_BY_KEY, array($this->GetKey()));
+			$res = $this->db->ExecuteSelectQueryAndFetchAll(self::GetSQL(self::SELECT_ARTICLE_ID_BY_KEY), array($this->GetKey()));
 			if(empty($res)) {
 				$this->Insert();
 			} else {
@@ -208,11 +254,6 @@ class CArticle implements IDatabaseObject, IInstallable {
 		else {
 			$this->Insert();
 		}
-		
-		// Load the article that was inserted/updated
-		if($loadOnSave) {
-			$this->Load();
-		}
 	}
 
 
@@ -223,6 +264,46 @@ class CArticle implements IDatabaseObject, IInstallable {
 	//
 	public function Delete($really=false) {
 		;
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Rename article key. 
+	//
+	public function RenameKey($key, $newKey) {
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_CHANGE_KEY), array($newKey, $key));
+		if($this->db->RowCount() == 1) {
+			return true;
+		} else {
+			return "Failed.";
+		}
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Publish article. 
+	//
+	public function Publish() {
+		if(!$this->GetId()) {
+			throw new Exception(get_class() . " error: Publish() without id set.");
+		}
+		
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_AS_PUBLISHED), array($this->GetId()));
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Remove draft article. 
+	//
+	public function UnsetDraft() {
+		if(!$this->GetId()) {
+			throw new Exception(get_class() . " error: UnsetDraft() without id set.");
+		}
+		
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_UNSET_DRAFT), array($this->GetId()));
 	}
 	
 
@@ -250,6 +331,12 @@ class CArticle implements IDatabaseObject, IInstallable {
 
 	public function SetContent($value) { $this->current['content'] = $value; }
 	public function GetContent() { return $this->current['content']; }
+
+	public function SetDraftTitle($value) { $this->current['draftTitle'] = $value; }
+	public function GetDraftTitle() { return $this->current['draftTitle']; }
+
+	public function SetDraftContent($value) { $this->current['draftContent'] = $value; }
+	public function GetDraftContent() { return $this->current['draftContent']; }
 
 	public function SetType($value) { $this->current['type'] = $value; }
 	public function GetType() { return $this->current['type']; }

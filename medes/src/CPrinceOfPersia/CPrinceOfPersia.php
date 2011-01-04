@@ -46,6 +46,12 @@ interface IDatabaseObject {
 
 	// ------------------------------------------------------------------------------------
 	//
+	// Get SQL that this object support. 
+	//
+  public static function GetSQL($which);
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Insert new object to database. 
 	//
 	public function Insert();
@@ -103,7 +109,7 @@ class CPrinceOfPersia implements iSingleton {
 	//
 	protected static $instance = null;
 	public $config;
-	protected $timePageGeneration;
+	public static $timePageGeneration = 0;
 
 	// CUserController
 	public $uc;
@@ -144,7 +150,7 @@ class CPrinceOfPersia implements iSingleton {
 	protected function __construct() {
 	
 		// time page generation
-		$this->timePageGeneration = microtime(true); 
+		self::$timePageGeneration = microtime(true); 
 
 		// Full error reporting
 		error_reporting(-1); 
@@ -248,7 +254,7 @@ class CPrinceOfPersia implements iSingleton {
 	// Create a common exception handler 
 	//
 	public static function DefaultExceptionHandler($aException) {
-  	die("<p>File " . $aException->getFile() . " at line" . $aException->getLine() ."<br>Uncaught exception: " . $aException->getMessage());
+  	die("<p>File " . $aException->getFile() . " at line" . $aException->getLine() ."<p>Uncaught exception: " . $aException->getMessage() . "<pre>" . print_r($aException->getTrace(), true) . "</pre>");
   }
 
 
@@ -383,9 +389,17 @@ EOD;
 		$item1 = CNavigation::GenerateMenu($nav1, false, "span-3");
 		$item2 = CNavigation::GenerateMenu($nav2, false, "span-3");
 		$item3 = CNavigation::GenerateMenu($nav3, false, "span-3 last");
-		$time = round(microtime(true) - $this->timePageGeneration, 5);
+		$time = round(microtime(true) - self::$timePageGeneration, 5);
+		$numQueries = CDatabaseController::$numQueries;
+
+		$reload= "";
+		if(isset($_SESSION['timer'])) {
+			$reload = "Page reloaded in {$_SESSION['timer']['time']} seconds with {$_SESSION['timer']['numQueries']} database queries.<br/>";
+			unset($_SESSION['timer']);
+		}
+
 		$html = <<<EOD
-<p class=clear><em>Page generated in {$time} seconds.</em></p>
+<p class=clear><em>{$reload}Page generated in {$time} seconds. There were {$numQueries} database queries.</em></p>
 {$item1}{$item2}{$item3}
 EOD;
 
@@ -449,7 +463,46 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Static function
+	// Modify query string of the url.
+	//
+	// array $queryString: array to merge with current querystring, overwrites if there is
+	//               duplicate keys.
+	// string $aUrl: if null, or omitted, get currentUrl from GetUrlToCurrentPage().
+	//
+	// returns string: the url with the updated query string.
+	//
+	public static function ModifyQueryStringOfCurrentUrl(array $aQueryString, string $aUrl=null) {
+		$url = is_null($aUrl) ? self::GetUrlToCurrentPage() : $aUrl;
+		$parts = parse_url($url);
+		parse_str($parts['query'], $qs);
+		$qs = array_merge($qs, $aQueryString);
+		if(empty($qs)) {
+			unset($parts['query']);
+		} else {
+			$parts['query'] = http_build_query($qs);
+		}
+		return self::BuildUrl($parts);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Build an url from array produced by parse_url(). Does not support user & pass.
+	//
+	// array $aParts: the parts of the url, in the form as produced by parse_url().
+	//
+	// returns string: the resulting url.
+	//
+	public static function BuildUrl(array $aParts) {
+		$port = isset($aParts['port']) ? ":{$aParts['port']}" : "";
+		$query = isset($aParts['query']) ? "?{$aParts['query']}" : "";
+		$fragment = isset($aParts['fragment']) ? "#{$aParts['fragment']}" : "";		
+		return "{$aParts['scheme']}://{$aParts['host']}{$port}{$aParts['path']}{$query}{$fragment}";
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Get query string as string.
 	//
 	public static function GetQueryString() {
@@ -480,6 +533,13 @@ EOD;
 	// $aRemember: an array of values to rememer in the session
 	//
 	public static function ReloadPageAndRemember($aRemember=array(), $aPage=null) {
+		// Store timing info before reloading
+		$timer = array();
+		$timer['time'] = round(microtime(true) - self::$timePageGeneration, 5);
+		$timer['numQueries'] = CDatabaseController::$numQueries;
+		$_SESSION['timer'] = $timer;
+		
+		// Save in session and reload page
 		$_SESSION['remember'] = $aRemember;
 		if(empty($aPage)) {
 			header("Location: " . self::GetUrlToCurrentPage());
