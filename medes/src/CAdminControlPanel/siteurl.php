@@ -63,7 +63,7 @@ automatically during the installation procedure.
 		</p>
 		
 		<p>
-			<input type=submit name=doSetSiteUrl value='Save meta information' {$disabled}>
+			<input type=submit name=doSetSiteUrl value='Save sitelink' {$disabled}>
 			<input type=reset value='Reset'>
 		</p>
 		
