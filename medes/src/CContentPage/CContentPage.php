@@ -241,7 +241,7 @@ EOD;
 		
 		// Does this page really exists?
 		if(is_null($this->a->GetId())) {
-			return "<p class='{$class}'>This page does not exists, <a href='?p={$this->key}&amp;a=newpage'>you may create it now</a>.</p>";
+			return "<p class='{$class}'>This page does not exists, <a href='?p={$this->key}&amp;a=createPageByKey'>you may create it now</a>.</p>";
 		}
 
 		// Create html for the menu
@@ -478,6 +478,7 @@ EOD;
 			switch($a) {
 				case 'viewNewPage': 			return $this->DoActionViewNewPage(); break;
 				case 'createPage': 				return $this->DoActionCreatePage(); break;
+				case 'createPageByKey': 	return $this->DoActionCreatePageByKey(); break;
 				case 'renamePage': 				return $this->DoActionViewRenamePage(); break;
 				case 'publishPage': 			return $this->DoActionPublishPage(); break;
 				case 'unpublishPage': 		return $this->DoActionUnpublishPage(); break;
@@ -556,6 +557,21 @@ EOD;
 		//$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
 		//CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was saved as draft.", "output-type"=>"success"), $url);
 		//return $this->GetViewCreatePageForm();
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Create a new page with a defined key.
+	//
+	protected function DoActionCreatePageByKey() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->SaveDraftContent("<h1>New page</h1>\n<p>Edit this text to modify your custom page.</p>", $_GET['p']);
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was created.", "output-type"=>"success"), $url);
+		return $this->GetViewCreatePageForm();
 	}
 	
 
