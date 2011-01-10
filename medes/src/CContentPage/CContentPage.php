@@ -568,7 +568,7 @@ EOD;
 		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
 		$this->a->LoadByKey($_GET['p']);
-		$this->SaveDraftContent("<h1>New page</h1>\n<p>Edit this text to modify your custom page.</p>", $_GET['p']);
+		$this->SaveContent("<h1>New page</h1>\n<p>Edit this text to modify your custom page.</p>", $_GET['p']);
 		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
 		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was created.", "output-type"=>"success"), $url);
 		return $this->GetViewCreatePageForm();
