@@ -92,6 +92,26 @@ interface IInstallable {
 	
 }
 
+interface IDateTime {
+	// ------------------------------------------------------------------------------------
+	//
+	//  Format a date and time, display the intervall between two dates using the largest 
+	//	diff-part.
+	//
+	public static function FormatDateTimeDiff($start, $end=null);
+	
+}
+
+interface ILanguage {
+	// ------------------------------------------------------------------------------------
+	//
+	// Gather all language-strings behind one method. 
+	// Store all strings in self::$lang.
+	//
+	public static function InitLanguage($language=null);
+	
+}
+
 interface IAddOn {
 	// ------------------------------------------------------------------------------------
 	//
@@ -101,7 +121,7 @@ interface IAddOn {
 
 
 
-class CPrinceOfPersia implements iSingleton {
+class CPrinceOfPersia implements iSingleton, IDateTime {
 
 	// ------------------------------------------------------------------------------------
 	//
@@ -416,13 +436,10 @@ EOD;
 	//
 	public function PrintHTMLPage($aPage="", $aHeader="", $aFooter="") {
 		$pp = &$this;
-		include(empty($aHeader) ? dirname(__FILE__) . "/htmlheader.php" : $aHeader);
+		include(dirname(__FILE__) . "/htmlheader.php");
+		echo empty($aHeader) ? $this->GetHTMLForHeader() : $aHeader;
 		echo $aPage;
-		if(empty($aFooter)) {
-			echo $pp->GetHTMLForFooter();
-		} else {
-			include($aFooter);
-		}
+		echo empty($aFooter) ? $this->GetHTMLForFooter() : $aFooter;
   }
 
 
@@ -501,6 +518,7 @@ EOD;
 	}
 
 
+/* Needed?
 	// ------------------------------------------------------------------------------------
 	//
 	// Get query string as string.
@@ -510,7 +528,7 @@ EOD;
 		parse_str($_SERVER['QUERY_STRING'], $qs);
 		return (empty($qs) ? '' : htmlspecialchars(http_build_query($qs)));
 	}
-
+*/
 
 /*
 	// ------------------------------------------------------------------------------------
@@ -684,6 +702,102 @@ EOD;
 			// data/config.php does not exists, redirect to installation procedure
 		}	
 	}
-	
+
+
+	// ====================================================================================
+	//
+	//	Code below relates to the interface IDateTime
+	//
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Needs PHP5.3
+	// Copied from http://se.php.net/manual/en/dateinterval.format.php#96768
+	// Modified (mos) to use timezones.
+	//
+	// A sweet interval formatting, will use the two biggest interval parts.
+	// On small intervals, you get minutes and seconds.
+	// On big intervals, you get months and days.
+	// Only the two biggest parts are used.
+	//
+	// @param DateTime|string $start
+	// @param DateTimeZone|string|null $startTimeZone
+	// @param DateTime|string|null $end
+	// @param DateTimeZone|string|null $endTimeZone
+	// @return string
+	//
+	public static function FormatDateTimeDiff($start, $startTimeZone=null, $end=null, $endTimeZone=null) {
+
+		if(!($start instanceof DateTime)) {
+			if($startTimeZone instanceof DateTimeZone) {
+				$start = new DateTime($start, $startTimeZone);
+			} else if(is_null($startTimeZone)) {
+				$start = new DateTime($start);
+			} else {
+				$start = new DateTime($start, new DateTimeZone($startTimeZone));
+			}
+		}
+
+		if($end === null) {
+				$end = new DateTime();
+		}
+
+		if(!($end instanceof DateTime)) {
+			if($endTimeZone instanceof DateTimeZone) {
+				$end = new DateTime($end, $endTimeZone);
+			} else if(is_null($endTimeZone)) {
+				$end = new DateTime($end);
+			} else {
+				$end = new DateTime($end, new DateTimeZone($endTimeZone));
+			}
+		}
+
+		$interval = $end->diff($start);
+		$doPlural = function($nb,$str){return $nb>1?$str.'s':$str;}; // adds plurals
+		//$doPlural = create_function('$nb,$str', 'return $nb>1?$str."s":$str;'); // adds plurals
+
+		$format = array();
+		if($interval->y !== 0) {
+			$format[] = "%y ".$doPlural($interval->y, "year");
+		}
+		if($interval->m !== 0) {
+			$format[] = "%m ".$doPlural($interval->m, "month");
+		}
+		if($interval->d !== 0) {
+			$format[] = "%d ".$doPlural($interval->d, "day");
+		}
+		if($interval->h !== 0) {
+			$format[] = "%h ".$doPlural($interval->h, "hour");
+		}
+		if($interval->i !== 0) {
+			$format[] = "%i ".$doPlural($interval->i, "minute");
+		}
+		if(!count($format)) {
+				return "less than a minute";
+		}
+		if($interval->s !== 0) {
+			$format[] = "%s ".$doPlural($interval->s, "second");
+		}
+
+/*
+		if($interval->s !== 0) {
+				if(!count($format)) {
+						return "less than a minute";
+				} else {
+						$format[] = "%s ".$doPlural($interval->s, "second");
+				}
+		}
+*/
+		// We use the two biggest parts
+		if(count($format) > 1) {
+				$format = array_shift($format)." and ".array_shift($format);
+		} else {
+				$format = array_pop($format);
+		}
+
+		// Prepend 'since ' or whatever you like
+		return $interval->format($format);
+	}
+
 }
 

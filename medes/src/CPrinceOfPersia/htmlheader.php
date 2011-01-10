@@ -28,6 +28,3 @@
 	<?php if(!empty($pp->googleAnalytics)) echo $pp->googleAnalytics; ?>
 
 </head>
-
-<!-- Get the header of the site, including the main navbar -->
-<?php echo $pp->GetHTMLForHeader(); ?>

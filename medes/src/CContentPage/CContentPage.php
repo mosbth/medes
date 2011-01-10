@@ -13,7 +13,7 @@
 // 2010-12-14: Created
 //
 
-class CContentPage extends CContent implements IInstallable, IActionHandler {
+class CContentPage extends CContent implements IInstallable, IActionHandler, ILanguage {
 
 	// ------------------------------------------------------------------------------------
 	//
@@ -21,6 +21,8 @@ class CContentPage extends CContent implements IInstallable, IActionHandler {
 	//
 	protected $key;
 	const TYPE = "CContentPage";
+	protected static $lang = null; 
+	protected $if; 
 	
 	
 	// ------------------------------------------------------------------------------------
@@ -30,6 +32,8 @@ class CContentPage extends CContent implements IInstallable, IActionHandler {
 	public function __construct($aKey="") {
 		parent::__construct();
 		$this->key = $aKey;
+		self::InitLanguage();
+		$this->if = CInterceptionFilter::GetInstance();
 	}
 	
 	
@@ -39,6 +43,22 @@ class CContentPage extends CContent implements IInstallable, IActionHandler {
 	//
 	public function __destruct() {
 		parent::__destruct();
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Gather all language-strings behind one method. 
+	// Store all strings in self::$lang.
+	//
+	public static function InitLanguage($language=null) {
+		if(is_null(self::$lang)) {
+			self::$lang = array( 
+				'CALLING_METHOD_WITH_EMPTY_KEY'=>'Calling method (%s) with empty key.',
+				'PAGE_DELETED_TO_WASTEBASKET'=>'Page was deleted  and moved to wastebasket.',
+				'PAGE_RESTORED_FROM_WASTEBASKET'=>'Page was restored from wastebasket.',
+			);
+		}
 	}
 	
 
@@ -166,7 +186,7 @@ EOD;
 	// Rename page key. 
 	//
 	public function Rename($newKey) {
-		if(empty($this->key) || empty($newKey))	throw new Exception(__METHOD__ . " error: Rename with empty key.");
+		if(empty($this->key) || empty($newKey))	throw new Exception(__METHOD__ . " error: Doing action with empty key.");
 		if(($res = $this->a->RenameKey($this->key, $newKey)) == true) {
 			$this->key = $newKey;
 		}
@@ -183,9 +203,14 @@ EOD;
 	}
 
 
+	// ====================================================================================
+	//
+	//	Code below relates to views
+	//
+
 	// ------------------------------------------------------------------------------------
 	//
-	// Get menu to edit page. 
+	// Get status bar with info about page. 
 	//
 	public function GetStatusBar($class="quiet small") {
 		// Is user authenticated?
@@ -205,6 +230,12 @@ EOD;
 		$modified = $this->a->GetModified();
 		$deleted = $this->a->GetDeleted();
 		
+		// Format dates
+		$tz = new DateTimeZone('UTC');
+		$timeCreated = CPrinceOfPersia::FormatDateTimeDiff($created, $tz);
+		$timeModified = CPrinceOfPersia::FormatDateTimeDiff($modified, $tz);
+		$timeDeleted = CPrinceOfPersia::FormatDateTimeDiff($deleted, $tz);
+		
 		// Get current querystring
 		//$qs = CPrinceOfPersia::GetQueryString();
 		
@@ -215,9 +246,13 @@ EOD;
 
 		// Create html for the menu
 		$html = "<p class='{$class}'>";
-		$html .= $published ? "Page is published. " : "Page is not yet published. ";
-		$html .= $hasDraft ? "Draft exists. " : "";
-		$html .= $modified ? "Last modified {$modified}. " : "Created {$created}. ";
+		if($deleted) {
+			$html .= "Page was deleted {$timeDeleted} ago and exists in the wastebasket. ";
+		} else {
+			$html .= $published ? "Page is published. " : "Page is not yet published. ";
+			$html .= $hasDraft ? "Draft exists. " : "";
+			$html .= $modified ? "Last modified in {$timeModified}. " : "Created {$timeCreated} ago. ";
+		}
 		$html .= " Owner is " . $this->a->GetOwner() . ". ";
 		$html .= $isInEditMode ? "<a href='?p={$this->key}'>View page</a>. ":"<a href='?p={$this->key}&amp;e'>Edit page</a>. ";
 /*
@@ -267,16 +302,23 @@ EOD;
 		$modified = $this->a->GetModified();
 		$deleted = $this->a->GetDeleted();
 
+		// Get datetimes
+		$tz = new DateTimeZone('UTC');
+		$timePublished = CPrinceOfPersia::FormatDateTimeDiff($published, $tz);
+		$timeCreated = CPrinceOfPersia::FormatDateTimeDiff($created, $tz);
+		$timeModified = CPrinceOfPersia::FormatDateTimeDiff($modified, $tz);		
+		$timeDeleted = CPrinceOfPersia::FormatDateTimeDiff($deleted, $tz);
+
 		// Create html for the details
 		$details = "<h4>Details</h4><p>This page is named '{$this->key}'. <a href='?p={$this->key}&amp;a=renamePage'>Rename page</a>. ";
 		$details .= "Owner is " . $this->a->GetOwner() . ".</p>";
-		$details .= $modified ? "<p>Page was created {$created} and last modified {$modified}.</p>" : "<p>Page was created {$created}.</p>";
-		$details .= $published ? "<p>Page was published on {$published}. <a href='?p={$this->key}&amp;a=unpublishPage'>Unpublish page</a>.</p>" : "<p>Page is not yet published.</p>";
+		$details .= $modified ? "<p>Page created {$timeCreated} ago and last modified in {$timeModified}.</p>" : "<p>Page created {$timeCreated} ago.</p>";
+		$details .= $published ? "<p>Page published {$timePublished} ago. <a href='?p={$this->key}&amp;e&amp;a=unpublishPage'>Unpublish page</a>.</p>" : "<p>Page is not yet published. <a href='?p={$this->key}&amp;e&amp;a=publishPage'>Publish page now</a>.</p>";
 		$details .= "<p><a href='?p={$this->key}'>View page</a>.</p>";
-		$details .= $hasDraft ? "<p>Draft exists, <a href='?p={$this->key}&amp;draft'>preview it</a>. <a href='?p={$this->key}&amp;a=destroyDraftPage'>Destroy draft</a>.</p>" : "";
-		$details .= "<p><a href='?p={$this->key}&amp;a=deletePage'>Delete page to wastebasket</a>.</p>";
+		$details .= $hasDraft ? "<p>Draft exists, <a href='?p={$this->key}&amp;draft'>preview it</a>. <a href='?p={$this->key}&amp;e&amp;a=destroyDraftPage'>Destroy draft</a>.</p>" : "";
+		$details .= $deleted ? "<p>Page was deleted {$timeDeleted} ago. <a href='?p={$this->key}&amp;e&amp;a=restorePage'>Restore page from wastebasket</a>.</p>" : "<p><a href='?p={$this->key}&amp;e&amp;a=deletePage'>Delete page to wastebasket</a>.</p>";
 		$details .= "<h4>All pages</h4>";
-		$details .= "<p><a href='?a=prepareNewPage'>Create new page</a>.</p>";
+		$details .= "<p><a href='?a=createPage'>Create new page</a>.</p>";
 		$details .= "<p><a href='?a=viewPages'>View all pages</a>.</p>";
 		$details .= "<p>There exists x published pages. <a href='?a=viewPages&amp;published'>View</a>.</p>";
 		$details .= "<p>There exists x unpublished pages. <a href='?a=viewPages&amp;unpublished'>View</a>.</p>";
@@ -307,7 +349,7 @@ EOD;
 	{$statusBar}
 	<form action='?p={$this->key}&amp;e' method=post>
 		<fieldset>
-			<legend>Edit page: {$this->key}</legend>		
+			<legend>Edit page: <a href='?p={$this->key}&amp;a=renamePage'>{$this->key}</a></legend>		
 			<p>
 				<label for=input1>Content:</label><br>
 				<textarea id=input1 class="wide" name=content>{$content}</textarea>
@@ -370,6 +412,47 @@ EOD;
 	}
 
 
+/*
+	// ------------------------------------------------------------------------------------
+	//
+	// Get view with form to create new page by entering page name. 
+	//
+	public function GetViewCreatePageForm() {
+		$pp = CPrinceOfPersia::GetInstance();
+		$remember = $pp->GetAndClearRememberFromSession(array('output'=>'', 'output-type'=>''));
+		$disabled = $pp->uc->IsAdministrator() ? "" : "disabled";
+		$this->GetContent();
+		$statusBar = $this->GetStatusBar();
+		$details = $this->GetViewSideMenu();
+				
+		$page = <<<EOD
+<div class=span-18>
+	{$statusBar}
+	<form action='?p={$this->key}&amp;e&amp;a=createPage' method=post>
+		<fieldset>
+			<legend>Create page: {$this->key}</legend>		
+			<p>
+				<label for=input1>Name of page:</label><br>
+				<input id=input1 type=text class=text name=newName value="{$this->key}">
+			</p>
+			<p class=left>
+				<input type=submit name=doCreatePage value='Create' {$disabled}>
+				<input type=reset value='Reset'>
+			</p>
+			<p class=right><output class="span-5 {$remember['output-type']}">{$remember['output']}</output></p>	
+		</fieldset>
+	</form>
+</div>
+<div class="span-6 last quiet">
+	{$details}
+</div>
+
+EOD;
+		return $page;
+	}
+*/
+
+
 	// ====================================================================================
 	//
 	//	Code below relates to the interface IActionHandler
@@ -383,21 +466,23 @@ EOD;
 	public function ActionHandler() {
 		// Check what _POST contains
 		if(isset($_POST['doSaveDraftPage'])) return $this->DoActionSaveDraftPage();
-		if(isset($_POST['doPublishPage'])) return $this->DoActionPublishPage();
+		if(isset($_POST['doPublishPage'])) return $this->DoActionSaveAndPublishPage();
 		if(isset($_POST['doRenamePage'])) return $this->DoActionRenamePage();
 
 		// Check what _GET contains
 		$a = isset($_GET['a']) ? $_GET['a'] : null; // Do some action with the page 
 		$e = isset($_GET['e']); // Edit page
 		$p = isset($_GET['p']); // Display page
-		
+
 		if($a) {
 			switch($a) {
 				case 'viewNewPage': 			return $this->DoActionViewNewPage(); break;
-				case 'newPage': 					return $this->DoActionNewPage(); break;
+				case 'createPage': 				return $this->DoActionCreatePage(); break;
 				case 'renamePage': 				return $this->DoActionViewRenamePage(); break;
+				case 'publishPage': 			return $this->DoActionPublishPage(); break;
 				case 'unpublishPage': 		return $this->DoActionUnpublishPage(); break;
 				case 'deletePage': 				return $this->DoActionDeletePage(); break;
+				case 'restorePage': 			return $this->DoActionRestorePage(); break;
 				case 'destroyDraftPage': 	return $this->DoActionDestroyDraftPage(); break;
 				case 'viewPages': 				return $this->DoActionViewPages(); break;
 				default: echo "403";
@@ -417,7 +502,7 @@ EOD;
 	// View a page
 	//
 	protected function DoActionViewPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
 		$this->key = $_GET['p'];
 		return $this->GetViewPage();
@@ -429,13 +514,14 @@ EOD;
 	// Edit a page
 	//
 	protected function DoActionEditPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
 		$this->key = $_GET['p'];
 		return $this->GetViewPageAsForm();
 	}
 	
 
+/*
 	// ------------------------------------------------------------------------------------
 	//
 	// Show view to create a new empty page
@@ -443,17 +529,33 @@ EOD;
 	protected function DoActionViewNewPage() {
 		throw new Exception(__METHOD__ . " error: not yet implemented.");
 	}
-	
+*/
+
+/*
+	// ------------------------------------------------------------------------------------
+	//
+	// Display the view to create a new empty page
+	//
+	protected function DoActionViewCreatePage() {
+		//if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		//$this->SaveDraftContent("<h1>New page</h1>\n<p>Edit this text to create your custom page.</p>", $_GET['p']);
+		return $this->GetViewCreatePageForm();
+	}
+*/
+
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Create a new empty page
+	// Create a new page with a autogenerated key.
 	//
-	protected function DoActionNewPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+	protected function DoActionCreatePage() {
+		//if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
-		$this->SaveDraftContent("<h1>New page</h1>\n<p>Edit this text to create your custom page.</p>", $_GET['p']);
-		return $this->GetViewPage();
+		//$this->SaveDraftContent("<h1>New page</h1>\n<p>Edit this text to create your custom page.</p>", $_GET['p']);
+		//$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		//CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was saved as draft.", "output-type"=>"success"), $url);
+		//return $this->GetViewCreatePageForm();
 	}
 	
 
@@ -462,7 +564,7 @@ EOD;
 	// Save page
 	//
 	protected function DoActionSaveDraftPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
 		$this->SaveDraftContent($_POST['content'], $_GET['p']);
 		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was saved as draft.", "output-type"=>"success"));
@@ -471,10 +573,24 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Publish page
+	// Destroy draft page
 	//
-	protected function DoActionPublishPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+	protected function DoActionDestroyDraftPage() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->a->UnsetDraft();
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Draft was destroyed.", "output-type"=>"success"), $url);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Save and Publish page
+	//
+	protected function DoActionSaveAndPublishPage() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 
 		$this->SaveContent($_POST['content'], $_GET['p']);
 		$this->a->Publish();
@@ -484,10 +600,38 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
+	// Publish page
+	//
+	protected function DoActionPublishPage() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->a->Publish();
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was saved and published.", "output-type"=>"success"), $url);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Unpublish page
+	//
+	protected function DoActionUnpublishPage() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->a->Unpublish();
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was unpublished.", "output-type"=>"success"), $url);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Show view to rename page
 	//
 	protected function DoActionViewRenamePage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 		
 		$this->key = $_GET['p'];
 		return $this->GetViewRenamePageForm();
@@ -499,7 +643,7 @@ EOD;
 	// Rename page
 	//
 	protected function DoActionRenamePage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
 		
 		$this->key = $_GET['p'];
 		$newName = $_POST['newName'];
@@ -519,31 +663,29 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Unpublish page
-	//
-	protected function DoActionUnpublishPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
-		throw new Exception(__METHOD__ . " error: not yet implemented.");
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Destroy draft page
-	//
-	protected function DoActionDestroyDraftPage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
-		throw new Exception(__METHOD__ . " error: not yet implemented.");
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
 	// Delete page
 	//
 	protected function DoActionDeletePage() {
-		if(empty($_GET['p'])) throw new Exception(__METHOD__ . " error: calling method with empty key.");
-		throw new Exception(__METHOD__ . " error: not yet implemented.");
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->a->Delete();
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>self::$lang['PAGE_DELETED_TO_WASTEBASKET'], "output-type"=>"success"), $url);
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Restore a deleted page
+	//
+	protected function DoActionRestorePage() {
+		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
+
+		$this->a->LoadByKey($_GET['p']);
+		$this->a->Restore();
+		$url = CPrinceOfPersia::ModifyQueryStringOfCurrentUrl(array("a"=>null));
+		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>self::$lang['PAGE_RESTORED_FROM_WASTEBASKET'], "output-type"=>"success"), $url);
 	}
 
 

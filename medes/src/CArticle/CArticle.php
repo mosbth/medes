@@ -61,11 +61,14 @@ class CArticle implements IDatabaseObject, IInstallable {
 	const INSERT_NEW_ARTICLE = 2;
 	const UPDATE_ARTICLE = 3;
 	const UPDATE_ARTICLE_AS_PUBLISHED = 4;
-	const UPDATE_ARTICLE_UNSET_DRAFT = 5;
-	const UPDATE_CHANGE_KEY = 6;
-	const SELECT_ARTICLE_BY_ID = 7;
-	const SELECT_ARTICLE_BY_KEY = 8;
-	const SELECT_ARTICLE_ID_BY_KEY = 9;
+	const UPDATE_ARTICLE_AS_UNPUBLISHED = 5;
+	const UPDATE_ARTICLE_AS_DELETED = 6;
+	const UPDATE_ARTICLE_AS_RESTORED = 7;
+	const UPDATE_ARTICLE_UNSET_DRAFT = 8;
+	const UPDATE_CHANGE_KEY = 9;
+	const SELECT_ARTICLE_BY_ID = 10;
+	const SELECT_ARTICLE_BY_KEY = 11;
+	const SELECT_ARTICLE_ID_BY_KEY = 12;
 
 
 	// ------------------------------------------------------------------------------------
@@ -103,7 +106,16 @@ class CArticle implements IDatabaseObject, IInstallable {
   		case self::UPDATE_ARTICLE_AS_PUBLISHED:
   			return 'update article set published=datetime("now") where id=?';
   			break;
-  		case self::UPDATE_ARTICLE_UNSET_DRAFT:
+  		case self::UPDATE_ARTICLE_AS_UNPUBLISHED:
+  			return 'update article set published=null where id=?';
+  			break;
+  		case self::UPDATE_ARTICLE_AS_DELETED:
+  			return 'update article set deleted=datetime("now") where id=?';
+  			break;
+  		case self::UPDATE_ARTICLE_AS_RESTORED:
+  			return 'update article set deleted=null where id=?';
+  			break;
+			case self::UPDATE_ARTICLE_UNSET_DRAFT:
   			return 'update article set draftTitle=null, draftContent=null where id=?';
   			break;
   		case self::UPDATE_CHANGE_KEY:
@@ -263,7 +275,18 @@ class CArticle implements IDatabaseObject, IInstallable {
 	// $really: Put object in wastebasket (false) or really delete row from table (true)
 	//
 	public function Delete($really=false) {
-		;
+		if(!$this->GetId()) throw new Exception(__METHOD__ . " error: No id set.");				
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_AS_DELETED), array($this->GetId()));
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Restore a deleted object.
+	//
+	public function Restore() {
+		if(!$this->GetId()) throw new Exception(__METHOD__ . " error: No id set.");				
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_AS_RESTORED), array($this->GetId()));
 	}
 	
 
@@ -286,11 +309,18 @@ class CArticle implements IDatabaseObject, IInstallable {
 	// Publish article. 
 	//
 	public function Publish() {
-		if(!$this->GetId()) {
-			throw new Exception(get_class() . " error: Publish() without id set.");
-		}
-		
+		if(!$this->GetId()) throw new Exception(__METHOD__ . " error: No id set.");				
 		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_AS_PUBLISHED), array($this->GetId()));
+	}
+	
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Unpublish article. 
+	//
+	public function Unpublish() {
+		if(!$this->GetId()) throw new Exception(__METHOD__ . " error: No id set.");				
+		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_AS_UNPUBLISHED), array($this->GetId()));
 	}
 	
 
@@ -299,10 +329,7 @@ class CArticle implements IDatabaseObject, IInstallable {
 	// Remove draft article. 
 	//
 	public function UnsetDraft() {
-		if(!$this->GetId()) {
-			throw new Exception(get_class() . " error: UnsetDraft() without id set.");
-		}
-		
+		if(!$this->GetId())	throw new Exception(get_class() . " error: UnsetDraft() without id set.");
 		$this->db->ExecuteQuery(self::GetSQL(self::UPDATE_ARTICLE_UNSET_DRAFT), array($this->GetId()));
 	}
 	
