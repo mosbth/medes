@@ -12,12 +12,12 @@ $navbar = $pp->GetHTMLForNavbar();
 
 $html = <<<EOD
 <html>
-<header id=top-above>
+<header id="top-above">
 	{$profile}
 	{$relatedSites}
 </header>
 
-<header id=top class="container showgrid" style="overflow:visible;">
+<header id="top" class="container showgrid" style="overflow:visible;">
 	<a href="{$logoLink}"><img src="{$logo}" alt="Logo" width=335 height=70 style="margin-left:0px;"></a>
 {$navbar}
 </header>
