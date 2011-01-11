@@ -160,7 +160,7 @@ else if(isset($_POST['doAddItem'])) {
 		Throw new Exception("doAddItem, selected item ($current) is out of range.");
 	} else {
 		$newItem['text'] 	= "new item";
-		$newItem['url'] 	= "medes/template.php";
+		$newItem['url'] 	= "medes/page/template.php";
 		$newItem['title'] = "new item title";
 
 		// Move all items +1 from $current

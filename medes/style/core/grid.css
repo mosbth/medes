@@ -1,13 +1,15 @@
-/* phpmedes: stylesheet/core/grid.css 
---------------------------------------------------------
+/* --------------------------------------------------------------
 
-   grid layouts, using blueprint as base.
-   
-   blueprint is 24 columns, 950px wide, each column
-   spanning 30px with a 10px margin between columns.
-   
-*/
+   grid.css
+   * Sets up an easy-to-use grid of 24 columns.
 
+   By default, the grid is 950px wide, with 24 columns
+   spanning 30px, and a 10px margin between columns.
+
+   If you need fewer or more columns, namespaces or semantic
+   element names, use the compressor script (lib/compress.rb)
+
+-------------------------------------------------------------- */
 
 /* A container should group all your columns. */
 .container {
@@ -17,7 +19,7 @@
 
 /* Use this class on any .span / container to see the grid. */
 .showgrid {
-  background: url(grid.png);
+  background: url(src/grid.png);
 }
 
 
@@ -276,47 +278,3 @@ hr.space {
    apply to column that should drop below previous ones. */
 
 .clear { clear:both; }
-
-
-
-
-
-
-/* http://www.1kbgrid.com/ */
-/* ================ */
-/* = The 1Kb Grid = */     /* 12 columns, 60 pixels each, with 20 pixel gutter */
-/* ================ */
-
-/*
-.grid_1 { width:60px; }
-.grid_2 { width:140px; }
-.grid_3 { width:220px; }
-.grid_4 { width:300px; }
-.grid_5 { width:380px; }
-.grid_6 { width:460px; }
-.grid_7 { width:540px; }
-.grid_8 { width:620px; }
-.grid_9 { width:700px; }
-.grid_10 { width:780px; }
-.grid_11 { width:860px; }
-.grid_12 { width:940px; }
-
-.column {
-	margin: 0 10px;
-	overflow: hidden;
-	float: left;
-	display: inline;
-}
-.row {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
-.row .row {
-	margin: 0 -10px;
-	width: auto;
-	display: inline-block;
-}
-*/
-
-

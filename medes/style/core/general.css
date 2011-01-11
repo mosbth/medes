@@ -12,7 +12,7 @@
 
 */
 html{overflow-y:scroll;background:#eee;}
-body{line-height:1.1em;}
+body{}
 header,footer,nav,article,aside{display:block;}
 
 
@@ -145,6 +145,15 @@ nav.breadcrumb {font:smaller arial,helvetica,sans-serif;color:#999;}
 nav.breadcrumb a {color:inherit;content:" \00BB ";}
 nav.breadcrumb a:after {content:" \00BB ";}
 nav.breadcrumb a:hover {color:#555;}
+
+
+
+/* Forms (forms.css)
+--------------------------------------------------------
+	Additions to forms.css
+
+*/
+textarea.wide { width: 660px; height: 350px; }
 
 
 /* Nice to have classe for styling

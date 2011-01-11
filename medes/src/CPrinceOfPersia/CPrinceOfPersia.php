@@ -151,12 +151,16 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	protected static $currentUrl = null; // get this value though the method GetUrlToCurrentPage()
 
 	// page-related
+	public $pageLang;	
+	public $pageCharset;
 	public $pageTitle;
 	public $pageKeywords;
 	public $pageDescription;
 	public $pageAuthor;
 	public $pageCopyright;
-	public $pageInlineStyle;
+	public $pageFaviconLink;
+	public $pageFaviconType;
+	public $pageStyle;
 	
 	// various
 	public $googleAnalytics;
@@ -200,14 +204,17 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->uc = CUserController::GetInstance();
 
 		// Set default values to be empty
-		$this->pageTitle='';
-		$this->pageKeywords='';
-		$this->pageDescription='';
-		$this->pageAuthor='';
-		$this->pageCopyright='';
-		$this->pageInlineStyle=''; // OBSOLETE replaced by pageStyle
+		$this->pageLang='sv';
+		$this->pageCharset='utf-8';
+		$this->pageTitle=null;
+		$this->pageKeywords=null;
+		$this->pageDescription=null;
+		$this->pageAuthor=null;
+		$this->pageCopyright=null;
+		$this->pageFaviconLink='img/favicon.png';
+		$this->pageFaviconType='img/png';
 		$this->pageStyle=null;
-		$this->googleAnalytics='';
+		$this->googleAnalytics=null;
 
 
 /*
@@ -290,12 +297,17 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'>" : "";
  		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->" : "";
 		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>" : "";
-    
+		$favicon = empty($this->pageFaviconLink) ? null : $this->PrependWithSiteUrl($this->pageFaviconLink);
+		$favicon = is_null($favicon) ? '' : "<link rel='shortcut icon' type='{$this->pageFaviconType}' href='{$favicon}'>";
+
+
 		$html = <<<EOD
 <link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}">
 {$print}
 {$ie}
 {$style}
+{$favicon}
+
 EOD;
 
 		return $html;
@@ -333,6 +345,20 @@ EOD;
 		}
 
 		return CNavigation::GenerateMenu($nav, false, 'profile');		
+  }
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get html for header 
+	//
+	public function GetHTMLForMeta() {
+		$meta = "<meta charset='{$this->pageCharset}'>\n";
+		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords'>\n";
+		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription'>\n";
+		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor'>\n";
+		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright'>\n";
+		return meta;
   }
 
 
