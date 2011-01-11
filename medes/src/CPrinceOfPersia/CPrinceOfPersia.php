@@ -285,7 +285,7 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		switch($this->pageDocType) {
 			case 'xhtml-strict':
 				$html = <<<EOD
-<?xml version="1.0" encoding="{$this->pageCharset}" ?> 
+<?xml version="1.0" encoding="{$this->pageCharset}" > 
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -405,11 +405,11 @@ EOD;
 	// Get html for header 
 	//
 	public function GetHTMLForMeta() {
-		$meta = "<meta charset='{$this->pageCharset}'>\n";
-		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'>\n";
-		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'>\n";
-		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'>\n";
-		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'>\n";
+		$meta = "<meta charset='{$this->pageCharset}'/>\n";
+		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'/>\n";
+		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'/>\n";
+		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'/>\n";
+		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'/>\n";
 		return $meta;
   }
 
