@@ -151,6 +151,7 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	protected static $currentUrl = null; // get this value though the method GetUrlToCurrentPage()
 
 	// page-related
+	public $pageDocType;	
 	public $pageContentType;	
 	public $pageLang;	
 	public $pageCharset;
@@ -205,6 +206,7 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->uc = CUserController::GetInstance();
 
 		// Set default values to be empty
+		$this->pageDocType='html5';
 		$this->pageContentType='text/html';
 		$this->pageLang='sv';
 		$this->pageCharset='utf-8';
@@ -289,6 +291,29 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 
 	// ------------------------------------------------------------------------------------
 	//
+	// Create code for correct doctype
+	// 
+	public function GetHTMLDocType() {
+		switch($this->pageDocType) {
+			case 'xhtml-strict':
+				;
+				break;
+			
+			case 'html5':
+			default:
+				$html = <<<EOD
+<!DOCTYPE html>
+<html lang="{$this->pageLang}">
+EOD;
+				break;			
+		}
+
+		return $html;
+	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
 	// Create html to include stylesheets based on theme choosen in config
 	//  $aUrl: a link to a resource
 	// 
@@ -301,7 +326,6 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>" : "";
 		$favicon = empty($this->pageFaviconLink) ? null : $this->PrependWithSiteUrl($this->pageFaviconLink);
 		$favicon = is_null($favicon) ? '' : "<link rel='shortcut icon' type='{$this->pageFaviconType}' href='{$favicon}'>";
-
 
 		$html = <<<EOD
 <link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}">

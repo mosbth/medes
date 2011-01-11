@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="<?php echo $pp->pageLang; ?>">
+<?php echo $pp->GetHTMLDocType(); ?>
 
 <head>
 	<!-- Meta tags -->
