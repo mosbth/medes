@@ -18,7 +18,7 @@ $html = <<<EOD
 </header>
 
 <header id="top" class="container showgrid" style="overflow:visible;">
-	<a href="{$logoLink}"><img src="{$logo}" alt="Logo" width=335 height=70 style="margin-left:0px;"></a>
+	<a href="{$logoLink}"><img src="{$logo}" alt="Logo" width="335" height="70" style="margin-left:0px;"/></a>
 {$navbar}
 </header>
 

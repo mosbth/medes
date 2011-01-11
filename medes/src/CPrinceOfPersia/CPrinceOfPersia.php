@@ -284,8 +284,9 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	public function GetHTMLDocType() {
 		switch($this->pageDocType) {
 			case 'xhtml-strict':
+				$xml = "<?xml version='1.0' encoding='{$this->pageCharset}' ?>";
 				$html = <<<EOD
-<?xml version="1.0" encoding="{$this->pageCharset}" ?> 
+{$xml}
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -497,7 +498,7 @@ EOD;
 		}
 
 		$html = <<<EOD
-<p class=clear><em>{$reload}Page generated in {$time} seconds. There were {$numQueries} database queries.</em></p>
+<p class="clear"><em>{$reload}Page generated in {$time} seconds. There were {$numQueries} database queries.</em></p>
 {$item1}{$item2}{$item3}
 EOD;
 
