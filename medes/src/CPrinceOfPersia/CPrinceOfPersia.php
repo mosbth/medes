@@ -547,14 +547,14 @@ EOD;
 	//
 	// Get the link to the current page. 
 	//
-	public function GetUrlToCurrentPage() {
+	public static function GetUrlToCurrentPage() {
 		if(!self::$currentUrl) {
 			self::$currentUrl = "http";
 			self::$currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
 			self::$currentUrl .= "://";
 			$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
 			(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
-			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . htmlspecialchars($_SERVER["REQUEST_URI"], ENT_COMPAT, $this->pageCharset);
+			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . htmlspecialchars($_SERVER["REQUEST_URI"]);
 		}
 		return self::$currentUrl;
 	}
