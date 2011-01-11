@@ -151,6 +151,7 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	protected static $currentUrl = null; // get this value though the method GetUrlToCurrentPage()
 
 	// page-related
+	public $pageContentType;	
 	public $pageLang;	
 	public $pageCharset;
 	public $pageTitle;
@@ -204,6 +205,7 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->uc = CUserController::GetInstance();
 
 		// Set default values to be empty
+		$this->pageContentType='text/html';
 		$this->pageLang='sv';
 		$this->pageCharset='utf-8';
 		$this->pageTitle=null;
@@ -354,11 +356,11 @@ EOD;
 	//
 	public function GetHTMLForMeta() {
 		$meta = "<meta charset='{$this->pageCharset}'>\n";
-		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords'>\n";
-		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription'>\n";
-		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor'>\n";
-		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright'>\n";
-		return meta;
+		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'>\n";
+		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'>\n";
+		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'>\n";
+		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'>\n";
+		return $meta;
   }
 
 
@@ -462,6 +464,9 @@ EOD;
 	//
 	public function PrintHTMLPage($aPage="", $aHeader="", $aFooter="") {
 		$pp = &$this;
+		if(!is_null($this->pageContentType)) {
+			header("Content-Type: {$this->pageContentType}; charset={$this->pageCharset}");
+		}
 		include(dirname(__FILE__) . "/htmlheader.php");
 		echo empty($aHeader) ? $this->GetHTMLForHeader() : $aHeader;
 		echo $aPage;
