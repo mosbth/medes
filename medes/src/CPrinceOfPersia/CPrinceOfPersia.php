@@ -547,7 +547,7 @@ EOD;
 	//
 	// Get the link to the current page. 
 	//
-	public static function GetUrlToCurrentPage() {
+	public function GetUrlToCurrentPage() {
 		if(!self::$currentUrl) {
 			self::$currentUrl = "http";
 			self::$currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
