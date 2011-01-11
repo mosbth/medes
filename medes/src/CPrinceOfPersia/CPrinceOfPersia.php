@@ -554,7 +554,7 @@ EOD;
 			self::$currentUrl .= "://";
 			$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
 			(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
-			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . $_SERVER["REQUEST_URI"];
+			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . htmlspecialchars($_SERVER["REQUEST_URI"], ENT_COMPAT, $this->pageCharset);
 		}
 		return self::$currentUrl;
 	}
@@ -578,7 +578,7 @@ EOD;
 		if(empty($qs)) {
 			unset($parts['query']);
 		} else {
-			$parts['query'] = htmlspecialchars(http_build_query($qs));
+			$parts['query'] = http_build_query($qs);
 		}
 		return self::BuildUrl($parts);
 	}
