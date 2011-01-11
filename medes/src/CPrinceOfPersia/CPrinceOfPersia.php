@@ -578,7 +578,7 @@ EOD;
 		if(empty($qs)) {
 			unset($parts['query']);
 		} else {
-			$parts['query'] = http_build_query($qs);
+			$parts['query'] = htmlspecialchars(http_build_query($qs));
 		}
 		return self::BuildUrl($parts);
 	}
