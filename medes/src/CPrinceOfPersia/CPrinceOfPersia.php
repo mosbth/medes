@@ -163,6 +163,9 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	public $pageFaviconLink;
 	public $pageFaviconType;
 	public $pageStyle;
+	public $pageStyleLink;
+	public $pageScript;
+	public $pageScriptLink;
 	
 	// various
 	public $googleAnalytics;
@@ -218,25 +221,10 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->pageFaviconLink='img/favicon.png';
 		$this->pageFaviconType='img/png';
 		$this->pageStyle=null;
+		$this->pageStyleLinks=array();
+		$this->pageScript=null;
+		$this->pageScriptLinks=array();
 		$this->googleAnalytics=null;
-
-
-/*
-		$this->navbar = array(
-			"1" => array("text"=>"home", "url"=>"medes/doc/home.php", "title"=>"Go home"),
-			"2" => array("text"=>"showcase", "url"=>"medes/doc/showcase.php", "title"=>"See some live sites showing off"),
-			"3" => array("text"=>"features", "url"=>"medes/doc/features.php", "title"=>"features"),
-			"4" => array("text"=>"style", "url"=>"medes/doc/style.php", "title"=>"style"),
-			"5" => array("text"=>"addons", "url"=>"medes/doc/addons.php", "title"=>"addons"),
-			"6" => array("text"=>"download", "url"=>"medes/doc/download.php", "title"=>"download"),
-			"7" => array("text"=>"contribute", "url"=>"medes/doc/contribute.php", "title"=>"contribute"),
-			"8" => array("text"=>"docs", "url"=>"medes/doc/docs.php", "title"=>"docs"),
-			"9" => array("text"=>"blog", "url"=>"medes/doc/blog.php", "title"=>"blog"),
-			"10" => array("text"=>"about", "url"=>"medes/doc/about.php", "title"=>"about"),
-			"11" => array("text"=>"adm", "url"=>"medes/adm.php", "title"=>"adm"),
-		);
-*/
-
 	}
 	
 	
@@ -296,7 +284,13 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	public function GetHTMLDocType() {
 		switch($this->pageDocType) {
 			case 'xhtml-strict':
-				;
+				$html = <<<EOD
+<?xml version="1.0" encoding="{$this->pageCharset}" ?> 
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$this->pageLang}" lang="{$this->pageLang}">
+EOD;
 				break;
 			
 			case 'html5':
@@ -315,22 +309,30 @@ EOD;
 	// ------------------------------------------------------------------------------------
 	//
 	// Create html to include stylesheets based on theme choosen in config
-	//  $aUrl: a link to a resource
 	// 
 	public function GetHTMLForStyle() {
 		
 		$pathToTheme = $this->PrependWithSiteUrl("medes/style/{$this->config['styletheme']['name']}");
 		$stylesheet = "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}";
-		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'>" : "";
- 		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->" : "";
-		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>" : "";
+		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'/>\n" : "";
+ 		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->\n" : "";
+		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>\n" : "";
 		$favicon = empty($this->pageFaviconLink) ? null : $this->PrependWithSiteUrl($this->pageFaviconLink);
-		$favicon = is_null($favicon) ? '' : "<link rel='shortcut icon' type='{$this->pageFaviconType}' href='{$favicon}'>";
+		$favicon = is_null($favicon) ? '' : "<link rel='shortcut icon' type='{$this->pageFaviconType}' href='{$favicon}'/>\n";
 
+		$stylelinks='';
+		foreach($this->pageStyleLinks as $val) {
+			$media = isset($val['media']) ? "media='{$val['media']}'" : "media='all'";
+			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/css'";
+			$href = "href='" . $this->PrependWithSiteUrl($val['href']) . "'";
+			$stylelinks .= "<link rel='stylesheet' {$media} {$type} {$href}/>\n";
+		}
+		
 		$html = <<<EOD
-<link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}">
+<link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}"/>
 {$print}
 {$ie}
+{$stylelinks}
 {$style}
 {$favicon}
 
@@ -338,6 +340,30 @@ EOD;
 
 		return $html;
 	}
+
+
+	// ------------------------------------------------------------------------------------
+	//
+	// Get html for script
+	//
+	public function GetHTMLForScript() {
+		$scriptlinks='';
+		foreach($this->pageStyleLinks as $val) {
+			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/javascript'";
+			$src = "src='" . $this->PrependWithSiteUrl($val['src']) . "'";
+			$scriptlinks .= "<script {$type} {$src}/>\n";
+		}
+		
+		$script = isset($this->pageScript) ? "<script type='text/css'>\n{$this->pageStyle}\n</style>\n" : "";
+
+		$html = <<<EOD
+{$scriptlinks}
+{$script}
+
+EOD;
+
+		return $html;		
+  }
 
 
 	// ------------------------------------------------------------------------------------

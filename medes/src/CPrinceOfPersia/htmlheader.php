@@ -7,8 +7,11 @@
 	<!-- Use PHP to set the page title dynamic -->
  	<?php echo "<title>$pp->pageTitle</title>"; ?>
  	
-	<!-- Stylesheets and style-->
+	<!-- Stylesheets and style -->
 	<?php echo $pp->GetHTMLForStyle(); ?>
+
+	<!-- Script -->
+	<?php echo $pp->GetHTMLForScript(); ?>
 
 	<!-- Help Internet Explorer understand HTML5 elements http://code.google.com/p/html5shiv/ -->
 	<!--[if lt IE 9]>
