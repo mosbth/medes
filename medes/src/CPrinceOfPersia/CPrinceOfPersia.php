@@ -467,10 +467,10 @@ EOD;
 			"tools"					=>array("text"=>"Tools", "class"=>"nav-h1 nolink"),			
 			"html5"					=>array("text"=>"html5", "url"=>"http://validator.w3.org/check/referer", "title"=>"html5 validator"),			
 			"css3"					=>array("text"=>"css3", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
-			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&ucn_task=conformance", "title"=>"unicorn html and css validator"),			
+			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance", "title"=>"unicorn html and css validator"),			
 			"cheatsheet"		=>array("text"=>"cheatsheet", "url"=>"http://www.w3.org/2009/cheatsheet/", "title"=>"html cheatsheet, lookup html-tags"),			
 			"link-checker"	=>array("text"=>"link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
-			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&docAddr=" . $url, "title"=>"css3 validator"),			
+			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=" . $url, "title"=>"css3 validator"),			
 			"check-header"	=>array("text"=>"check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 			"browsers"			=>array("text"=>"browsers", "url"=>"http://browsershots.org/{$url}", "title"=>"check browser compatibility"),	
 		);
