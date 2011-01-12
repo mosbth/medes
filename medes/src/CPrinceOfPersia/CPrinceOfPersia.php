@@ -352,10 +352,10 @@ EOD;
 		foreach($this->pageScriptLinks as $val) {
 			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/javascript'";
 			$src = "src='" . $this->PrependWithSiteUrl($val['src']) . "'";
-			$scriptlinks .= "<script {$type} {$src}/>\n";
+			$scriptlinks .= "<script {$type} {$src}></script>\n";
 		}
 		
-		$script = isset($this->pageScript) ? "<script type='text/css'>\n{$this->pageStyle}\n</style>\n" : "";
+		$script = isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : "";
 
 		$html = <<<EOD
 {$scriptlinks}
