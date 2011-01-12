@@ -386,14 +386,19 @@ EOD;
 		$nav = array(
 			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=login"), "title"=>"Login"),
 			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php"), "title"=>"Change your settings"),
+			"acp"=>array("text"=>"acp", "url"=>$this->PrependWithSiteUrl("medes/page/acp.php"), "title"=>"Admin Control Panel"),
 			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=dologout"), "title"=>"Logout"),
 		);
 
 		if($this->uc->IsAuthenticated()) {
 			unset($nav['login']);
 			$nav['settings']['text'] = $this->uc->GetAccountName();
+			if(!$this->uc->IsAdministrator()) {
+				unset($nav['acp']);			
+			}
 		} else {
 			unset($nav['settings']);
+			unset($nav['acp']);
 			unset($nav['logout']);			
 		}
 
