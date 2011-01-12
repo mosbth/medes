@@ -540,7 +540,7 @@ EOD;
 			return false;
 		}
 			
-		if(strstr('://', $aUrl) || $aUrl[0] == '/') {
+		if(strpos($aUrl, '://') || $aUrl[0] == '/') {
 			return $aUrl;
 		}
 
