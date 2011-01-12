@@ -9,7 +9,12 @@
 //
 
 // Enable auto-load of class declarations
-function __autoload($aClassName){require_once(dirname(__FILE__)."/src/{$aClassName}/{$aClassName}.php");}
+function __autoload($aClassName) {
+	$file = dirname(__FILE__)."/src/{$aClassName}/{$aClassName}.php";
+	if(is_file($file)) {
+		require_once($file);
+	}
+}
 
 // -------------------------------------------------------------------------------------------
 //
