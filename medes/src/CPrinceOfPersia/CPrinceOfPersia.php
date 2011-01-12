@@ -163,9 +163,9 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	public $pageFaviconLink;
 	public $pageFaviconType;
 	public $pageStyle;
-	public $pageStyleLink;
+	public $pageStyleLinks;
 	public $pageScript;
-	public $pageScriptLink;
+	public $pageScriptLinks;
 	
 	// various
 	public $googleAnalytics;
@@ -349,7 +349,7 @@ EOD;
 	//
 	public function GetHTMLForScript() {
 		$scriptlinks='';
-		foreach($this->pageStyleLinks as $val) {
+		foreach($this->pageScriptLinks as $val) {
 			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/javascript'";
 			$src = "src='" . $this->PrependWithSiteUrl($val['src']) . "'";
 			$scriptlinks .= "<script {$type} {$src}/>\n";
