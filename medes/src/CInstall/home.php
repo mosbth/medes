@@ -170,7 +170,8 @@ if($dataDirectoryIsWritable && !$configFileExists) {
 your medes website.</p>
 <p><a href="acp.php?p=changepwd">Admin area: change password</a></p>
 <p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
-All dynamic site data is included in the data-directory, <code>medes/data</code>, always consider to make a backup of its content.</p>
+The sites dynamic data, config-files and file-databases, are all stored in the data-directory, <code>medes/data</code>. 
+Always consider to make a proper backup of its content.</p>
 	
 EOD;
 } else {
