@@ -164,7 +164,7 @@ $config['meta'] = array(
 );
 $config['tracker'] = "";
 
-$done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes failed. Correct the errors above and <a href='{$_SERVER['script']}'>reload this page</a>.</strong></p>";
+$done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes failed. Correct the errors above and <a href=''>reload this page</a>.</strong></p>";
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
 	$done = <<<EOD
