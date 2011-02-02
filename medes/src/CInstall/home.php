@@ -42,7 +42,7 @@ $case 	= "Creating and initiating the database <code>medes/data/CDatabaseControl
 $class 	= "ok";
 $result = "";
 $databaseExists = false;
-if(is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
+if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
 	$databaseExists = true;
 	$result = "A database already exists. Leaving it as is. Remove it 'by hand', if needed.";
 	$class = "info";
@@ -69,7 +69,7 @@ $case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPe
 $class 	= "ok";
 $result = "";
 $configFileExists = false;
-if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
+if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 	$configFileExists = true;
 	$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
 	$class = "fail";
