@@ -196,7 +196,7 @@ $page = <<<EOD
 an existing installation, makes no harm.</p>
 <hr>
 
-<h2>Checking the environment</h2>
+<h2>Checking and Installing</h2>
 {$check}
 {$done}
 <hr>
