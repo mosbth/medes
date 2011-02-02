@@ -11,7 +11,7 @@
    Basic structural settings
 
 */
-html{background:#E6E6E6;} 
+html{background:#E6E6E6;overflow-y:scroll;} 
 body{background:#fff;} 
 
 
