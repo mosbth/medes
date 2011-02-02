@@ -28,9 +28,9 @@ if(!is_dir(dirname(__FILE__) . "/../../data/")) {
 } 
 $check .= <<<EOD
 <p>
-<span class={$class}>[{$class}]</span> 
+<span class="{$class}">[{$class}]</span> 
 {$case}
-<p class=fix><em>{$result}</em></p>
+<p class="fix"><em>{$result}</em></p>
 EOD;
 
 
@@ -56,9 +56,9 @@ if($dataDirectoryIsWritable) {
 	$check .= <<<EOD
 	<h2>Installing</h2>
 	<p>
-	<span class={$class}>[{$class}]</span> 
+	<span class="{$class}">[{$class}]</span> 
 	{$case}
-	<p class=fix><em>{$result}</em></p>
+	<p class="fix"><em>{$result}</em></p>
 EOD;
 }
 
@@ -79,9 +79,9 @@ if($dataDirectoryIsWritable) {
 	} 
 	$check .= <<<EOD
 	<p>
-	<span class={$class}>[{$class}]</span> 
+	<span class="{$class}">[{$class}]</span> 
 	{$case}
-	<p class=fix><em>{$result}</em></p>
+	<p class="fix"><em>{$result}</em></p>
 EOD;
 }
 
@@ -113,9 +113,9 @@ if($dataDirectoryIsWritable && !$configFileExists) {
 	$result = "Sitelink = {$siteUrl}";
 	$check .= <<<EOD
 	<p>
-	<span class={$class}>[{$class}]</span> 
+	<span class="{$class}">[{$class}]</span> 
 	{$case}
-	<p class=fix><em>{$result}</em></p>
+	<p class="fix"><em>{$result}</em></p>
 EOD;
 }
 
@@ -186,10 +186,16 @@ EOD;
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<article id="install" class="container colborder span-18 last">
+<article id="install" class="colborder span-18 last">
 <h1>Do a fresh installation of medes</h1>
 <hr>
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
+<h2>installing phpmedes</h2>
+<p>This scripts installs medes. Correct any error and <a href=''>reload this page</a> until all is green.</p>
+<p>There is currently no nice way to do an upgrade of an existing installation, however, running this script on
+an existing installation, makes no harm.</p>
+<hr>
+
 <h2>Checking the environment</h2>
 {$check}
 {$done}
