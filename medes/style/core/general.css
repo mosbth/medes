@@ -118,7 +118,8 @@ figure.standard figcaption 	{text-align:center;font-style:italic;}
 */
 
 figure {border:1px solid #E6E6E6;padding:4px;margin:1em;text-align:center;}
-figcaption {font-style:italic;font-size:smaller;padding-left:1em;}
+figure img {display:block;margin:auto;max-width:100%;max-height:100%;}
+figcaption {font-style:italic;padding-left:1em;}
 
 figure.right{margin-right:0;}
 figure.top{margin-top:0;}
