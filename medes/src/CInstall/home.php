@@ -185,12 +185,13 @@ EOD;
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<article id=install>
+<article id="install" class="border">
 <h1>Do a fresh installation of medes</h1>
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
 <h2>Checking the environment</h2>
 {$check}
 {$done}
+<hr>
 </article>
 EOD;
 
