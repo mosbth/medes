@@ -38,11 +38,11 @@ EOD;
 //
 // Install the database
 //
+$databaseExists = false;
 if($dataDirectoryIsWritable) {
 	$case 	= "Creating and initiating the database <code>medes/data/CDatabaseController.db</code>.";
 	$class 	= "ok";
 	$result = "";
-	$databaseExists = false;
 	if(is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
 		$databaseExists = true;
 		$result = "A database already exists. Leaving it as is. Remove it 'by hand', if needed.";
@@ -68,11 +68,11 @@ EOD;
 //
 // Check if the config file exists and is writable. 
 //
+$configFileExists = false;
 if($dataDirectoryIsWritable) {
 	$case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPersia_config.php</code>.";
 	$class 	= "ok";
 	$result = "";
-	$configFileExists = false;
 	if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 		$configFileExists = true;
 		$result = "A config-file already exists. Remove it 'by hand' to do a fresh installation.";
