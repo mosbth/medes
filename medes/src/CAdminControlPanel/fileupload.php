@@ -1,38 +1,12 @@
 <?php
-// -------------------------------------------------------------------------------------------
-//
-// FUNCTION
-// Function to open and read a directory, return its content as an array.
-//
-// $aPath: A path to the directory to scan for files. 
-//
-function readDirectory($aPath) {
-	$list = Array();
-	if(is_dir($aPath)) {
-		if ($dh = opendir($aPath)) {
-			while (($file = readdir($dh)) !== false) {
-				if(is_file("$aPath/$file") && $file != '.htaccess') {
-					$list[$file] = "$file";
-				}
-			}
-			closedir($dh);
-		}
-	}
-	sort($list, SORT_NUMERIC);
-	return $list;
-}
-
-
 // ---------------------------------------------------------------------------------------------
 //
-// VALIDATE INCOMING VALUES FROM POST AND GET VARIABLES.
 // Do some initial checking, validating and defining/setting of variables that will be used
 // all through the script. 
 //
-//
 $output = "";
+//$imageDir	= "upload";
 $imageDir	= "upload";
-$pp = CPrinceOfPersia::GetInstance();
 
 $FILE_UPLOAD_DISABLED=false;
 if(is_readable('config.php')) {	require_once('config.php'); }
