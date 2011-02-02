@@ -175,10 +175,12 @@ Always consider to make a proper backup of its content.</p>
 	
 EOD;
 } else {
-	unset($config['navigation']['navbar']['nav'][1]);
-	unset($config['navigation']['navbar']['nav'][2]);
-	unset($config['navigation']['navbar']['nav'][3]);
-	unset($config['navigation']['navbar']['nav'][4]);
+	if(!$configFileExists) {
+		unset($config['navigation']['navbar']['nav'][1]);
+		unset($config['navigation']['navbar']['nav'][2]);
+		unset($config['navigation']['navbar']['nav'][3]);
+		unset($config['navigation']['navbar']['nav'][4]);
+	}
 	$pp->UpdateConfiguration($config, false);
 }
 
