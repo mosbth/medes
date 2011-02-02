@@ -185,7 +185,7 @@ EOD;
 // Set $page to contain html for the page
 //
 $page = <<<EOD
-<article id="install" class="colborder span-18 last">
+<article id="install" class="container colborder span-18 last">
 <h1>Do a fresh installation of medes</h1>
 <hr>
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
