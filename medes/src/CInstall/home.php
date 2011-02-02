@@ -190,7 +190,7 @@ $page = <<<EOD
 <h1>Do a fresh installation of medes</h1>
 <hr>
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
-<h2>installing phpmedes</h2>
+<h2>Information</h2>
 <p>This scripts installs medes. Correct any error and <a href=''>reload this page</a> until all is green.</p>
 <p>There is currently no nice way to do an upgrade of an existing installation, however, running this script on
 an existing installation, makes no harm.</p>
