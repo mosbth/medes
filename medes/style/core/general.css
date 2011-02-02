@@ -5,24 +5,24 @@
 */
 
 
-/* html, html5, body, etc 
+/* html, body, etc 
 --------------------------------------------------------
 
    Basic structural settings
 
 */
-html{overflow-y:scroll;background:#eee;}
-body{}
-header,footer,nav,article,aside{display:block;}
+html{overflow-y:scroll;} 
+html{background:#E6E6E6;} 
+body{background:#fff;} 
 
 
-/* move to grid.css */
-/* default layout of article and aside is the 2 col layout */
-/*
-div#content article{width:592px;}
-div#content article.fullwidth{width:824px}
-div#content aside{width:232px;float:right;margin-top:1em;padding:0 8px 1em 8px;border-left:2px dashed #eee;}
+/* typography
+--------------------------------------------------------
+
+
 */
+h1, h2{border-bottom:1px solid #DDD;line-height:1.3em;}
+
 
 /* header#top-above, nav.relatedlinks, nav.profile
 --------------------------------------------------------
@@ -31,7 +31,7 @@ div#content aside{width:232px;float:right;margin-top:1em;padding:0 8px 1em 8px;b
    related sitelinks and login/profile menu. 
 
 */
-header#top-above{border-bottom:1px solid #ccc;padding:0.5em 1em 0.5em 1em;background:#fff;color:#555;}
+header#top-above{border-bottom:1px solid #E6E6E6;padding:0 1em 4px 1em;background:#fff;color:#656565;}
 nav.relatedlinks{float:left;} /* related links, usually top-left menu */
 nav.profile{float:right;} /* nav profile, login, logout menu, usually top-left menu */
 
@@ -52,14 +52,16 @@ header#top{}
 	Main navigation bar
 	
 */
-nav.mainmenu{overflow:auto;margin:0;padding:2px 90px 2px 25px;background-color:#aaa;
-border:1px solid #eee;border-left:0;border-right:0;}
-
-nav.mainmenu a{float:left;text-decoration:none;padding:7px 10px 7px 10px;color:#222;
-border-left:1px solid #ccc;}
-nav.mainmenu a:last-child{border-right:1px solid #ccc;}
-nav.mainmenu a:hover,nav a#sel{background:#ccc;}
-
+nav.mainmenu {
+	font-family: arial;
+	font-weight: bold;
+	font-size:1.2em;
+	padding: 2px 8px;
+	background:#656565;
+	border:2px solid #858585;
+}
+nav.mainmenu a {padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
+nav.mainmenu a:hover {background:#858585;border:2px solid #656565;}
 
 
 /* div#content
@@ -78,9 +80,9 @@ div#content{min-height:20em;}
    Footer and related elements
 
 */
-footer#bottom-wrap{border-top:1px solid #ccc;background:#eee;}
+footer#bottom-wrap{border-top:4px solid #eee;background:#E6E6E6;}
 
-footer#bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
+footer#bottom{padding:1em 0 1em 0;background-color:transparent;color:#656565;}
 /*footer#bottom{padding:1em;border-top:1px solid #999;background:#eee;color:#999;}*/
 
 footer#bottom nav{float:left;margin-bottom:2em;}
@@ -122,7 +124,7 @@ figure.standard figcaption 	{text-align:center;font-style:italic;}
 a{color:inherit;}
 a:link{}
 a:visited{}
-a:hover{text-decoration:none;color:#222;background:#eee;}
+a:hover{text-decoration:none;color:#5C0A0A;}
 a:active{}
 
 /* a element without href */
@@ -164,38 +166,5 @@ textarea.wide { width: 660px; height: 350px; }
 .justify{text-align:justify;}
 
 output{display:inline;font-style:italic;}
-
-
-
-/* phpmedes logotype */
-/*
-div.logo{position:relative;font-family:serif;font-weight:bold;width:300px;height:70px;line-height:1px;}
-div.logo p#label{position:absolute;top:-20px;left:0;font-size:50px;text-shadow: 1px 1px 1px #222, -1px -1px 1px #222;color:#444;}
-div.logo p#tagline{position:absolute;top:40px;left:100px;color:#222;font-size:14px;}
-*/
-
-
-/* Basic settings */
-/*body{background:white;margin:8px auto;width:850px;color:#222;}*/
-/*header,footer,nav,article,aside{display:block;overflow:auto;}*/
-/*
-header#top{overflow:auto;} 
-header#top img{border:0;} 
-*/
-
-/* 2 col layout with article and aside */
-/*
-div.col2 article{width:592px;text-align:justify;}
-div.col2 aside{width:240px;float:right;margin-top:1em;padding-left:8px;border-left:2px dashed #eee;}
-*/
-
-/*aside.box a {word-wrap:break-word;}*/
-
-/* custom to display colors */
-/*
-div.color{width:20px;height:20px;float:left;}
-div.color:after{clear:both;}
-*/
-
 
 

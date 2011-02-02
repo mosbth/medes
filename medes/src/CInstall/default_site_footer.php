@@ -19,7 +19,9 @@ $html = <<<EOD
 -->
 
 	<p class="span-24 last">This site is built using <a href="http://phpmedes.org/">the free 
-	and opensource software named phpmedes</a>. PhpMedes is free software, open source, and therefore licensed 
+	and opensource software named phpmedes</a>. PhpMedes is a PHP framework, and a CMS based on PHP,
+	that aids in quickly building, small and medium sized websites, using latest technique, 
+	with a minimum of knowledge needed. PhpMedes is free software, open source, and therefore licensed 
 	according to <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License version 3</a>.
 	</p>
 	

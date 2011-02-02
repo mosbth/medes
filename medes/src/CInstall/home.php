@@ -55,7 +55,6 @@ if($dataDirectoryIsWritable) {
 	}
 	$result = empty($result) ? "" : "<p class='info'>{$result}</p>";
 	$check .= <<<EOD
-<hr>
 <h2>Installing</h2>
 <p>
 <span class="{$class}">[{$class}]</span> 
@@ -166,7 +165,6 @@ $done = "<p class='notice'><strong>A fresh installation of medes failed. The con
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
 	$done = <<<EOD
-<hr>
 <h2>Installation complete</h2>
 <p>Proceed to the admin area to set the admin password and start configuring
 your medes website.</p>
@@ -194,18 +192,17 @@ EOD;
 $page = <<<EOD
 <article id="install" class="border span-18 ">
 <h1>Do a fresh installation of medes</h1>
-<hr>
+
 <!-- <h1>Do a fresh (re-)installation of medes</h1> -->
 <h2>Information</h2>
 <p>This scripts installs medes. Correct any error and <a href=''>reload this page</a> until all is green.</p>
 <p>There is currently no nice way to do an upgrade of an existing installation, however, running this script on
 an existing installation, makes no harm.</p>
-<hr>
 
 <h2>Checking environment</h2>
 {$check}
 {$done}
-<hr>
 </article>
+
 EOD;
 

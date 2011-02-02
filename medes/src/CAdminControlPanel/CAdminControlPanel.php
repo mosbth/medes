@@ -22,7 +22,7 @@ class CAdminControlPanel implements IFrontController {
 	protected static $menu = array(
 		"home" => array("text"=>"/admin control panel/", "url"=>"acp.php", "title"=>"Administrate and configure the site and its addons", "class"=>"nav-h1"),
 
-		"site" => array("text"=>"Configure site", "title"=>"Configure and define site related items", "class"=>"nav-h2 nolink"),
+		"site" => array("text"=>"Site", "title"=>"Configure and define site related items", "class"=>"nav-h2 nolink"),
 		"changepwd" => array("text"=>"change password", "url"=>"?p=changepwd", "title"=>"Change the administrator password"),
 		"siteurl" => array("text"=>"site link", "url"=>"?p=siteurl", "title"=>"Set the main link to the site"),
 		"meta" => array("text"=>"meta",  "url"=>"?p=meta", "title"=>"Set default meta tags to enhace search enginge visibility"),
@@ -32,7 +32,7 @@ class CAdminControlPanel implements IFrontController {
 		"stylesheet" => array("text"=>"stylesheet", "url"=>"?p=stylesheet", "title"=>"Set and edit the stylesheet"),
 		"debug" => array("text"=>"debug", "url"=>"?p=debug", "title"=>"Print out debug information and current configuration"),
 
-		"addons" => array("text"=>"Configure addons", "title"=>"Install, update and configure addons", "class"=>"nav-h2 nolink"),
+		"addons" => array("text"=>"Addons", "title"=>"Install, update and configure addons", "class"=>"nav-h2 nolink"),
 		"fileupload" => array("text"=>"fileupload", "url"=>"?p=fileupload", "title"=>"Upload files and images"),
 
 //		"other" => array("text"=>"Other", "title"=>"Other things, to be removed?", "class"=>"nav-h2 nolink"),
@@ -103,10 +103,10 @@ class CAdminControlPanel implements IFrontController {
 
 		// Create the resulting page
 		$html = <<<EOD
-<article class="span-18">
+<article class="span-18 colborder">
 	{$page}
 </article>	
-<aside class="span-6 last">
+<aside class="span-5 last">
 	{$sidemenu}
 </aside>
 EOD;
