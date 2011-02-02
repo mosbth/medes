@@ -13,11 +13,15 @@ $check = "";
 //
 // Check that the data-directory is writable
 //
-$case 	= "The directory <code>medes/data</code> is writable by the webserver.";
+$case 	= "The directory <code>medes/data</code> exists and is writable by the webserver.";
 $class 	= "ok";
 $result = "";
 $dataDirectoryIsWritable = true;
-if(!is_writable(dirname(__FILE__) . "/../../data/")) {
+if(!is_dir(dirname(__FILE__) . "/../../data/")) {
+	$dataDirectoryIsWritable = false;
+	$result = "Create the directory and make it writable (for example chmod 777) by the webserver.";
+	$class = "fail";
+} else if(!is_writable(dirname(__FILE__) . "/../../data/")) {
 	$dataDirectoryIsWritable = false;
 	$result = "Make the directory writable (for example chmod 777) by the webserver.";
 	$class = "fail";

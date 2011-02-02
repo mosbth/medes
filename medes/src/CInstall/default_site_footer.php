@@ -9,7 +9,7 @@ $developer = $pp->GetHTMLForDeveloperMenu();
 $html = <<<EOD
 </div> <!-- end of div#content -->
 <footer id="bottom-wrap">
-<footer id="bottom" class="container showgrid">
+<footer id="bottom" class="container">
 
 	<p class="span-24 last">The content on this site is licensed according to  
 	<a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a>
