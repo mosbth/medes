@@ -164,7 +164,6 @@ $config['meta'] = array(
 );
 $config['tracker'] = "";
 
-
 $done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes failed. Correct the errors above and reload this page.</strong></p>";
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
@@ -176,7 +175,9 @@ your medes website.</p>
 <p>You can always run this procedure again by by pointing the browser to <code>medes/install.php</code>.
 	
 EOD;
-} 
+} else {
+	$pp->UpdateConfiguration($config, false);
+}
 
 
 // ------------------------------------------------------------------------------
