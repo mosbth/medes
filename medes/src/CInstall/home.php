@@ -171,10 +171,10 @@ your medes website.</p>
 	
 EOD;
 } else {
-	unset($config['navigation']['navbar']['nav'][1];
-	unset($config['navigation']['navbar']['nav'][2];
-	unset($config['navigation']['navbar']['nav'][3];
-	unset($config['navigation']['navbar']['nav'][4];
+	unset($config['navigation']['navbar']['nav'][1]);
+	unset($config['navigation']['navbar']['nav'][2]);
+	unset($config['navigation']['navbar']['nav'][3]);
+	unset($config['navigation']['navbar']['nav'][4]);
 	$pp->UpdateConfiguration($config, false);
 }
 
