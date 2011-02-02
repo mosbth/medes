@@ -25,11 +25,12 @@ if(!is_dir(dirname(__FILE__) . "/../../data/")) {
 	$result = "Make the directory writable (for example chmod 777) by the webserver.";
 	$class = "fail";
 } 
+$result = empty($result) ? "" : "<p class='info'>{$result}</p>";
 $check .= <<<EOD
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="info">{$result}</p>
+{$result}
 EOD;
 
 
@@ -52,13 +53,14 @@ if($dataDirectoryIsWritable) {
 		$a = new CContentPage();
 		$a->Install();
 	}
+	$result = empty($result) ? "" : "<p class='info'>{$result}</p>";
 	$check .= <<<EOD
 <hr>
 <h2>Installing</h2>
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="info"><em>{$result}</em></p>
+{$result}
 EOD;
 }
 
@@ -77,11 +79,12 @@ if($dataDirectoryIsWritable) {
 		$result = "A config-file already exists. Remove it 'by hand' to do a fresh installation.";
 		$class = "info";
 	} 
+	$result = empty($result) ? "" : "<p class='info'>{$result}</p>";
 	$check .= <<<EOD
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="info"><em>{$result}</em></p>
+{$result}
 EOD;
 }
 
@@ -110,12 +113,12 @@ $pp->config['siteurl'] = $siteUrl;
 
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration(array('siteurl'=>$siteUrl));
-	$result = "Sitelink = {$siteUrl}";
+	$result = "<p class='info'>Sitelink = {$siteUrl}</p>";
 	$check .= <<<EOD
-	<p>
-	<span class="{$class}">[{$class}]</span> 
-	{$case}
-	<p class="info"><em>{$result}</em></p>
+<p>
+<span class="{$class}">[{$class}]</span> 
+{$case}
+{$result}
 EOD;
 }
 
