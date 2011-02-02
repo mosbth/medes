@@ -59,7 +59,7 @@ if($dataDirectoryIsWritable) {
 	<span class={$class}>[{$class}]</span> 
 	{$case}
 	<p class=fix><em>{$result}</em></p>
-	EOD;
+EOD;
 }
 
 
@@ -67,22 +67,23 @@ if($dataDirectoryIsWritable) {
 //
 // Check if the config file exists and is writable. 
 //
-$case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPersia_config.php</code>.";
-$class 	= "ok";
-$result = "";
-$configFileExists = false;
-if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
-	$configFileExists = true;
-	$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
-	$class = "fail";
-} 
-$check .= <<<EOD
-<p>
-<span class={$class}>[{$class}]</span> 
-{$case}
-<p class=fix><em>{$result}</em></p>
+if($dataDirectoryIsWritable) {
+	$case 	= "Fresh install, writing the config-file to <code>medes/data/CPrinceOfPersia_config.php</code>.";
+	$class 	= "ok";
+	$result = "";
+	$configFileExists = false;
+	if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
+		$configFileExists = true;
+		$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
+		$class = "fail";
+	} 
+	$check .= <<<EOD
+	<p>
+	<span class={$class}>[{$class}]</span> 
+	{$case}
+	<p class=fix><em>{$result}</em></p>
 EOD;
-
+}
 
 // ------------------------------------------------------------------------------
 //
