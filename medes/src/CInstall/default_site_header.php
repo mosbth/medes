@@ -23,7 +23,7 @@ $html = <<<EOD
 </header>
 
 <!-- Here is the actual content of the page-->
-<div id=content class="container showgrid prepend-top append-bottom">
+<div id=content class="container prepend-top append-bottom">
 
 EOD;
 
