@@ -314,7 +314,7 @@ EOD;
 	public function GetHTMLForStyle() {
 		
 		$pathToTheme = $this->PrependWithSiteUrl("medes/style/{$this->config['styletheme']['name']}");
-		$stylesheet = "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}";
+		$stylesheet = isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
 		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'/>\n" : "";
  		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->\n" : "";
 		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>\n" : "";
@@ -428,6 +428,7 @@ EOD;
 		//$GLOBALS['GetHTMLForHeader'] = $this->config['header'];
 		//include "var://GetHTMLForHeader";
 		//return $this->config['header'];
+		
 		return eval("?>" . $this->config['header']);
   }
 
@@ -751,13 +752,16 @@ EOD;
 	//
 	// Update configuration information and save it
 	//  $aArray: an array with configuration values to save
+	//  $aSave: true/false, should config be saved to file or not?
 	//
-	public function UpdateConfiguration($aArray) {
+	public function UpdateConfiguration($aArray, $aSave=true) {
 		
 		foreach($aArray as $key => $val) {
 			$this->config[$key] = $val;
 		}
-		$this->StoreConfigToFile();
+		if($aSave) {
+			$this->StoreConfigToFile();
+		}
 	}
 
 
