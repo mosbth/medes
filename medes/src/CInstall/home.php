@@ -54,11 +54,12 @@ if($dataDirectoryIsWritable) {
 		$a->Install();
 	}
 	$check .= <<<EOD
-	<h2>Installing</h2>
-	<p>
-	<span class="{$class}">[{$class}]</span> 
-	{$case}
-	<p class="fix"><em>{$result}</em></p>
+<hr>
+<h2>Installing</h2>
+<p>
+<span class="{$class}">[{$class}]</span> 
+{$case}
+<p class="fix"><em>{$result}</em></p>
 EOD;
 }
 
@@ -72,16 +73,16 @@ if($dataDirectoryIsWritable) {
 	$class 	= "ok";
 	$result = "";
 	$configFileExists = false;
-	if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
+	if(is_readable(dirname(__FILE__) . "/../../data/CPrinceOfPersia_config.php")) {
 		$configFileExists = true;
-		$result = "A config-file already exists. Remove it 'by hand' before doing a fresh installation.";
-		$class = "fail";
+		$result = "A config-file already exists. Remove it 'by hand' to do a fresh installation.";
+		$class = "info";
 	} 
 	$check .= <<<EOD
-	<p>
-	<span class="{$class}">[{$class}]</span> 
-	{$case}
-	<p class="fix"><em>{$result}</em></p>
+<p>
+<span class="{$class}">[{$class}]</span> 
+{$case}
+<p class="fix"><em>{$result}</em></p>
 EOD;
 }
 
@@ -163,6 +164,7 @@ $done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
 	$done = <<<EOD
+<hr>
 <h2>Installation complete</h2>
 <p>Proceed to the admin area to set the admin password and start configuring
 your medes website.</p>
@@ -194,7 +196,7 @@ $page = <<<EOD
 an existing installation, makes no harm.</p>
 <hr>
 
-<h2>Checking and Installing</h2>
+<h2>Checking environment</h2>
 {$check}
 {$done}
 <hr>
