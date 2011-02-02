@@ -29,7 +29,7 @@ $check .= <<<EOD
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="info"><em>{$result}</em></p>
+<p class="info">{$result}</p>
 EOD;
 
 
