@@ -134,12 +134,7 @@ $config['navigation'] = array(
 			"2"=>array("text"=>"page", "url"=>"medes/page/page.php?p=template-page", "title"=>"A template page that stores content in the database"),
 			"3"=>array("text"=>"acp", "url"=>"medes/page/acp.php", "title"=>"Administrate and configure the site and its addons"),
 			"4"=>array("text"=>"ucp", "url"=>"medes/page/ucp.php", "title"=>"User control panel"),
-//			"5"=>array("text"=>"article", "url"=>"medes/src/CArticle/example.php", "title"=>"CArticle"),
-//			"6"=>array("text"=>"article editor", "url"=>"medes/src/CArticleEditor/example.php", "title"=>"CArticleEditor"),
-//			"6"=>array("text"=>"blog", "url"=>"medes/src/CBlog/example.php", "title"=>"CBlog"),
-//			"7"=>array("text"=>"news", "url"=>"medes/src/CContentNews/example.php", "title"=>"CContentNews"),
-//			"8"=>array("text"=>"rss reader", "url"=>"medes/src/CRSSReader/example.php", "title"=>"CRSSReader"),
-			"9"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
+			"5"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
 		),
 	),
 	"relatedsites"=>array(
@@ -164,7 +159,6 @@ $config['meta'] = array(
 );
 $config['tracker'] = "";
 
-
 $done = "<p><strong><span class=fail>[fail]</span> A fresh installation of medes failed. Correct the errors above and <a href=''>reload this page</a>.</strong></p>";
 if($dataDirectoryIsWritable && !$configFileExists) {
 	$pp->UpdateConfiguration($config);
@@ -177,6 +171,10 @@ your medes website.</p>
 	
 EOD;
 } else {
+	unset($config['navigation']['navbar']['nav'][1];
+	unset($config['navigation']['navbar']['nav'][2];
+	unset($config['navigation']['navbar']['nav'][3];
+	unset($config['navigation']['navbar']['nav'][4];
 	$pp->UpdateConfiguration($config, false);
 }
 
