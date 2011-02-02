@@ -38,27 +38,29 @@ EOD;
 //
 // Install the database
 //
-$case 	= "Creating and initiating the database <code>medes/data/CDatabaseController.db</code>.";
-$class 	= "ok";
-$result = "";
-$databaseExists = false;
-if($dataDirectoryIsWritable && is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
-	$databaseExists = true;
-	$result = "A database already exists. Leaving it as is. Remove it 'by hand', if needed.";
-	$class = "info";
-} else {
-	$a = new CArticle();
-	$a->Install();
-	$a = new CContentPage();
-	$a->Install();
+if($dataDirectoryIsWritable) {
+	$case 	= "Creating and initiating the database <code>medes/data/CDatabaseController.db</code>.";
+	$class 	= "ok";
+	$result = "";
+	$databaseExists = false;
+	if(is_readable(dirname(__FILE__) . "/../../data/CDatabaseController.db")) {
+		$databaseExists = true;
+		$result = "A database already exists. Leaving it as is. Remove it 'by hand', if needed.";
+		$class = "info";
+	} else {
+		$a = new CArticle();
+		$a->Install();
+		$a = new CContentPage();
+		$a->Install();
+	}
+	$check .= <<<EOD
+	<h2>Installing</h2>
+	<p>
+	<span class={$class}>[{$class}]</span> 
+	{$case}
+	<p class=fix><em>{$result}</em></p>
+	EOD;
 }
-$check .= <<<EOD
-<h2>Installing</h2>
-<p>
-<span class={$class}>[{$class}]</span> 
-{$case}
-<p class=fix><em>{$result}</em></p>
-EOD;
 
 
 // ------------------------------------------------------------------------------
