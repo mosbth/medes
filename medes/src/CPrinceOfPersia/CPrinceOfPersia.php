@@ -439,10 +439,14 @@ EOD;
 	//
 	public function GetHTMLForNavbar() {
 		//self::$menu[$p]['active'] = 'active';
+		$cur = self::GetUrlToCurrentPage();
 		$nav = $this->config['navigation']['navbar']['nav'];
 		foreach($nav as $key => $val) {
 			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
 				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
+			}
+			if(strpos($cur, $nav[$key]['url'])) {
+				$nav[$key]['active'] = "active";
 			}
 		}		
 		return CNavigation::GenerateMenu($nav, false, 'mainmenu');		

@@ -12,7 +12,7 @@
 
 */
 html{overflow-y:scroll;} 
-html{background:#E6E6E6;} 
+html{background:#fff;} 
 body{background:#fff;} 
 
 
@@ -62,6 +62,7 @@ nav.mainmenu {
 }
 nav.mainmenu a {padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
 nav.mainmenu a:hover {background:#858585;border:2px solid #656565;}
+nav.mainmenu a.active {background:#858585;border:2px solid #656565;}
 
 
 /* div#content
