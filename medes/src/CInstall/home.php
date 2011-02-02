@@ -3,7 +3,6 @@ $pp->pageStyle .= <<<EOD
 span.ok{color:green;text-transform:capitalize;}
 span.fail{color:red;text-transform:uppercase;}
 span.info{color:#205791;text-transform:capitalize;background:transparent;border:none;padding:0;}
-p.fix{padding-left:3em;}
 EOD;
 
 $check = "";
@@ -59,7 +58,7 @@ if($dataDirectoryIsWritable) {
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="fix"><em>{$result}</em></p>
+<p class="info"><em>{$result}</em></p>
 EOD;
 }
 
@@ -82,7 +81,7 @@ if($dataDirectoryIsWritable) {
 <p>
 <span class="{$class}">[{$class}]</span> 
 {$case}
-<p class="fix"><em>{$result}</em></p>
+<p class="info"><em>{$result}</em></p>
 EOD;
 }
 
@@ -116,7 +115,7 @@ if($dataDirectoryIsWritable && !$configFileExists) {
 	<p>
 	<span class="{$class}">[{$class}]</span> 
 	{$case}
-	<p class="fix"><em>{$result}</em></p>
+	<p class="info"><em>{$result}</em></p>
 EOD;
 }
 
