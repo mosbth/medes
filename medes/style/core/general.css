@@ -1,104 +1,127 @@
 /* phpmedes: style/core/general.css 
 -------------------------------------------------------- 
-
-
+	This is the core style for phpmedes. Its using blueprint
+	as a base, then adding as little as possible to start with.
+	
+	There is a grid which aids in laying out the parts of the page.
+	This page-grid is the basis for phpmedes standard themes.
+	
 */
 
 
 /* html, body, etc 
 --------------------------------------------------------
-
    Basic structural settings
 
 */
-html{background:#E6E6E6;overflow-y:scroll;} 
-body{background:#fff;} 
+html{background:#F0F0F0;overflow-y:scroll;} 
+body{background:#FFF;} 
 
 
-/* typography
+/* #mds-top
 --------------------------------------------------------
-
+   The top of page, usually containing related 
+   sitelinks and the login/profile menu. 
 
 */
-h1, h2{border-bottom:1px solid #DDD;line-height:1.3em;}
+#mds-top-wrap{border-bottom:1px solid #E6E6E6;padding:0 1em 4px 1em;background:transparent;color:#656565;}
+#mds-top-left{float:left;}
+#mds-top-right{float:right;}
 
 
-/* header#top-above, nav.relatedlinks, nav.profile
+/* #mds-header
 --------------------------------------------------------
-
-   Style the header above the header, usually containing 
-   related sitelinks and login/profile menu. 
-
-*/
-header#top-above{border-bottom:1px solid #E6E6E6;padding:0 1em 4px 1em;background:#fff;color:#656565;}
-nav.relatedlinks{float:left;} /* related links, usually top-left menu */
-nav.profile{float:right;} /* nav profile, login, logout menu, usually top-left menu */
-
-
-/* header#top
---------------------------------------------------------
-
-	Header area with logo
+	Header area with logo, site title and position of
+	site menu.
 	
 */
-header#top{}
+#mds-header-wrap{}
+#mds-header{}
+#mds-header-logo{}
+#mds-header-title{}
+#mds-header-menu{}
 
 
+/* mds-content
+--------------------------------------------------------
+	Main content with sidebars
 
-/* nav.mainmenu
+*/
+#mds-content-wrapper{min-height:20em;}
+.mds-content-row-wrapper{}
+.mds-content-row{}
+.mds-content{}
+.mds-sidebar1{}
+.mds-sidebar2{}
+
+
+/* #mds-footer
+--------------------------------------------------------
+   The footer of the content part.
+
+*/
+#mds-footer-wrap{}
+#mds-footer{}
+
+
+/* #mds-bottom
+--------------------------------------------------------
+   The bottom of the page, usually the footer with
+   copyright and links.
+
+*/
+#mds-bottom-wrap{border-top:1px solid #C2C2C2;background:#F0F0F0;}
+#mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#656565;}
+
+
+/* Links
 --------------------------------------------------------
 
-	Main navigation bar
+*/
+a{color:inherit;}
+a:link{}
+a:visited{}
+a:hover{text-decoration:none;color:#5C0A0A;}
+a:active{}
+
+/* a element without href */
+a.nolink,a.nolink:link,a.nolink:visited,a.nolink:hover,a.nolink:active
+{text-decoration:none !important;color:inherit;background:transparent !important;}
+
+
+/* Navigation menus
+--------------------------------------------------------
+	Standard navigation menus, style as you wish. Contains
+	<nav><a></a><a></a>...</nav>
 	
 */
-nav.mainmenu {
-	font-family: arial;
-	font-weight: bold;
-	font-size:1.2em;
-	padding: 2px 8px;
-	background:#656565;
-	border:2px solid #858585;
-}
-nav.mainmenu a {padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
-nav.mainmenu a:hover {background:#858585;border:2px solid #656565;}
-nav.mainmenu a.active {background:#858585;border:2px solid #656565;}
+.mds-nav-relatedsites{}
+.mds-nav-login{}
+
+.mds-nav-mainmenu{font-family:arial;font-weight:bold;font-size:1.2em;padding:2px 8px;background:#656565;border:2px solid #858585;}
+.mds-nav-mainmenu a{padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
+.mds-nav-mainmenu a:hover{background:#858585;border:2px solid #656565;}
+.mds-nav-mainmenu a.active{background:#858585;border:2px solid #656565;}
+
+/* nav sidemenu */
+nav.sidemenu{}
+nav.sidemenu a{display:list-item;list-style:none;}
+nav.sidemenu a:hover,
+nav.sidemenu a.active{background:#eee;}
+nav.sidemenu a.nav-h1{font-size: 1.2em;font-weight:bold;margin-bottom:1em;}
+nav.sidemenu a.nav-h2{margin-top:1em;font-weight:bold;}
 
 
-/* div#content
---------------------------------------------------------
-
-	Main content container
-
-*/
-div#content{min-height:20em;}
-
-
-
-/* footer#bottom
---------------------------------------------------------
-
-   Footer and related elements
-
-*/
-footer#bottom-wrap{border-top:4px solid #eee;background:#E6E6E6;}
-
-footer#bottom{padding:1em 0 1em 0;background-color:transparent;color:#656565;}
-/*footer#bottom{padding:1em;border-top:1px solid #999;background:#eee;color:#999;}*/
-
-footer#bottom nav{float:left;margin-bottom:2em;}
-footer#bottom nav a{display:list-item;list-style:none;}
-footer#bottom nav a.nav-h1{font-weight:bold;margin-bottom:0.5em;}
-
-footer#bottom a{text-decoration:none;}
-footer#bottom a:hover{text-decoration:underline;}
-
-footer#bottom p.license {clear:both;}
-
+/* breadcrumb */
+nav.breadcrumb {display:inline;margin:0;padding:1em 0 0 0;}
+nav.breadcrumb {font:smaller arial,helvetica,sans-serif;color:#999;}
+nav.breadcrumb a {color:inherit;content:" \00BB ";}
+nav.breadcrumb a:after {content:" \00BB ";}
+nav.breadcrumb a:hover {color:#555;}
 
 
 /* figure, figcaption, img
 --------------------------------------------------------
-
 	Style for figure/pictures/images
 
 */
@@ -127,54 +150,30 @@ figure.fullwidth{margin-left:0;margin-right:0;}
 
 
 
-/* a
---------------------------------------------------------
 
+/* Typography
+--------------------------------------------------------
+	Additions to blueprint typography.css.
 
 */
-a{color:inherit;}
-a:link{}
-a:visited{}
-a:hover{text-decoration:none;color:#5C0A0A;}
-a:active{}
-
-/* a element without href */
-a.nolink,a.nolink:link,a.nolink:visited,a.nolink:hover,a.nolink:active
-{text-decoration:none !important;color:inherit;background:transparent !important;}
-
-
-/* nav sidemenu */
-nav.sidemenu{}
-nav.sidemenu a{display:list-item;list-style:none;}
-nav.sidemenu a:hover,
-nav.sidemenu a.active{background:#eee;}
-nav.sidemenu a.nav-h1{font-size: 1.2em;font-weight:bold;margin-bottom:1em;}
-nav.sidemenu a.nav-h2{margin-top:1em;font-weight:bold;}
-
-
-/* breadcrumb */
-nav.breadcrumb {display:inline;margin:0;padding:1em 0 0 0;}
-nav.breadcrumb {font:smaller arial,helvetica,sans-serif;color:#999;}
-nav.breadcrumb a {color:inherit;content:" \00BB ";}
-nav.breadcrumb a:after {content:" \00BB ";}
-nav.breadcrumb a:hover {color:#555;}
-
+h1, h2{border-bottom:1px solid #DDD;line-height:1.3em;}
 
 
 /* Forms (forms.css)
 --------------------------------------------------------
-	Additions to forms.css
+	Additions to blueprint forms.css
 
 */
 textarea.wide { width: 660px; height: 350px; }
 
 
-/* Nice to have classe for styling
+/* Utility classes, nice to have for styling
 --------------------------------------------------------
-
 
 */
 .justify{text-align:justify;}
+.strong{font-weight:bold;}
+.hide{display:none;}
 
 output{display:inline;font-style:italic;}
 

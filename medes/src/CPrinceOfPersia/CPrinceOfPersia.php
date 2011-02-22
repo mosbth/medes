@@ -167,6 +167,18 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	public $pageScript;
 	public $pageScriptLinks;
 	
+	// main content of page
+	public $pageTop;	
+	public $pageHeader;	
+	public $pageContent;	
+	public $pageSidebar1;	
+	public $pageSidebar2;	
+	public $pageFooter;	
+	public $pageBottom;	
+	public $classContent;	
+	public $classSidebar1;	
+	public $classSidebar2;	
+	
 	// various
 	public $googleAnalytics;
 	public $navbar;
@@ -225,6 +237,18 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->pageScript=null;
 		$this->pageScriptLinks=array();
 		$this->googleAnalytics=null;
+		
+		// page content is default null
+		$this->pageTop=null;
+		$this->pageHeader=null;
+		$this->pageContent=null;
+		$this->pageSidebar1=null;
+		$this->pageSidebar2=null;
+		$this->pageFooter=null;
+		$this->pageBottom=null;
+		$this->classContent=null;
+		$this->classSidebar1=null;
+		$this->classSidebar2=null;
 	}
 	
 	
@@ -357,6 +381,8 @@ EOD;
 		
 		$script = isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : "";
 
+		// Google analytics tracker code
+		
 		$html = <<<EOD
 {$scriptlinks}
 {$script}
@@ -374,7 +400,7 @@ EOD;
 	public function GetHTMLForRelatedSitesMenu() {
 		// treat all relative links as relative to sitelink, therefore prepend sitelink
 		$nav = $this->config['navigation']['relatedsites']['nav'];
-		return CNavigation::GenerateMenu($nav, false, 'relatedsites');		
+		return CNavigation::GenerateMenu($nav, false, '#mds-nav-relatedsites');		
   }
 
 
@@ -382,7 +408,7 @@ EOD;
 	//
 	// Get html for login/logout/profile menu
 	//
-	public function GetHTMLForProfileMenu() {
+	public function GetHTMLForLoginMenu() {
 		$nav = array(
 			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=login"), "title"=>"Login"),
 			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php"), "title"=>"Change your settings"),
@@ -402,7 +428,7 @@ EOD;
 			unset($nav['logout']);			
 		}
 
-		return CNavigation::GenerateMenu($nav, false, 'profile');		
+		return CNavigation::GenerateMenu($nav, false, '#mds-nav-login');		
   }
 
 
@@ -422,22 +448,9 @@ EOD;
 
 	// ------------------------------------------------------------------------------------
 	//
-	// Get html for header 
-	//
-	public function GetHTMLForHeader() {
-		//$GLOBALS['GetHTMLForHeader'] = $this->config['header'];
-		//include "var://GetHTMLForHeader";
-		//return $this->config['header'];
-		
-		return eval("?>" . $this->config['header']);
-  }
-
-
-	// ------------------------------------------------------------------------------------
-	//
 	// Get html for navbar 
 	//
-	public function GetHTMLForNavbar() {
+	public function GetHTMLForMainMenu() {
 		//self::$menu[$p]['active'] = 'active';
 		$cur = self::GetUrlToCurrentPage();
 		$nav = $this->config['navigation']['navbar']['nav'];
@@ -449,16 +462,7 @@ EOD;
 				$nav[$key]['active'] = "active";
 			}
 		}		
-		return CNavigation::GenerateMenu($nav, false, 'mainmenu');		
-  }
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for footer 
-	//
-	public function GetHTMLForFooter() {
-		return eval("?>" . $this->config['footer']);
+		return CNavigation::GenerateMenu($nav, false, 'mds-nav-mainmenu');		
   }
 
 
@@ -469,12 +473,12 @@ EOD;
 	public function GetHTMLForDeveloperMenu() {
 		$url = $this->GetUrlToCurrentPage();
 		$nav1 = array(
-			"phpmedes"	=>array("text"=>"PhpMedes", "class"=>"nav-h1 nolink"),			
+			"phpmedes"	=>array("text"=>"phpmedes:", "class"=>"strong nolink"),			
 			"site"	=>array("text"=>"phpmedes.org", "url"=>"http://phpmedes.org/", "title"=>"home of phpmedes project"),			
 		);
 
 		$nav2 = array(
-			"tools"					=>array("text"=>"Tools", "class"=>"nav-h1 nolink"),			
+			"tools"					=>array("text"=>"Tools:", "class"=>"strong nolink"),			
 			"html5"					=>array("text"=>"html5", "url"=>"http://validator.w3.org/check/referer", "title"=>"html5 validator"),			
 			"css3"					=>array("text"=>"css3", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance", "title"=>"unicorn html and css validator"),			
@@ -483,10 +487,11 @@ EOD;
 			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=" . $url, "title"=>"css3 validator"),			
 			"check-header"	=>array("text"=>"check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
 			"browsers"			=>array("text"=>"browsers", "url"=>"http://browsershots.org/{$url}", "title"=>"check browser compatibility"),	
+			"colors"				=>array("text"=>"colors", "url"=>"http://www.workwithcolor.com/hsl-color-schemer-01.htm", "title"=>"color chooser"),	
 		);
 
 		$nav3 = array(
-			"manuals"	=>array("text"=>"Manuals", "class"=>"nav-h1 nolink"),			
+			"manuals"	=>array("text"=>"Manuals:", "class"=>"strong nolink"),			
 			"html5"		=>array("text"=>"html5", "url"=>"http://dev.w3.org/html5/spec/spec.html", "title"=>"html5 specification"),			
 			"css2"		=>array("text"=>"css2", "url"=>"http://www.w3.org/TR/CSS2/", "title"=>"css2 specification"),			
 			"css3"		=>array("text"=>"css3", "url"=>"http://www.w3.org/Style/CSS/current-work#CSS3", "title"=>"css3 specification"),			
@@ -495,15 +500,15 @@ EOD;
 			"blueprint"	=>array("text"=>"blueprint", "url"=>"https://github.com/joshuaclayton/blueprint-css/wiki/Tutorials", "title"=>"blueprint tutorials on github"),			
 		);
 
-		$item1 = CNavigation::GenerateMenu($nav1, false, "span-3");
-		$item2 = CNavigation::GenerateMenu($nav2, false, "span-3");
-		$item3 = CNavigation::GenerateMenu($nav3, false, "span-3 last");
+		$item1 = CNavigation::GenerateMenu($nav1, false);
+		$item2 = CNavigation::GenerateMenu($nav2, false);
+		$item3 = CNavigation::GenerateMenu($nav3, false);
 		$time = round(microtime(true) - self::$timePageGeneration, 5);
 		$numQueries = CDatabaseController::$numQueries;
 
 		$reload= "";
 		if(isset($_SESSION['timer'])) {
-			$reload = "Page reloaded in {$_SESSION['timer']['time']} seconds with {$_SESSION['timer']['numQueries']} database queries.<br/>";
+			$reload = "Page processed and redirected in {$_SESSION['timer']['time']} seconds with {$_SESSION['timer']['numQueries']} database queries.<br/>";
 			unset($_SESSION['timer']);
 		}
 
@@ -519,19 +524,45 @@ EOD;
 	// ------------------------------------------------------------------------------------
 	//
 	// Print the complete html-page 
-	// $aPage: the html-code for the page
-	// $aHeader: html-code for the header of the page, if empty using default
-	// $aFooter: html-code for the footer of the page, if empty using default
+	// $aContent: the html-code for the main content of the page
+	// $aSidebar1: html-code for sidebar1 of the page, if null then do not use sidebar1
+	// $aSidebar2: html-code for sidebar1 of the page, if null then do not use sidebar2
 	//
-	public function PrintHTMLPage($aPage="", $aHeader="", $aFooter="") {
+	public function PrintHTMLPage($aContent=null, $aSidebar1=null, $aSidebar2=null) {
+		if(!is_null($aContent)) $this->pageContent = $aContent;
+		if(!is_null($aSidebar1)) $this->pageSidebar1 = $aSidebar1;
+		if(!is_null($aSidebar2)) $this->pageSidebar2 = $aSidebar2;		
+		
+		if($this->pageSidebar1 && $this->pageSidebar2) {
+			$this->classContent="span-16 border";
+			$this->classSidebar1="span-4 border";
+			$this->classSidebar2="span-4 last";			
+		} else if($this->pageSidebar1) {
+			$this->classContent="span-19 last";
+			$this->classSidebar1="span-4 colborder";
+		} else if($this->pageSidebar2) {
+			$this->classContent="span-18 colborder";
+			$this->classSidebar2="span-5 last";
+		}
+
 		$pp = &$this;
+		
 		if(!is_null($this->pageContentType)) {
 			header("Content-Type: {$this->pageContentType}; charset={$this->pageCharset}");
 		}
-		include(dirname(__FILE__) . "/htmlheader.php");
-		echo empty($aHeader) ? $this->GetHTMLForHeader() : $aHeader;
-		echo $aPage;
-		echo empty($aFooter) ? $this->GetHTMLForFooter() : $aFooter;
+
+		ob_start();
+		echo eval("?>" . $this->config['htmlparts-htmlhead']);
+
+		echo is_null($this->pageTop) ? eval("?>" . $this->config['htmlparts-pagetop']) : $this->pageTop;
+		echo is_null($this->pageHeader) ? eval("?>" . $this->config['htmlparts-pageheader']) : $this->pageHeader;		
+
+		echo eval("?>" . $this->config['htmlparts-pagecontent']);
+	
+		echo is_null($this->pageFooter) ? eval("?>" . $this->config['htmlparts-pagefooter']) : $this->pageFooter;
+		echo is_null($this->pageBottom) ? eval("?>" . $this->config['htmlparts-pagebottom']) : $this->pageBottom;
+		echo "</body>\n</html>\n";
+		ob_end_flush();
   }
 
 

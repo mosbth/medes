@@ -126,17 +126,23 @@ EOD;
 //
 // Create default settings for configuration
 //
-$config['header'] 		= file_get_contents(dirname(__FILE__) . "/default_site_header.php");
-$config['footer'] 		= file_get_contents(dirname(__FILE__) . "/default_site_footer.php");
+$config['htmlparts-htmlhead'] 		= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/html_head.php");
+$config['htmlparts-pagetop'] 			= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/page_top.php");
+$config['htmlparts-pageheader'] 	= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/page_header.php");
+$config['htmlparts-pagecontent'] 	= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/page_content.php");
+$config['htmlparts-pagefooter'] 	= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/page_footer.php");
+$config['htmlparts-pagebottom'] 	= file_get_contents(dirname(__FILE__) . "/../CPrinceOfPersia/htmlparts/mds/page_bottom.php");
+
 $config['navigation'] = array(
 	"navbar"=>array(
 		"text"=>"Main navigation bar",
 		"nav"=>array(
 			"1"=>array("text"=>"home", "url"=>"medes/page/template.php", "title"=>"A default template page to start with"),
 			"2"=>array("text"=>"page", "url"=>"medes/page/page.php?p=template-page", "title"=>"A template page that stores content in the database"),
-			"3"=>array("text"=>"acp", "url"=>"medes/page/acp.php", "title"=>"Administrate and configure the site and its addons"),
-			"4"=>array("text"=>"ucp", "url"=>"medes/page/ucp.php", "title"=>"User control panel"),
-			"5"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
+			"3"=>array("text"=>"columns", "url"=>"medes/page/column_layout.php", "title"=>"Example page to show how flexible column layout works"),
+			"4"=>array("text"=>"acp", "url"=>"medes/page/acp.php", "title"=>"Administrate and configure the site and its addons"),
+			"5"=>array("text"=>"ucp", "url"=>"medes/page/ucp.php", "title"=>"User control panel"),
+			"6"=>array("text"=>"install", "url"=>"medes/page/install.php", "title"=>"Install"),
 		),
 	),
 	"relatedsites"=>array(
@@ -180,6 +186,7 @@ EOD;
 		unset($config['navigation']['navbar']['nav'][2]);
 		unset($config['navigation']['navbar']['nav'][3]);
 		unset($config['navigation']['navbar']['nav'][4]);
+		unset($config['navigation']['navbar']['nav'][5]);
 	}
 	$pp->UpdateConfiguration($config, false);
 }

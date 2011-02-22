@@ -1,5 +1,4 @@
 <?php echo $pp->GetHTMLDocType(); ?>
-
 <head>
 	<!-- Meta tags -->
 	<?php echo $pp->GetHTMLForMeta(); ?>
@@ -22,3 +21,4 @@
 	<?php if(!empty($pp->googleAnalytics)) echo $pp->googleAnalytics; ?>
 
 </head>
+<body>

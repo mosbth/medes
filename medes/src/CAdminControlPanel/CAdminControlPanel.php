@@ -115,4 +115,154 @@ EOD;
 	}
 
 
+	/**
+	 * Check the syntax of some PHP code.
+	 * @param string $code PHP code to check.
+	 * @return boolean|array If false, then check was successful, otherwise an array(message,line) of errors is returned.
+	 */
+/*	public static function CheckPHPSyntaxError($code) {
+			$braces=0;
+			$inString=0;
+			foreach (token_get_all('<?php ' . $code) as $token) {
+					if (is_array($token)) {
+							switch ($token[0]) {
+									case T_CURLY_OPEN:
+									case T_DOLLAR_OPEN_CURLY_BRACES:
+									case T_START_HEREDOC: ++$inString; break;
+									case T_END_HEREDOC:   --$inString; break;
+							}
+					} else if ($inString & 1) {
+							switch ($token) {
+									case '`': case '\'':
+									case '"': --$inString; break;
+							}
+					} else {
+							switch ($token) {
+									case '`': case '\'':
+									case '"': ++$inString; break;
+									case '{': ++$braces; break;
+									case '}':
+											if ($inString) {
+													--$inString;
+											} else {
+													--$braces;
+													if ($braces < 0) break 2;
+											}
+											break;
+							}
+					}
+			}
+			$inString = @ini_set('log_errors', false);
+			$token = @ini_set('display_errors', true);
+			ob_start();
+			$braces || $code = "if(0){{$code}\n}";
+			if (eval($code) === false) {
+					if ($braces) {
+							$braces = PHP_INT_MAX;
+					} else {
+							false !== strpos($code,CR) && $code = strtr(str_replace(CRLF,LF,$code),CR,LF);
+							$braces = substr_count($code,LF);
+					}
+					$code = ob_get_clean();
+					$code = strip_tags($code);
+					if (preg_match("'syntax error, (.+) in .+ on line \d+)$'s", $code, $code)) {
+							$code[2] = (int) $code[2];
+							$code = $code[2] <= $braces
+									? array($code[1], $code[2])
+									: array('unexpected $end' . substr($code[1], 14), $braces);
+					} else $code = array('syntax error', 0);
+			} else {
+					ob_end_clean();
+					$code = false;
+			}
+			@ini_set('display_errors', $token);
+			@ini_set('log_errors', $inString);
+			return $code;
+	}
+*/
+
+}
+
+
+/**
+*    Check Syntax
+*    Performs a Syntax check within a php script, without killing the parser (hopefully)
+*    Do not use this with PHP 5 <= PHP 5.0.4, or rename this function.
+*
+*    @params    string    PHP to be evaluated
+*    @return    array    Parse error info or true for success
+**/
+function php_check_syntax( $php, $isFile=false )
+{
+    # Get the string tokens
+    $tokens = token_get_all( '<?php '.trim( $php  ));
+   
+    # Drop our manually entered opening tag
+    array_shift( $tokens );
+    token_fix( $tokens );
+
+    # Check to see how we need to proceed
+    # prepare the string for parsing
+    if( isset( $tokens[0][0] ) && $tokens[0][0] === T_OPEN_TAG )
+       $evalStr = $php;
+    else
+        $evalStr = "<?php\n{$php}?>";
+
+    if( $isFile OR ( $tf = tempnam( NULL, 'parse-' ) AND file_put_contents( $tf, $php ) !== FALSE ) AND $tf = $php )
+    {
+        # Prevent output
+        ob_start();
+        system( 'C:\inetpub\PHP\5.2.6\php -c "'.dirname(__FILE__).'/php.ini" -l < '.$php, $ret );
+        $output = ob_get_clean();
+
+        if( $ret !== 0 )
+        {
+            # Parse error to report?
+            if( (bool)preg_match( '/Parse error:\s*syntax error,(.+?)\s+in\s+.+?\s*line\s+(\d+)/', $output, $match ) )
+            {
+                return array(
+                    'line'    =>    (int)$match[2],
+                    'msg'    =>    $match[1]
+                );
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+//fixes related bugs: 29761, 34782 => token_get_all returns <?php NOT as T_OPEN_TAG
+function token_fix( &$tokens ) {
+    if (!is_array($tokens) || (count($tokens)<2)) {
+        return;
+    }
+   //return of no fixing needed
+    if (is_array($tokens[0]) && (($tokens[0][0]==T_OPEN_TAG) || ($tokens[0][0]==T_OPEN_TAG_WITH_ECHO)) ) {
+        return;
+    }
+    //continue
+    $p1 = (is_array($tokens[0])?$tokens[0][1]:$tokens[0]);
+    $p2 = (is_array($tokens[1])?$tokens[1][1]:$tokens[1]);
+    $p3 = '';
+
+    if (($p1.$p2 == '<?') || ($p1.$p2 == '<%')) {
+        $type = ($p2=='?')?T_OPEN_TAG:T_OPEN_TAG_WITH_ECHO;
+        $del = 2;
+        //update token type for 3rd part?
+        if (count($tokens)>2) {
+            $p3 = is_array($tokens[2])?$tokens[2][1]:$tokens[2];
+            $del = (($p3=='php') || ($p3=='='))?3:2;
+            $type = ($p3=='=')?T_OPEN_TAG_WITH_ECHO:$type;
+        }
+        //rebuild erroneous token
+        $temp = array($type, $p1.$p2.$p3);
+        if (version_compare(phpversion(), '5.2.2', '<' )===false)
+            $temp[] = isset($tokens[0][2])?$tokens[0][2]:'unknown';
+
+        //rebuild
+        $tokens[1] = '';
+        if ($del==3) $tokens[2]='';
+        $tokens[0] = $temp;
+    }
+    return;
 }
