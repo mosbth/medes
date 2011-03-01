@@ -379,7 +379,8 @@ EOD;
 			$scriptlinks .= "<script {$type} {$src}></script>\n";
 		}
 		
-		$script = isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : "";
+		$script = isset($this->config['tracker']) ? "<script type='text/javascript'>\n{$this->config['tracker']}\n</script>\n" : "";
+		$script .= isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : "";
 
 		// Google analytics tracker code
 		
