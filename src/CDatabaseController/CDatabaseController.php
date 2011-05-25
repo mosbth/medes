@@ -1,97 +1,66 @@
 <?php
-// ===========================================================================================
-//
-// File: CDatabaseController.php
-//
-// Description: Interface to store data in a database.
-//
-// Author: Mikael Roos
-//
-// History:
-// 2010-12-14: Created
-//
-
-class CDatabaseController implements ISingleton {
+/**
+ * Database controller, to manage data in a database.
+ * @package MedesCore
+ */
+class CDatabaseController {
 
 	// ------------------------------------------------------------------------------------
 	//
 	// Internal variables
 	//
-  protected static $instance = null;
-	protected static $db = null;
-	protected static $stmt = null;
-	public static $numQueries = 0;
+  //protected static $instance = null;
+	protected $db = null;
+	public $debug = null;
+	protected $stmt = null;
+	public $numQueries = 0;
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Constructor
-	//
-	public function __construct() {
-    $pp = CPrinceOfPersia::GetInstance(); 
-    self::$db = new PDO("sqlite:{$pp->installPath}/medes/data/CDatabaseController.db");
-    self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	/**
+	 * Constructor
+	 */
+	public function __construct($dsn, $username = null, $password = null, $driver_options = null) {
+    $this->db = new PDO($dsn, $username, $password, $driver_options);
+    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 	}
-	
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Destructor
-	//
-	public function __destruct() {;}
-	
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Singleton, get the instance through this method. 
-	//
-  public static function GetInstance(){
-    if(self::$instance == null) self::$instance = new CDatabaseController();
-    return self::$instance;
-  }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-  // Execute pre-defined (or own-defined) select-query with arguments and return the
-  // resultset.
-	//
-  public function ExecuteSelectQueryAndFetchAll($aQuery, $aParams=array()){
-    self::$stmt = self::$db->prepare($aQuery);
+	/**
+	 * Execute a select-query with arguments and return the resultset.
+	 */
+  public function ExecuteSelectQueryAndFetchAll($query, $params=array()){
+   $this->stmt = $this->db->prepare($query);
     
-    if(isset($_GET['debugCDatabaseController'])) {
-    	echo "<p>", self::$stmt->debugDumpParams(), print_r($aParams, true);
+    if($this->debug) {
+    	echo "<p>", $this->stmt->debugDumpParams(), print_r($params, true);
     }
     
-    self::$numQueries++;
-    self::$stmt->execute($aParams);
-    return self::$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $this->numQueries++;
+    $this->stmt->execute($params);
+    return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-  // Execute pre-defined (or own-defined) select-query with arguments, ignore the
-  // resultset (if any).
-	//
-  public function ExecuteQuery($aQuery, $aParams=array()) {
-    self::$stmt = self::$db->prepare($aQuery);
+	/**
+	 * Execute a SQL-query and ignore the resultset.
+	 */
+  public function ExecuteQuery($query, $params = array()) {
+    $this->stmt = $this->db->prepare($query);
 
-    if(isset($_GET['debugCDatabaseController'])) {
-    	echo "<p>", self::$stmt->debugDumpParams(), print_r($aParams, true);
+    if($this->debug) {
+    	echo "<p>", $this->stmt->debugDumpParams(), print_r($params, true);
     }
     
-    self::$numQueries++;
-    self::$stmt->execute($aParams);
+    $this->numQueries++;
+    $this->stmt->execute($params);
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-  // Return last insert id
-	//
+	/**
+	 * Return last insert id.
+	 */
   public function LastInsertId() {
-	   return self::$db->lastInsertid();
+	   return $this->db->lastInsertid();
   }
 
 

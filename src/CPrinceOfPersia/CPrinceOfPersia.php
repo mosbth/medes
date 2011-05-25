@@ -1,148 +1,78 @@
 <?php
-// ===========================================================================================
-//
-// File: CPrinceOfPersia.php
-//
-// Description: The master of phpmedes. Controls configuration and setup. 
-// It does a lot of things, just like a real Prince should do.
-//
-// Author: Mikael Roos
-//
-// History:
-// 2010-10-21: Created
-//
+/**
+ * The Prince of Persia/Medes. One singleton object to rule them all.
+ * 
+ * @package MedesCore
+ */
+class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 
-interface ISingleton {
-	// ------------------------------------------------------------------------------------
-	//
-	// Singleton pattern.
-	// Get the instance of the latest created object or create a new one. 
-	//
-	public static function GetInstance();
+	/**#@+
+	 * @access private
+   */
+	private static $instance = null;
+	/**#@-*/
+ 
+ 
+	/**#@+
+	 * @access public
+   */
+	 
+	/**
+	 * Contains all config settings, defines, included from config.php or from database.
+	 * @var array
+   */
+	public $cfg;
 	
-}
+	/** 
+	 * Timers, all timers stored in an array.
+	 * @var array
+   */
+	public $timer;
 
-interface IFrontController {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Frontcontroller. Redirect to choosen page and return the resulting html. 
-	//
-	public static function DoIt();
+	/**
+	 * db, holding a database controller. Used to query the database.
+   * @var CDatabaseController
+   */
+	public $db;
 	
-}
-
-interface IActionHandler {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Manage _GET and _POST requests and redirect or return the resulting html. 
-	//
-	public function ActionHandler();
-	
-}
-
-interface IDatabaseObject {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get SQL that this object support. 
-	//
-  public static function GetSQL($which);
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Insert new object to database. 
-	//
-	public function Insert();
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Update existing object in database. 
-	//
-	public function Update();
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Save object to database. Manage if insert or update.
-	//
-	public function Save();
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Load object from database. 
-	//
-	public function Load();
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Delete object from database. 
-	// $really: Put object in wastebasket (false) or really delete row from table (true)
-	//
-	public function Delete($really=false);
-	
-}
-
-interface IInstallable {
-	// ------------------------------------------------------------------------------------
-	//
-	//  Installation routine for this class
-	//
-	public function Install();
-	
-}
-
-interface IDateTime {
-	// ------------------------------------------------------------------------------------
-	//
-	//  Format a date and time, display the intervall between two dates using the largest 
-	//	diff-part.
-	//
-	public static function FormatDateTimeDiff($start, $end=null);
-	
-}
-
-interface ILanguage {
-	// ------------------------------------------------------------------------------------
-	//
-	// Gather all language-strings behind one method. 
-	// Store all strings in self::$lang.
-	//
-	public static function InitLanguage($language=null);
-	
-}
-
-interface IAddOn {
-	// ------------------------------------------------------------------------------------
-	//
-	//  
-	//
-}
-
-
-
-class CPrinceOfPersia implements iSingleton, IDateTime {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Internal variables
-	//
-	protected static $instance = null;
-	public $config;
-	public static $timePageGeneration = 0;
-
-	// CUserController
+	/**
+	 * uc, a reference to the user controller. Contains info about the current user.
+   * @var CUserController
+   */
 	public $uc;
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Public internal variables
-	//
+	/**
+	 * if, a reference to the interception filter. Can be used to manage access to resources.
+   * @var CInterceptionFilter
+   */
+	public $if;
 	
-	// medes installation related
-	public $medesPath; // the root of the installation directory and adding medes
-	public $installPath; // the root of the installation directory
+	/**
+	 * te, a reference to the template engine. A container for all views.
+   * @var CTemplateEngine
+   */
+	//public $te;
 	
+
+	/**
+	 * views, a container for all views.
+   * @var array
+   */
+	public $views;
+	
+
+	/**
+   * req, the current request.
+   * @var CRequest
+   */
+	public $req;
+	
+
+	
+	
+	// CLEAN UP WITH PHPDOC LATER ON
+	
+
 	// site-related
 	public $siteUrl;
 	public $sessionName;
@@ -182,44 +112,58 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 	// various
 	public $googleAnalytics;
 	public $navbar;
+ /**#@-*/
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Constructor
-	//
+	/**
+	 * Constructor
+	 */
 	protected function __construct() {
-	
-		// time page generation
-		self::$timePageGeneration = microtime(true); 
 
-		// Full error reporting
-		error_reporting(-1); 
+		// $pp should be an reference to the instance of this object	
+		$pp = &$this;
+
+		// time page generation
+		$this->timer['first'] = microtime(true); 
 
 		// set default exception handler
 		set_exception_handler(array($this, 'DefaultExceptionHandler'));
 
+		// include the site specific config.php
+		include(MEDES_SITE_PATH . '/config.php');
+
 		// Start a named session
-		$this->sessionName = $_SERVER["SERVER_NAME"];
-		session_name(preg_replace('/[:\.\/-_]/', '', $this->sessionName));
+		session_name($this->cfg['session']['name']);
 		session_start();
 
 		// Set default date/time-zone
-		date_default_timezone_set('Europe/Stockholm');
+		date_default_timezone_set($this->cfg['server']['timezone']);
 
-		// path to medes installation directory
-		$this->medesPath = realpath(dirname(__FILE__).'/../../');
-		$this->installPath = realpath(dirname(__FILE__).'/../../../');
+		// Create the main database, where the Medes configuration is.
+		extract($this->cfg['db'][0]);
+		$this->db = new CDatabaseController($dsn, $username, $password, $driver_options);
 
-		// Get defaults from the configuration file
-		$this->ReadConfigFromFile();
+		// Include general configuration from database.
+		$cfg = $this->db->ExecuteSelectQueryAndFetchAll($this->SQL('load pp:config'));
+		$this->cfg['config-db'] = unserialize($cfg[0]['value']);
 
-		// Set the siteurl from the stored configuration
-		$this->siteUrl = $this->config['siteurl'];
-
-		// Get hold of the controllers, just in case
+		// Init global controllers and variables
 		$this->uc = CUserController::GetInstance();
+		$this->if = CInterceptionFilter::GetInstance();
 
+		// Init the requst object, fill with values from the current request
+		$this->req = new CRequest();
+		$this->req->Init($this->cfg['general']['base_url']);
+		
+		// Create and init the template engine
+		//$this->te = new CTemplateEngine($this->cfg['config-db']['theme']);
+		
+		// A container for all views
+		$this->views = array();
+
+
+
+		// TO BE REARRANGED		
 		// Set default values to be empty
 		$this->pageDocType='html5';
 		$this->pageContentType='text/html';
@@ -249,62 +193,214 @@ class CPrinceOfPersia implements iSingleton, IDateTime {
 		$this->classContent=null;
 		$this->classSidebar1=null;
 		$this->classSidebar2=null;
+
+		// time after creation
+		$this->timer['constructor done'] = microtime(true); 
 	}
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Destructor
-	//
-	public function __destruct() {;}
+	/**
+	 * Magic method to alarm when setting member that does not exists. 
+	 */
+	public function __set($name, $value) {
+		echo "Setting undefined member: {$name} => {$value}";
+	}
+
 	
+	/**
+	 * Magic method to alarm when getting member that does not exists.
+	 * @return mixed
+	 */
+	public function __get($name) {
+		echo "Getting undefined member: {$name}";
+	}
+
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Singleton pattern.
-	// Get the instance of the latest created object or create a new one. 
-	//
+	/**
+	 * Singleton pattern. Get the instance of the latest created object or create a new one. 
+	 * @return CPrinceOfPersia The instance of this class.
+	 */
 	public static function GetInstance() {
-	
-		if(self::$instance == NULL) {
+		if(self::$instance == null) {
 			self::$instance = new CPrinceOfPersia();
 		}
 		return self::$instance;
 	}
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Dump current settings. 
-	//
-	public function Dump() {
-		$html = "<pre>"; 
-    foreach($this as $key => $val) {
-   		if(is_array($val)) {
-    		$html .= "$key = " . htmlentities(print_r($val, true)) . "\n";
-    	} else {
-    		$html .= "$key = " . htmlentities($val) . "\n";
-    	}
-    }
-    $html .= "</pre>";
-    
-    return $html;
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Create a common exception handler 
-	//
+	/**
+	 * Create a common exception handler 
+	 */
 	public static function DefaultExceptionHandler($aException) {
-  	die("<p>File " . $aException->getFile() . " at line" . $aException->getLine() ."<p>Uncaught exception: " . $aException->getMessage() . "<pre>" . print_r($aException->getTrace(), true) . "</pre>");
+		// CWatchdog to store logs
+  	die("<h3>Exceptionhandler</h3><p>File " . $aException->getFile() . " at line" . $aException->getLine() ."<p>Uncaught exception: " . $aException->getMessage() . "<pre>" . print_r($aException->getTrace(), true) . "</pre>");
   }
 
 
-	// ------------------------------------------------------------------------------------
+	/**
+ 	 * Implementing interface IModule. Initiating when module is installed.
+ 	 */
+	public function InstallModule() {
+	}
+	
+
+	/**
+ 	 * Implementing interface IModule. Cleaning up when module is deinstalled.
+ 	 */
+	public function DeinstallModule() {
+	}
+	
+
+	/**
+ 	 * Implementing interface IModule. Called when updating to newer versions.
+ 	 */
+	public function UpdateModule() {
+	}
+	
+	
+	/**
+	 * Implementing interface IUsesSQL. Encapsulate all SQL used by this class.
+	 */
+  public static function SQL($id=null) {
+  	$query = array(
+  		'create table pp' => 'create table if not exists pp(module text, key text, value text, primary key(module, key))',
+  		'load pp:config' => 'select value from pp where module="' . get_class() . '" and key="config"',
+  		'save pp:config' => 'update pp set value=? where module="' . get_class() . '" and key="config"',
+  	);
+  
+  	if(!isset($query[$id])) {
+  		throw new Exception(t('#class error: Out of range. Query = @id', array('#class'=>get_class(), '@id'=>$id)));
+		}
+		
+		return $query[$id];
+	}	
+
+
+	/**
+	 * Frontcontroller, route to controllers.
+	 */
+  public function FrontControllerRoute() {
+		$controller 		= $this->req->controller;
+		$action					= $this->req->action;
+		$moduleExists 	= isset($this->cfg['config-db']['modules'][$controller]);
+		$moduleEnabled 	= ($this->cfg['config-db']['modules'][$controller]['enabled'] == true);
+		$class					= $this->cfg['config-db']['modules'][$controller]['class'];
+		$classExists 		= class_exists($class);
+		
+		if($moduleExists && $moduleEnabled && $classExists) {
+			$rc = new ReflectionClass($class);
+			if($rc->implementsInterface('IController')) {
+				if($rc->hasMethod($action)) {
+					$controllerObj = $rc->newInstance();
+					$method = $rc->getMethod($action);
+					$method->invoke($controllerObj);
+				} else {
+					throw new Exception(t('#class error: Controller does not contain action.', array('#class'=>get_class())));		
+				}
+			} else {
+				throw new Exception(t('#class error: Controller does not implement interface IController.', array('#class'=>get_class())));
+			}
+		} else {
+			// 404
+			$v = new CView();
+			$v->AddStatic("<h2>404</h2>moduleExists=" . $moduleExists . ", moduleEnabled=" . $moduleEnabled . ", classExists=" . $classExists);
+			$this->AddView($v);
+		}
+  
+		// time after front controller
+		$this->timer['front controller done'] = microtime(true); 
+	}
+
+
+	// ---------------------------------------------------------------------------------------------
 	//
-	// Create code for correct doctype
+	// Template Engine and View, related stuff.
 	// 
+	
+	/**
+	 * Add view
+	 */
+	public function AddView($view, $prio=0, $region='content') {
+		$this->views[$region][] = array('view'=>$view, 'prio'=>$prio);
+	}
+	
+	
+	/**
+	 * Does the region contain any views?
+	 */
+	public function ViewExistsForRegion($region) {
+		return isset($this->views[$region]);
+	}
+	
+	
+	/**
+	 * Render all views for a specific region
+	 */
+	public function RenderViewsForRegion($region) {
+		// Sort views
+		function cmp($a, $b) {
+			if($a['prio'] == $b['prio']) {
+				return 0;
+			}
+			return $a['prio'] > $b['prio'] ? 1 : -1;
+		}
+		usort($this->views[$region], 'cmp');
+
+		// Render each view
+		foreach($this->views[$region] as $view) {
+			$view['view']->Render();
+		}
+	}
+	
+	
+	/**
+	 * Template Engine Render, renders the views using the selected theme.
+	 */
+  public function TemplateEngineRender() {
+  	// Get blocks from db?
+  	// Panels?
+  	// A block contains a CView? AddBlock()... CVIew has a title? Views rendered as block.
+  	// theme regions can be divided into panels?
+  	
+  	// Menus?(is a CView in a block? AddMenu() or AddBlock
+  	
+  	// Create the theme template page and render onto it.
+  
+		// Configuration array
+		$v = new CView();
+		$v->AddStatic('<hr><h2>$pp->cfg</h2><pre>' . print_r($this->cfg, true) . '</pre>');
+		$this->AddView($v, 1);
+
+		// Testing a view
+		$v = new CView();
+		$v->AddStatic('<hr><h2>$pp->req</h2><pre>' . print_r($this->req, true) . '</pre>');
+		$this->AddView($v, 0);
+
+		// Timer before render all views onto template
+		$this->timer['before-render'] = microtime(true); 
+		
+		// Include template file, this hands over control to the theme to make callbacks to $pp.
+		$pp = &$this;
+		$tplFile = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/page.tpl.php";
+		if(is_file($tplFile)) {
+			$tplFunctions = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/functions.php";
+			if(is_file($tplFunctions)) {
+				include $tplFunctions;
+			}
+			include $tplFile;
+		} else {
+			throw new Exception(t('#class error: Template file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$tplFile)));			
+		}
+		//$this->te->Render();
+
+		// last timer
+		$this->timer['last'] = microtime(true); 
+	}
+
+
+	/**
+	 * Create code for correct doctype
+	 */ 
 	public function GetHTMLDocType() {
 		switch($this->pageDocType) {
 			case 'xhtml-strict':
@@ -331,11 +427,24 @@ EOD;
 	}
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Create html to include stylesheets based on theme choosen in config
-	// 
+	/**
+	 * Get html for header 
+	 */
+	public function GetHTMLForMeta() {
+		$meta = "<meta charset='{$this->pageCharset}'/>\n";
+		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'/>\n";
+		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'/>\n";
+		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'/>\n";
+		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'/>\n";
+		return $meta;
+  }
+
+
+	/**
+	 * Create html to include stylesheets based on theme choosen in config
+	 */ 
 	public function GetHTMLForStyle() {
+		return;
 		
 		$pathToTheme = $this->PrependWithSiteUrl("medes/style/{$this->config['styletheme']['name']}");
 		$stylesheet = isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
@@ -367,11 +476,11 @@ EOD;
 	}
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for script
-	//
+	/** 
+	 * Get html for script
+	 */
 	public function GetHTMLForScript() {
+		return;
 		$scriptlinks='';
 		foreach($this->pageScriptLinks as $val) {
 			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/javascript'";
@@ -394,22 +503,22 @@ EOD;
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for related sites menu
-	//
+	/**
+	 * Get html for related sites menu
+	 */
 	public function GetHTMLForRelatedSitesMenu() {
 		// treat all relative links as relative to sitelink, therefore prepend sitelink
+		return "[relatedsitesmenu]";
 		$nav = $this->config['navigation']['relatedsites']['nav'];
 		return CNavigation::GenerateMenu($nav, false, '#mds-nav-relatedsites');		
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for login/logout/profile menu
-	//
+	/**
+	 * Get html for login/logout/profile menu
+	 */
 	public function GetHTMLForLoginMenu() {
+		return "[loginmenu]";
 		$nav = array(
 			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=login"), "title"=>"Login"),
 			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php"), "title"=>"Change your settings"),
@@ -433,27 +542,13 @@ EOD;
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for header 
-	//
-	public function GetHTMLForMeta() {
-		$meta = "<meta charset='{$this->pageCharset}'/>\n";
-		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'/>\n";
-		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'/>\n";
-		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'/>\n";
-		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'/>\n";
-		return $meta;
-  }
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for navbar 
-	//
+	/**
+	 * Get html for navbar 
+	 */
 	public function GetHTMLForMainMenu() {
 		//self::$menu[$p]['active'] = 'active';
-		$cur = self::GetUrlToCurrentPage();
+		return "[mainmenu]";
+		$cur = $this->req->GetUrlToCurrentPage();
 		$nav = $this->config['navigation']['navbar']['nav'];
 		foreach($nav as $key => $val) {
 			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
@@ -467,12 +562,12 @@ EOD;
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Get html for debug menu, usually used during development 
-	//
+	/**
+	 * Get html for debug menu, usually used during development 
+	 */
 	public function GetHTMLForDeveloperMenu() {
-		$url = $this->GetUrlToCurrentPage();
+		return "[developer menu]";
+		$url = $this->req->GetUrlToCurrentPage();
 		$nav1 = array(
 			"phpmedes"	=>array("text"=>"phpmedes:", "class"=>"strong nolink"),			
 			"site"	=>array("text"=>"phpmedes.org", "url"=>"http://phpmedes.org/", "title"=>"home of phpmedes project"),			
@@ -522,7 +617,11 @@ EOD;
   }
 
 
-	// ------------------------------------------------------------------------------------
+	// ------------------------------------ end of Template Engine related -------------------------
+
+
+
+
 	//
 	// Print the complete html-page 
 	// $aContent: the html-code for the main content of the page
@@ -584,90 +683,6 @@ EOD;
 		return $this->config['siteurl'] . $aUrl;
 	}
 
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get the link to the current page. 
-	//
-	public static function GetUrlToCurrentPage() {
-		if(!self::$currentUrl) {
-			self::$currentUrl = "http";
-			self::$currentUrl .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
-			self::$currentUrl .= "://";
-			$serverPort = ($_SERVER["SERVER_PORT"] == "80") ? '' :
-			(($_SERVER["SERVER_PORT"] == 443 && @$_SERVER["HTTPS"] == "on") ? '' : ":{$_SERVER['SERVER_PORT']}");
-			self::$currentUrl .= $_SERVER["SERVER_NAME"] . $serverPort . htmlspecialchars($_SERVER["REQUEST_URI"]);
-		}
-		return self::$currentUrl;
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Modify query string of the url.
-	//
-	// array $queryString: array to merge with current querystring, overwrites if there is
-	//               duplicate keys.
-	// string $aUrl: if null, or omitted, get currentUrl from GetUrlToCurrentPage().
-	//
-	// returns string: the url with the updated query string.
-	//
-	public static function ModifyQueryStringOfCurrentUrl(array $aQueryString, string $aUrl=null) {
-		$url = is_null($aUrl) ? self::GetUrlToCurrentPage() : $aUrl;
-		$parts = parse_url($url);
-		parse_str($parts['query'], $qs);
-		$qs = array_merge($qs, $aQueryString);
-		if(empty($qs)) {
-			unset($parts['query']);
-		} else {
-			$parts['query'] = http_build_query($qs);
-		}
-		return self::BuildUrl($parts);
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Build an url from array produced by parse_url(). Does not support user & pass.
-	//
-	// array $aParts: the parts of the url, in the form as produced by parse_url().
-	//
-	// returns string: the resulting url.
-	//
-	public static function BuildUrl(array $aParts) {
-		$port = isset($aParts['port']) ? ":{$aParts['port']}" : "";
-		$query = isset($aParts['query']) ? "?{$aParts['query']}" : "";
-		$fragment = isset($aParts['fragment']) ? "#{$aParts['fragment']}" : "";		
-		return "{$aParts['scheme']}://{$aParts['host']}{$port}{$aParts['path']}{$query}{$fragment}";
-	}
-
-
-/* Needed?
-	// ------------------------------------------------------------------------------------
-	//
-	// Get query string as string.
-	//
-	public static function GetQueryString() {
-		$qs = Array();
-		parse_str($_SERVER['QUERY_STRING'], $qs);
-		return (empty($qs) ? '' : htmlspecialchars(http_build_query($qs)));
-	}
-*/
-
-/*
-	// ------------------------------------------------------------------------------------
-	//
-	// Static function
-	// Parse query string and add items to it. Return the modified query string.
-	// array $aQueryStr: items to add to query string, key and values
-	//
-	public static function QueryStringAddItems(array $items=array()) {
-		$qs = Array();
-		parse_str($_SERVER['QUERY_STRING'], $qs);
-		$qs = array_merge($qs, $items);
-		return (empty($qs) ? '' : htmlspecialchars(http_build_query($qs)));
-	}
-*/
 
 	// ------------------------------------------------------------------------------------
 	//
