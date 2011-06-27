@@ -96,6 +96,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	public $pageStyleLinks;
 	public $pageScript;
 	public $pageScriptLinks;
+	public $pageUseListForMenus;
 	
 	// main content of page
 	public $pageTop;	
@@ -181,6 +182,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->pageScript=null;
 		$this->pageScriptLinks=array();
 		$this->googleAnalytics=null;
+		$this->pageUseListForMenus=false;
 		
 		// page content is default null
 		$this->pageTop=null;
@@ -282,9 +284,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
   public function FrontControllerRoute() {
 		$controller 		= $this->req->controller;
 		$action					= $this->req->action;
-		$moduleExists 	= isset($this->cfg['config-db']['modules'][$controller]);
-		$moduleEnabled 	= ($this->cfg['config-db']['modules'][$controller]['enabled'] == true);
-		$class					= $this->cfg['config-db']['modules'][$controller]['class'];
+		$moduleExists 	= isset($this->cfg['config-db']['controllers'][$controller]);
+		$moduleEnabled 	= ($this->cfg['config-db']['controllers'][$controller]['enabled'] == true);
+		$class					= $this->cfg['config-db']['controllers'][$controller]['class'];
 		$classExists 		= class_exists($class);
 		
 		if($moduleExists && $moduleEnabled && $classExists) {
@@ -334,19 +336,20 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	
 	
 	/**
+	 * Compare views when sorting array
+	 */
+	public static function ViewCompare($a, $b) {
+		if($a['prio'] == $b['prio']) {
+			return 0;
+		}
+		return $a['prio'] > $b['prio'] ? 1 : -1;
+	}
+
+	/**
 	 * Render all views for a specific region
 	 */
 	public function RenderViewsForRegion($region) {
-		// Sort views
-		function cmp($a, $b) {
-			if($a['prio'] == $b['prio']) {
-				return 0;
-			}
-			return $a['prio'] > $b['prio'] ? 1 : -1;
-		}
-		usort($this->views[$region], 'cmp');
-
-		// Render each view
+		usort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
 		foreach($this->views[$region] as $view) {
 			$view['view']->Render();
 		}
@@ -366,16 +369,6 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
   	
   	// Create the theme template page and render onto it.
   
-		// Configuration array
-		$v = new CView();
-		$v->AddStatic('<hr><h2>$pp->cfg</h2><pre>' . print_r($this->cfg, true) . '</pre>');
-		$this->AddView($v, 1);
-
-		// Testing a view
-		$v = new CView();
-		$v->AddStatic('<hr><h2>$pp->req</h2><pre>' . print_r($this->req, true) . '</pre>');
-		$this->AddView($v, 0);
-
 		// Timer before render all views onto template
 		$this->timer['before-render'] = microtime(true); 
 		
@@ -444,10 +437,20 @@ EOD;
 	 * Create html to include stylesheets based on theme choosen in config
 	 */ 
 	public function GetHTMLForStyle() {
-		return;
-		
-		$pathToTheme = $this->PrependWithSiteUrl("medes/style/{$this->config['styletheme']['name']}");
-		$stylesheet = isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
+
+		$html = null;		
+
+		// get all stylesheets
+		$baseurl = $this->req->baseUrl . trim($this->cfg['config-db']['theme']['url'], '/');
+		$stylesheets = $this->cfg['config-db']['theme']['stylesheets'];
+		foreach($stylesheets as $style) {
+			$media = isset($style['media']) ? "media='{$style['media']}' " : null;
+			$type = isset($style['type']) ? "type='{$style['type']}' " : null;	
+			$html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
+		}
+
+/*		
+		isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
 		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'/>\n" : "";
  		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->\n" : "";
 		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>\n" : "";
@@ -461,7 +464,6 @@ EOD;
 			$href = "href='" . $this->PrependWithSiteUrl($val['href']) . "'";
 			$stylelinks .= "<link rel='stylesheet' {$media} {$type} {$href}/>\n";
 		}
-		
 		$html = <<<EOD
 <link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}"/>
 {$print}
@@ -471,6 +473,7 @@ EOD;
 {$favicon}
 
 EOD;
+*/		
 
 		return $html;
 	}
@@ -518,12 +521,11 @@ EOD;
 	 * Get html for login/logout/profile menu
 	 */
 	public function GetHTMLForLoginMenu() {
-		return "[loginmenu]";
 		$nav = array(
-			"login"=>array("text"=>"login", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=login"), "title"=>"Login"),
-			"settings"=>array("text"=>"settings", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php"), "title"=>"Change your settings"),
-			"acp"=>array("text"=>"acp", "url"=>$this->PrependWithSiteUrl("medes/page/acp.php"), "title"=>"Admin Control Panel"),
-			"logout"=>array("text"=>"logout", "url"=>$this->PrependWithSiteUrl("medes/page/ucp.php?p=dologout"), "title"=>"Logout"),
+			'login'=>array('text'=>'login', 'url'=>$this->req->CreateUrlToControllerAction('user', 'login'), 'title'=>'Login'),
+			'settings'=>array('text'=>'settings', 'url'=>$this->req->CreateUrlToControllerAction('user', 'settings'), 'title'=>'Change your settings'),
+			'acp'=>array('text'=>'acp', 'url'=>$this->req->CreateUrlToControllerAction('admin'), 'title'=>'Admin Control Panel'),
+			'logout'=>array('text'=>'logout', 'url'=>$this->req->CreateUrlToControllerAction('user', 'logout'), 'title'=>'Logout'),
 		);
 
 		if($this->uc->IsAuthenticated()) {
@@ -538,7 +540,7 @@ EOD;
 			unset($nav['logout']);			
 		}
 
-		return CNavigation::GenerateMenu($nav, false, '#mds-nav-login');		
+		return CNavigation::GenerateMenu($nav, $this->pageUseListForMenus, 'mds-nav-login', 'mds-nav-login');		
   }
 
 

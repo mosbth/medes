@@ -46,8 +46,11 @@ class CNavigation {
 	// $list = present menu as list
 	// $class = class of nav-element
 	//
-	public static function GenerateMenu($array, $list=false, $class=''){
-		$html = "<nav class=\"{$class}\">\n";
+	public static function GenerateMenu($array, $list=false, $id=null, $class=null){
+		$id 		= isset($id) ? "id='$id' " : null;
+		$class 	= isset($class) ? "class='$class' " : null;
+
+		$html = "<nav {$id}{$class}>\n";
 		if($list) {
 			$html .= "\t<ul>\n";
 		}

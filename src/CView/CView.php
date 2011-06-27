@@ -31,11 +31,11 @@ class CView {
 	/**
 	 * Constructor
 	 */
-	public function __construct($vars = null, $path = null, $html = null, $php = null) {
-		$this->vars = $vars;
-		$this->path = $path;
-		$this->html = $html;
-		$this->php = $php;
+	public function __construct($def = array()) {
+		$this->vars = isset($def['vars']) ? $def['vars'] : null;
+		$this->path = isset($def['path']) ? $def['path'] : null;
+		$this->html = isset($def['html']) ? $def['html'] : null;
+		$this->php 	= isset($def['php']) ? $def['php'] : null;
 	}
 	
 	

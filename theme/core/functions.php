@@ -20,10 +20,10 @@ function core_CalculateContentWidth(&$hasSidebar1, &$hasSidebar2, &$classContent
 	} else if($hasSidebar1) {
 		$classContent="span-19 last";
 		$classSidebar1="span-4 colborder";
-		$classSidebar2="";
+		$classSidebar2=null;
 	} else if($hasSidebar2) {
 		$classContent="span-18 colborder";
-		$classSidebar1="";
-		$classSidebar2="span-5 colborder";
+		$classSidebar1=null;
+		$classSidebar2="span-5 last";
 	}
 }

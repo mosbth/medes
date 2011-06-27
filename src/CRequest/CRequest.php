@@ -139,6 +139,17 @@ class CRequest {
 	}
 
 
+	/**
+	 * Create url to page using current settings. 
+	 */
+	public function CreateUrlToControllerAction($controller = null, $action = null) {
+		$base = $this->baseUrl;
+		$controller = isset($controller) ? $controller : $this->controller;
+		$action = isset($action) ? "/$action" : null;
+		return "$base$controller$action";
+	}
+	
+
 	// ------------------------------------------------------------------------------------
 	//
 	// Modify query string of the url.
