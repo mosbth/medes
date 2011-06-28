@@ -25,9 +25,10 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	//
 	const sessionName = 'mds-uc';
 	private static $instance = null;
-	private $settings = array();
-	private $accountId = null;
-	private $accountName = null;
+	//private $settings = array();
+	private $userId = null;
+	private $userAccount = null;
+	private $userEmail = null;
 
 
 	// ------------------------------------------------------------------------------------
@@ -62,6 +63,23 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 
 
 	/**
+	 * Magic method to alarm when setting member that does not exists. 
+	 */
+	public function __set($name, $value) {
+		echo get_class() . ": Setting undefined member: {$name} => {$value}";
+	}
+
+	
+	/**
+	 * Magic method to alarm when getting member that does not exists.
+	 * @return mixed
+	 */
+	public function __get($name) {
+		throw new Exception(get_class() . ": Getting undefined member: {$name}");
+	}
+
+	
+	/**
 	 * Store object in session
 	 */
 	public function StoreInSession() { 
@@ -92,6 +110,8 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	
 	/**
 	 * Implementing interface IUsesSQL. Encapsulate all SQL used by this class.
+	 *
+	 * @param string $id the string that is the key of a SQL-entry in the array
 	 */
   public static function SQL($id=null) {
   	$query = array(
@@ -109,6 +129,9 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 
 	/**
 	 * Login, try to authenticate user and store in session if successful
+	 *
+	 * @param string $aUser the username/account to login with
+	 * @param string $aPassword the password
 	 */
 	public function Login($aUser, $aPassword) {
 		global $pp;
@@ -121,7 +144,7 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 			$this->userEmail		= $user['email']; 
 			// Get additional settings
 			//$this->settings			= $aSettings;
-			$this->StoreObjectInSession()
+			$this->StoreInSession();
 			return true;
 		} 
 		return false;		
@@ -130,6 +153,11 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	
 	/**
 	 * Check a password using the specified algorithm
+	 *
+	 * @param string $aPwd the password to check
+	 * @param string $aAlgorithm what algorithm to use when checking
+	 * @param string $aPassword the users current password
+	 * @param string $aSalt the salt, if any
 	 */
 	public function CheckPassword($aPwd, $aAlgorithm, $aPassword, $aSalt) {
 		switch($aAlgorithm) {
@@ -148,6 +176,18 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 			default:
 				return false;
 		}
+	}
+	
+	
+	/**
+	 * Logout, clear the session
+	 *
+	 * @param string $aUser the username/account to login with
+	 * @param string $aPassword the password
+	 */
+	public function Logout() {
+		global $pp;
+		$pp->DestroyAndRestartSession();
 	}
 	
 	
@@ -202,7 +242,7 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	// Is user authenticated?
 	//
 	public function IsAuthenticated() {
-		return empty($this->accountId) ? false : true;
+		return empty($this->userAccount) ? false : true;
 	}
 
 
@@ -212,7 +252,7 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	//
 	public function IsAdministrator() {
 		//return $this->IsMemberOfGroup('admin');
-		return $this->accountId == 1;
+		return $this->userId == 1;
 	}
 
 
@@ -220,8 +260,8 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	//
 	// Get account id.
 	//
-	public function GetAccountId() {
-		return $this->accountId;
+	public function GetUserId() {
+		return $this->userId;
 	}
 
 
@@ -229,8 +269,8 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	//
 	// Get account name.
 	//
-	public function GetAccountName() {
-		return $this->accountName;
+	public function GetUserAccount() {
+		return $this->userAccount;
 	}
 
 }

@@ -8,6 +8,7 @@ class CForm {
 	/**
 	 * Members
 	 */
+	const sessionName = 'mds-form';
 	public $id;					// Form id, default none
 	public $name;				// Form name
 	public $action;			// Form action, default none which is current url
@@ -50,7 +51,39 @@ class CForm {
 	public function AddFeedback($feedback) {
 		$this->feedback[] = $feedback;
 		//$_SESSION['form-feedback-' . $this->secret] = serialize($this->feedback);
-		$_SESSION['form-feedback-'] = serialize($this->feedback);
+		$_SESSION[self::sessionName] = serialize($this->feedback);
+	}
+	
+	
+	/**
+	 * Add feedback as success message.
+	 */
+	public function AddFeedbackSuccess($feedback) {
+		$this->AddFeedback(array('class'=>'success', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as notice message.
+	 */
+	public function AddFeedbackNotice($feedback) {
+		$this->AddFeedback(array('class'=>'notice', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as alert message.
+	 */
+	public function AddFeedbackAlert($feedback) {
+		$this->AddFeedback(array('class'=>'alert', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as error message.
+	 */
+	public function AddFeedbackError($feedback) {
+		$this->AddFeedback(array('class'=>'error', 'message'=>$feedback));
 	}
 	
 	
@@ -60,7 +93,7 @@ class CForm {
 	public function ClearFeedback() {
 		$this->feedback = array();
 		//unset($_SESSION['form-feedback-' . $this->secret]);
-		unset($_SESSION['form-feedback-']);
+		unset($_SESSION[self::sessionName]);
 	}
 	
 	
@@ -94,15 +127,16 @@ class CForm {
 */
 		$this->secretMatch = true;
 		// Check if feedback is set
-		if(isset($_SESSION['form-feedback-'])) {
-			$this->feedback = array_merge($this->feedback, unserialize($_SESSION['form-feedback-']));
-			unset($_SESSION['form-feedback-']);
+		if(isset($_SESSION[self::sessionName])) {
+			//$this->feedback = array_merge($this->feedback, unserialize($_SESSION[self::sessionName]));
+			$this->feedback = unserialize($_SESSION[self::sessionName]);
+			unset($_SESSION[self::sessionName]);
 		} 
 		
 		foreach($this->actions as $val) {
 			if(isset($val['name']) && isset($_POST[$val['name']]) && isset($val['callback'])) {
 				if($this->secretMatch) {
-					call_user_func($val['callback']);
+					call_user_func($val['callback'], $this);
 					return true;
 				}
 				else {

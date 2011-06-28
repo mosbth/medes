@@ -211,13 +211,30 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	
 	/**
 	 * Magic method to alarm when getting member that does not exists.
-	 * @return mixed
 	 */
 	public function __get($name) {
 		throw new Exception(get_class() . ": Getting undefined member: {$name}");
 	}
 
-	
+	/**
+	 * Restart the session.
+	 */
+	public function DestroyAndRestartSession() {
+		$_SESSION = array();
+		if (ini_get("session.use_cookies")) {
+    	$params = session_get_cookie_params();
+    	setcookie(session_name(), '', time() - 42000,
+      	$params["path"], $params["domain"],
+      	$params["secure"], $params["httponly"]
+      );
+		}
+		session_destroy();
+		session_name($this->cfg['session']['name']);
+		session_start();
+		session_regenerate_id();		
+	}
+
+
 	/**
 	 * Singleton pattern. Get the instance of the latest created object or create a new one. 
 	 * @return CPrinceOfPersia The instance of this class.
@@ -546,7 +563,7 @@ EOD;
 		global $pp;
 		if($pp->uc->IsAuthenticated()) {
 			unset($menu['login']);
-			$menu['settings']['text'] = $pp->uc->GetAccountName();
+			$menu['settings']['text'] = $pp->uc->GetUserAccount();
 			if(!$pp->uc->IsAdministrator()) {
 				unset($menu['acp']);			
 			}
@@ -581,7 +598,9 @@ EOD;
 		$alt 		= $this->cfg['config-db']['theme']['logo']['alt'];
 		$width 	= $this->cfg['config-db']['theme']['logo']['width'];
 		$height = $this->cfg['config-db']['theme']['logo']['height'];
-		return "<img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/>";
+		$url		= $this->req->CreateUrlToControllerAction('home');
+		$title	= t('Home');
+		return "<a href='{$url}' title='{$title}'><img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/>";
   }
 
 
