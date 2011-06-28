@@ -14,7 +14,7 @@
    Basic structural settings
 
 */
-html{background:#F0F0F0;overflow-y:scroll;} 
+html{background:#EEE;overflow-y:scroll;} 
 body{background:#FFF;} 
 
 
@@ -24,7 +24,7 @@ body{background:#FFF;}
    sitelinks and the login/profile menu. 
 
 */
-#mds-top-wrap{border-bottom:1px solid #E6E6E6;padding:0 1em 4px 1em;background:transparent;color:#656565;}
+#mds-top-wrap{border-bottom:1px solid #EEE;padding:0 1em 4px 1em;background:transparent;color:#666;}
 #mds-top-left{float:left;}
 #mds-top-right{float:right;}
 
@@ -47,8 +47,8 @@ body{background:#FFF;}
 	Main content with sidebars
 
 */
-#mds-content-wrapper{min-height:20em;}
-.mds-content-row-wrapper{}
+#mds-content-wrap{min-height:20em;}
+.mds-content-row-wrap{}
 .mds-content-row{}
 .mds-content{}
 .mds-sidebar1{}
@@ -70,8 +70,8 @@ body{background:#FFF;}
    copyright and links.
 
 */
-#mds-bottom-wrap{border-top:1px solid #C2C2C2;background:#F0F0F0;}
-#mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#656565;}
+#mds-bottom-wrap{border-top:1px solid #CCC;background:#EEE;}
+#mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
 
 
 /* Links
@@ -98,10 +98,10 @@ a.nolink,a.nolink:link,a.nolink:visited,a.nolink:hover,a.nolink:active
 .mds-nav-relatedsites{}
 .mds-nav-login{}
 
-.mds-nav-mainmenu{font-family:arial;font-weight:bold;font-size:1.2em;padding:2px 8px;background:#656565;border:2px solid #858585;}
-.mds-nav-mainmenu a{padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
-.mds-nav-mainmenu a:hover{background:#858585;border:2px solid #656565;}
-.mds-nav-mainmenu a.active{background:#858585;border:2px solid #656565;}
+.mds-nav-main{font-family:arial;font-weight:bold;font-size:1.2em;padding:2px 8px;background:#666;border:2px solid #999;}
+.mds-nav-main a{padding:6px 8px;text-decoration:none;border:2px solid transparent;color:#fff;}
+.mds-nav-main a:hover{background:#999;border:2px solid #666;}
+.mds-nav-main a.active{background:#999;border:2px solid #666;}
 
 /* nav sidemenu */
 nav.sidemenu{}

@@ -22,8 +22,10 @@ function __autoload($aClassName) {
  */
 function t($key, $arg=null) {
 	$t = $key;
-	foreach($arg as $key => $val) {
-		$t = preg_replace('/' . $key . '/', $val, $t);		
+	if(isset($arg)) {
+		foreach($arg as $key => $val) {
+			$t = preg_replace('/' . $key . '/', $val, $t);		
+		}
 	}
 	return $t;
 }

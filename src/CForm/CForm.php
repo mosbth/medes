@@ -77,7 +77,7 @@ class CForm {
 	 *
 	 * @return boolean returns on failure, else calls callback, if returning from callback, return true.
 	 */
-	public function Submitted() {
+	public function CheckDoSubmitted() {
 		// Fill form from session
 /*
 		if(isset($_POST['secret']) && isset($_SESSION['form-secret-' . $_POST['secret']])) {
@@ -132,8 +132,8 @@ class CForm {
 		$feedback	= $this->GetHTMLForFeedback($this->feedback);
 		$this->ClearFeedback();
 		$html = <<< EOD
-<form{$id}{$class}{$name}{$action}{$method}">
-<input type='hidden' name='secret' value='{$this->secret}' />
+\n<form{$id}{$class}{$name}{$action}{$method}>
+<input type='hidden' name='secret' value='{$this->secret}'/>
 <fieldset>
 {$feedback}
 {$elements}

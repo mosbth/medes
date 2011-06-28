@@ -25,8 +25,8 @@
 
 <!-- top -->
 <div id="mds-top-wrap" class="clearfix">
- <div id="mds-top-left"><?php echo $pp->GetHTMLForRelatedSitesMenu(); ?></div>
- <div id="mds-top-right"><?php echo $pp->GetHTMLForLoginMenu(); ?></div>
+ <div id="mds-top-left"><?php echo $pp->GetHTMLForMenu('relatedsites'); ?></div>
+ <div id="mds-top-right"><?php echo $pp->GetHTMLForMenu('login'); ?></div>
 </div>
 
 
@@ -35,21 +35,21 @@
  <div id="mds-header" class="container">
 
   <div id="mds-header-logo">
-   <a href="<?php echo $pp->PrependWithSiteUrl('medes/page/template.php') ?>"><img src="<?php echo $pp->PrependWithSiteUrl('img/logo_medes_335x70.png'); ?>" alt="Logo" width="335" height="70" style="margin-left:0px;"/></a>
+   <a href="<?php echo $pp->PrependWithSiteUrl('home') ?>"><?php echo $pp->GetHTMLForLogo(); ?></a>
   </div>
 
   <div id="mds-header-title"></div>
 
-  <div id="mds-header-menu"><?php echo $pp->GetHTMLForMainMenu(); ?></div>
+  <div id="mds-header-menu"><?php echo $pp->GetHTMLForMenu('main'); ?></div>
 
  </div>
 </div>
 
 
 <!-- content -->
-<div id="mds-content-wrapper" class="prepend-top append-bottom">
+<div id="mds-content-wrap" class="prepend-top append-bottom">
 
- <div class="mds-content-row-wrapper">
+ <div class="mds-content-row-wrap">
   <div class="mds-content-row container">
 
 <?php core_CalculateContentWidth($hasSidebar1, $hasSidebar2, $classContent, $classSidebar1, $classSidebar2); ?>
@@ -80,9 +80,9 @@
 <div id="mds-bottom-wrap">
  <footer id="mds-bottom" class="container">
 
-  <p class="span-24 last"><em>This site is built using <a href="http://phpmedes.org/">the free and opensource software named phpmedes</a>. PHPMedes is a PHP framework and a CMS, based on PHP, that aids in quickly building, small and medium sized websites, using latest technique, with a minimum of knowledge needed. PHPMedes is free software, open source, and therefore licensed according to <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License version 3</a>.</em></p>
+  <p><?php echo $pp->GetHTMLMessage('copyright'); ?></p>
 	
-  <?php echo $pp->GetHTMLForDeveloperMenu(); ?>
+  <?php echo $pp->GetHTMLForDeveloper(); ?>
 
  </footer>
 </div>

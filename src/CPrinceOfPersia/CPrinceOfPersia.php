@@ -205,7 +205,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 * Magic method to alarm when setting member that does not exists. 
 	 */
 	public function __set($name, $value) {
-		echo "Setting undefined member: {$name} => {$value}";
+		echo get_class() . ": Setting undefined member: {$name} => {$value}";
 	}
 
 	
@@ -214,7 +214,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 * @return mixed
 	 */
 	public function __get($name) {
-		echo "Getting undefined member: {$name}";
+		throw new Exception(get_class() . ": Getting undefined member: {$name}");
 	}
 
 	
@@ -285,9 +285,15 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$controller 		= $this->req->controller;
 		$action					= $this->req->action;
 		$moduleExists 	= isset($this->cfg['config-db']['controllers'][$controller]);
-		$moduleEnabled 	= ($this->cfg['config-db']['controllers'][$controller]['enabled'] == true);
-		$class					= $this->cfg['config-db']['controllers'][$controller]['class'];
-		$classExists 		= class_exists($class);
+		$moduleEnabled 	= false;
+		$class					= false;
+		$classExists 		= false;
+
+		if($moduleExists) {
+			$moduleEnabled 	= ($this->cfg['config-db']['controllers'][$controller]['enabled'] == true);
+			$class					= $this->cfg['config-db']['controllers'][$controller]['class'];
+			$classExists 		= class_exists($class);
+		}
 		
 		if($moduleExists && $moduleEnabled && $classExists) {
 			$rc = new ReflectionClass($class);
@@ -448,6 +454,8 @@ EOD;
 			$type = isset($style['type']) ? "type='{$style['type']}' " : null;	
 			$html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
 		}
+		$faviconHref= $this->PrependWithSiteUrl($this->cfg['config-db']['theme']['favicon']);
+		$html .= "<link rel='shortcut icon' href='{$faviconHref}'/>\n";
 
 /*		
 		isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
@@ -507,112 +515,131 @@ EOD;
 
 
 	/**
-	 * Get html for related sites menu
+	 * Get html for menu
+	 * @param string key corresponding to menu
+	 * @return string or null if menu is not enabled.
 	 */
-	public function GetHTMLForRelatedSitesMenu() {
-		// treat all relative links as relative to sitelink, therefore prepend sitelink
-		return "[relatedsitesmenu]";
-		$nav = $this->config['navigation']['relatedsites']['nav'];
-		return CNavigation::GenerateMenu($nav, false, '#mds-nav-relatedsites');		
-  }
-
-
-	/**
-	 * Get html for login/logout/profile menu
-	 */
-	public function GetHTMLForLoginMenu() {
-		$nav = array(
-			'login'=>array('text'=>'login', 'url'=>$this->req->CreateUrlToControllerAction('user', 'login'), 'title'=>'Login'),
-			'settings'=>array('text'=>'settings', 'url'=>$this->req->CreateUrlToControllerAction('user', 'settings'), 'title'=>'Change your settings'),
-			'acp'=>array('text'=>'acp', 'url'=>$this->req->CreateUrlToControllerAction('admin'), 'title'=>'Admin Control Panel'),
-			'logout'=>array('text'=>'logout', 'url'=>$this->req->CreateUrlToControllerAction('user', 'logout'), 'title'=>'Logout'),
-		);
-
-		if($this->uc->IsAuthenticated()) {
-			unset($nav['login']);
-			$nav['settings']['text'] = $this->uc->GetAccountName();
-			if(!$this->uc->IsAdministrator()) {
-				unset($nav['acp']);			
+	public function GetHTMLForMenu($aMenu) {
+		if(isset($this->cfg['config-db']['menus'][$aMenu])) {
+			$menu = $this->cfg['config-db']['menus'][$aMenu];
+			if($menu['enabled']) {
+				if(isset($menu['callback'])) {
+					if(is_callable($menu['callback'])) {
+						call_user_func($menu['callback'], &$menu['items']);
+					} else {
+						throw new Exception(t("Menu callback is not callable."));
+					}
+				}
+				return CNavigation::GenerateMenu($menu['items'], $this->cfg['config-db']['menus']['list-style'], $menu['id'], $menu['class']);	
 			}
 		} else {
-			unset($nav['settings']);
-			unset($nav['acp']);
-			unset($nav['logout']);			
+			throw new Exception(t('Menu "{$amenu}" does not exist in config.'));
 		}
-
-		return CNavigation::GenerateMenu($nav, $this->pageUseListForMenus, 'mds-nav-login', 'mds-nav-login');		
+		return null;
   }
 
 
 	/**
-	 * Get html for navbar 
+	 * Callback function, modify the items of the loginmenu
 	 */
-	public function GetHTMLForMainMenu() {
-		//self::$menu[$p]['active'] = 'active';
-		return "[mainmenu]";
-		$cur = $this->req->GetUrlToCurrentPage();
-		$nav = $this->config['navigation']['navbar']['nav'];
-		foreach($nav as $key => $val) {
-			if(!(strstr($nav[$key]['url'], '://') || $nav[$key]['url'][0] == '/')) {
-				$nav[$key]['url'] = $this->PrependWithSiteUrl($nav[$key]['url']);
+	public static function ModifyLoginMenu(&$menu) {
+		global $pp;
+		if($pp->uc->IsAuthenticated()) {
+			unset($menu['login']);
+			$menu['settings']['text'] = $pp->uc->GetAccountName();
+			if(!$pp->uc->IsAdministrator()) {
+				unset($menu['acp']);			
 			}
-			if(strpos($cur, $nav[$key]['url'])) {
-				$nav[$key]['active'] = "active";
+		} else {
+			unset($menu['settings']);
+			unset($menu['acp']);
+			unset($menu['logout']);			
+		}
+  }
+
+	/**
+	 * Callback function, check and set menu item to current
+	 */
+	public static function ModifyMenuDisplayCurrent(&$menu) {
+		global $pp;
+		foreach($menu as $key=>$val) {
+			$alt1 = $pp->req->controller;
+			$alt2 = "{$alt1}/{$pp->req->action}";
+			if(($val['href'] == $alt1) || ($val['href'] == $alt2)) {
+				$menu[$key]['active'] = true;
 			}
-		}		
-		return CNavigation::GenerateMenu($nav, false, 'mds-nav-mainmenu');		
+		}
+  }
+
+
+	/**
+	 * Get html for logo 
+	 * @return string
+	 */
+	public function GetHTMLForLogo() {
+		$href 	= $this->PrependWithSiteUrl($this->cfg['config-db']['theme']['logo']['src']);
+		$alt 		= $this->cfg['config-db']['theme']['logo']['alt'];
+		$width 	= $this->cfg['config-db']['theme']['logo']['width'];
+		$height = $this->cfg['config-db']['theme']['logo']['height'];
+		return "<img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/>";
+  }
+
+
+	/**
+	 * Get html for for short messages defined in cfg. 
+	 * @return string
+	 */
+	public function GetHTMLMessage($aMessage) {
+		if(isset($this->cfg['config-db']['messages'][$aMessage])) {
+			return $this->cfg['config-db']['messages'][$aMessage];
+		} else {
+			throw new Exception(t("Message '{$aMessage}' does not exist in config."));
+		}
   }
 
 
 	/**
 	 * Get html for debug menu, usually used during development 
 	 */
-	public function GetHTMLForDeveloperMenu() {
-		return "[developer menu]";
+	public function GetHTMLForDeveloper() {
 		$url = $this->req->GetUrlToCurrentPage();
-		$nav1 = array(
-			"phpmedes"	=>array("text"=>"phpmedes:", "class"=>"strong nolink"),			
-			"site"	=>array("text"=>"phpmedes.org", "url"=>"http://phpmedes.org/", "title"=>"home of phpmedes project"),			
-		);
-
-		$nav2 = array(
-			"tools"					=>array("text"=>"Tools:", "class"=>"strong nolink"),			
-			"html5"					=>array("text"=>"html5", "url"=>"http://validator.w3.org/check/referer", "title"=>"html5 validator"),			
-			"css3"					=>array("text"=>"css3", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
-			"unicorn"				=>array("text"=>"unicorn", "url"=>"http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance", "title"=>"unicorn html and css validator"),			
-			"cheatsheet"		=>array("text"=>"cheatsheet", "url"=>"http://www.w3.org/2009/cheatsheet/", "title"=>"html cheatsheet, lookup html-tags"),			
-			"link-checker"	=>array("text"=>"link checker", "url"=>"http://validator.w3.org/checklink?uri=" . $url, "title"=>"css3 validator"),			
-			"i18n-checker"	=>array("text"=>"i18n checker", "url"=>"http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr=" . $url, "title"=>"css3 validator"),			
-			"check-header"	=>array("text"=>"check http-header", "url"=>"http://jigsaw.w3.org/css-validator/check/referer?profile=css3", "title"=>"css3 validator"),			
-			"browsers"			=>array("text"=>"browsers", "url"=>"http://browsershots.org/{$url}", "title"=>"check browser compatibility"),	
-			"colors"				=>array("text"=>"colors", "url"=>"http://www.workwithcolor.com/hsl-color-schemer-01.htm", "title"=>"color chooser"),	
-		);
-
-		$nav3 = array(
-			"manuals"	=>array("text"=>"Manuals:", "class"=>"strong nolink"),			
-			"html5"		=>array("text"=>"html5", "url"=>"http://dev.w3.org/html5/spec/spec.html", "title"=>"html5 specification"),			
-			"css2"		=>array("text"=>"css2", "url"=>"http://www.w3.org/TR/CSS2/", "title"=>"css2 specification"),			
-			"css3"		=>array("text"=>"css3", "url"=>"http://www.w3.org/Style/CSS/current-work#CSS3", "title"=>"css3 specification"),			
-			"php"			=>array("text"=>"php", "url"=>"http://php.net/manual/en/index.php", "title"=>"php manual"),			
-			"sqlite"	=>array("text"=>"sqlite", "url"=>"http://www.sqlite.org/lang.html", "title"=>"sqlite manual"),			
-			"blueprint"	=>array("text"=>"blueprint", "url"=>"https://github.com/joshuaclayton/blueprint-css/wiki/Tutorials", "title"=>"blueprint tutorials on github"),			
-		);
-
-		$item1 = CNavigation::GenerateMenu($nav1, false);
-		$item2 = CNavigation::GenerateMenu($nav2, false);
-		$item3 = CNavigation::GenerateMenu($nav3, false);
-		$time = round(microtime(true) - self::$timePageGeneration, 5);
-		$numQueries = CDatabaseController::$numQueries;
+		$time = round(microtime(true) - $this->timer['first'], 5)*1000;
+		$numQueries = $this->db->numQueries;
 
 		$reload= "";
 		if(isset($_SESSION['timer'])) {
-			$reload = "Page processed and redirected in {$_SESSION['timer']['time']} seconds with {$_SESSION['timer']['numQueries']} database queries.<br/>";
+			$reload = "Page processed and redirected in {$_SESSION['timer']['time']} msecs with {$_SESSION['timer']['numQueries']} database queries.<br/>";
 			unset($_SESSION['timer']);
 		}
 
 		$html = <<<EOD
-<p class="clear"><em>{$reload}Page generated in {$time} seconds. There were {$numQueries} database queries.</em></p>
-{$item1}{$item2}{$item3}
+<p class="clear"><em>{$reload}Page generated in {$time} msecs. There were {$numQueries} database queries.</em></p>
+
+<p>Tools: 
+<a href="http://validator.w3.org/check/referer">html5</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">css3</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css21">css21</a>
+<a href="http://validator.w3.org/unicorn/check?ucn_uri=referer&amp;ucn_task=conformance">unicorn</a>
+<a href="http://validator.w3.org/checklink?uri={$url}">links</a>
+<a href="http://qa-dev.w3.org/i18n-checker/index?async=false&amp;docAddr={$url}">i18n</a>
+<!-- <a href="link?">http-header</a> -->
+<a href="http://csslint.net/">css-lint</a>
+<a href="http://jslint.com/">js-lint</a>
+<a href="http://jsperf.com/">js-perf</a>
+<a href="http://www.workwithcolor.com/hsl-color-schemer-01.htm">colors</a>
+<a href="http://dbwebb.se/style">style</a>
+</p>
+
+<p>Docs:
+<a href="http://www.w3.org/2009/cheatsheet">cheatsheet</a>
+<a href="http://dev.w3.org/html5/spec/spec.html">html5</a>
+<a href="http://www.w3.org/TR/CSS2">css2</a>
+<a href="http://www.w3.org/Style/CSS/current-work#CSS3">css3</a>
+<a href="http://php.net/manual/en/index.php">php</a>
+<a href="http://www.sqlite.org/lang.html">sqlite</a>
+<a href="http://www.blueprintcss.org/">blueprint</a>
+</p>
+
 EOD;
 
 		return $html;
@@ -622,67 +649,23 @@ EOD;
 	// ------------------------------------ end of Template Engine related -------------------------
 
 
-
-
-	//
-	// Print the complete html-page 
-	// $aContent: the html-code for the main content of the page
-	// $aSidebar1: html-code for sidebar1 of the page, if null then do not use sidebar1
-	// $aSidebar2: html-code for sidebar1 of the page, if null then do not use sidebar2
-	//
-	public function PrintHTMLPage($aContent=null, $aSidebar1=null, $aSidebar2=null) {
-		if(!is_null($aContent)) $this->pageContent = $aContent;
-		if(!is_null($aSidebar1)) $this->pageSidebar1 = $aSidebar1;
-		if(!is_null($aSidebar2)) $this->pageSidebar2 = $aSidebar2;		
-		
-		if($this->pageSidebar1 && $this->pageSidebar2) {
-			$this->classContent="span-16 border";
-			$this->classSidebar1="span-4 border";
-			$this->classSidebar2="span-4 last";			
-		} else if($this->pageSidebar1) {
-			$this->classContent="span-19 last";
-			$this->classSidebar1="span-4 colborder";
-		} else if($this->pageSidebar2) {
-			$this->classContent="span-18 colborder";
-			$this->classSidebar2="span-5 last";
-		}
-
-		$pp = &$this;
-		
-		if(!is_null($this->pageContentType)) {
-			header("Content-Type: {$this->pageContentType}; charset={$this->pageCharset}");
-		}
-
-		ob_start();
-		echo eval("?>" . $this->config['htmlparts-htmlhead']);
-
-		echo is_null($this->pageTop) ? eval("?>" . $this->config['htmlparts-pagetop']) : $this->pageTop;
-		echo is_null($this->pageHeader) ? eval("?>" . $this->config['htmlparts-pageheader']) : $this->pageHeader;		
-
-		echo eval("?>" . $this->config['htmlparts-pagecontent']);
-	
-		echo is_null($this->pageFooter) ? eval("?>" . $this->config['htmlparts-pagefooter']) : $this->pageFooter;
-		echo is_null($this->pageBottom) ? eval("?>" . $this->config['htmlparts-pagebottom']) : $this->pageBottom;
-		echo "</body>\n</html>\n";
-		ob_end_flush();
-  }
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Set a link by adding the siteurl
-	//  $aUrl: a link to a resource
-	// 
+	/**
+	 * Set a link by adding the siteurl
+	 * @param: $aUrl string a link to a resource
+	 * @return: string
+	 */
 	public function PrependWithSiteUrl($aUrl) {
-		if(empty($aUrl)) {
-			return false;
+		$url = trim($aUrl, '/');
+		
+		if(empty($url)) {
+			return null;
 		}
 			
-		if(strpos($aUrl, '://') || $aUrl[0] == '/') {
-			return $aUrl;
+		if(strpos($url, '://') || $url[0] == '/') {
+			return $url;
 		}
 
-		return $this->config['siteurl'] . $aUrl;
+		return "{$this->req->baseUrl}{$url}";
 	}
 
 
@@ -756,96 +739,6 @@ EOD;
 	}
 
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Set the administrator password
-	//  $aPwd: the password in plain text
-	//  $aEncryptionFunction: a function that encrypts the password
-	//
-	public function SetAdminPassword($aPwd, $aEncryptionFunction='sha1') {
-		
-		$timestamp = md5(microtime());
-		$this->config['password'] = array(
-			'function'=>$aEncryptionFunction,
-			'timestamp'=>$timestamp,
-			'password'=>call_user_func($aEncryptionFunction, $timestamp.$aPwd.$timestamp),
-		);
-		$this->StoreConfigToFile();
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Check if password matches the administrator password
-	//  $aPwd: the password in plain text
-	//
-	public function CheckAdminPassword($aPwd) {
-		
-		$password 	= $this->config['password']['password'];
-		$function 	= $this->config['password']['function'];
-		$timestamp 	= $this->config['password']['timestamp'];
-		return $password == call_user_func($function, $timestamp.$aPwd.$timestamp);
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	// OBSOLETE, should be replaced by UpdateConfiguration()
-	// Set the siteurl
-	//  $aSiteUrl: string
-	// 
-	public function SetSiteUrl($aSiteUrl) {
-		
-		$this->config['siteurl'] = $aSiteUrl;
-		$this->siteUrl = $aSiteUrl;
-		$this->StoreConfigToFile();
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Update configuration information and save it
-	//  $aArray: an array with configuration values to save
-	//  $aSave: true/false, should config be saved to file or not?
-	//
-	public function UpdateConfiguration($aArray, $aSave=true) {
-		
-		foreach($aArray as $key => $val) {
-			$this->config[$key] = $val;
-		}
-		if($aSave) {
-			$this->StoreConfigToFile();
-		}
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Store configuration settings to file
-	//
-	public function StoreConfigToFile() {
-		
-		$className = get_class($this);
-		if(is_writable($this->medesPath . '/data/')) {
-			file_put_contents($this->medesPath . "/data/{$className}_config.php", serialize($this->config));
-		} else {
-			throw new Exception('Failed to store CPrinceOfPercia configuration to file.');
-		}	
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Read configuration settings from file
-	//
-	public function ReadConfigFromFile() {
-		
-		$className = get_class($this);
-		if(is_readable($this->medesPath . "/data/{$className}_config.php")) {
-			$this->config = unserialize(file_get_contents($this->medesPath . "/data/{$className}_config.php"));
-		} else {
-			// data/config.php does not exists, redirect to installation procedure
-		}	
-	}
 
 
 	// ====================================================================================

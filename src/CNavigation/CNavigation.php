@@ -46,7 +46,8 @@ class CNavigation {
 	// $list = present menu as list
 	// $class = class of nav-element
 	//
-	public static function GenerateMenu($array, $list=false, $id=null, $class=null){
+	public static function GenerateMenu($array, $list=false, $id=null, $class=null) {
+		global $pp;
 		$id 		= isset($id) ? "id='$id' " : null;
 		$class 	= isset($class) ? "class='$class' " : null;
 
@@ -62,21 +63,23 @@ class CNavigation {
 				$html .= "\t";
 			}
 			
-            $classes = ' class="';
-			if(isset($value['active'])) 
+      $classes = ' class="';
+			if(isset($value['active'])) {
 				$classes .= "active";
-			if(isset($value['class']))
+			}
+			if(isset($value['class'])) {
 				$classes .= " {$value['class']}";
-            $classes .= '"';
+			}
+      $classes .= '"';
 
 			$title = '';
 			if(isset($value['title']))
-				$title = " title=\"{$value['title']}\"";
+				$title = " title=\"" . t($value['title']) . "\"";
 			
-			if(isset($value['url']))
-				$html .= "<a href=\"{$value['url']}\"{$title}{$classes}>{$value['text']}</a>";
+			if(isset($value['href']))
+				$html .= "<a href=\"" . $pp->PrependWithSiteUrl($value['href']) . "\"{$title}{$classes}>{$value['text']}</a>";
 			else
-				$html .= "<a{$title}{$classes}>".$value['text']."</a>";
+				$html .= "<a{$title}{$classes}>" . t($value['text']) . "</a>";
 
 			if($list) {
 				$html .= "</li>\n";
