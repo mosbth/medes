@@ -27,6 +27,7 @@ class CRequest {
 	public $controller;
 	public $action;
 	public $params;
+	public $args;
 	public $get;
 	public $post;
 	public $session;
@@ -87,12 +88,13 @@ class CRequest {
 		// Set controller, action and parameters
 		$controller =  !empty($splits[0]) ? $splits[0] : 'index';
 		$action 		=  !empty($splits[1]) ? $splits[1] : 'index';
-		$params = array();
+		$args = $params = array();
 		if(!empty($splits[2])) {
 			$keys = $val = array();
 			for($i=2, $cnt=count($splits); $i<$cnt; $i+=2) {
 				$params[$splits[$i]] = !empty($splits[$i+1]) ? $splits[$i+1] : null;
 			}
+			$args = array_merge(array_keys($params), array_values($params));
 		}
 
   	// Step 3
@@ -116,6 +118,7 @@ class CRequest {
   	$this->controller = $controller;
   	$this->action 		= $action;
   	$this->params 		= $params;
+  	$this->args 			= $args;
   	$this->get 			= &$_GET;
   	$this->post 		= &$_POST;
   	$this->session 	= &$_SESSION;
@@ -140,13 +143,26 @@ class CRequest {
 
 
 	/**
-	 * Create url to page using current settings. 
+	 * Create url to page using current settings.
+	 *
+	 * Can be called with variable amount of arguments.
+	 * 
+	 * @param string $controller
+	 * @param string $action
+	 * @param array $params array with values to be combined in url
 	 */
 	public function CreateUrlToControllerAction($controller = null, $action = null) {
 		$base = $this->baseUrl;
 		$controller = isset($controller) ? $controller : $this->controller;
 		$action = isset($action) ? "/$action" : null;
-		return "$base$controller$action";
+		$params = null;
+		$num = func_num_args();
+		if($num > 2) {
+			for($i=2; $i < $num; $i++) {
+				$params .= '/' . func_get_arg($i);
+			}
+		}
+		return "$base$controller$action$params";
 	}
 	
 

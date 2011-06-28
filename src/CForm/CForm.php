@@ -230,7 +230,7 @@ EOD;
 			$type 	= isset($val['type']) ? " type='{$val['type']}'" : null;
 			$class 	= isset($val['class']) ? " class='{$val['class']}'" : null;
 			$name 	= isset($val['name']) ? " name='{$val['name']}'" : null;
-			$value 	= isset($val['value']) ? " value='{$val['value']}'" : null;
+			$value 	= isset($val['value']) ? " value='" . t($val['value']) . "'" : null;
 			$disabled = isset($val['disabled']) && $val['disabled'] == true ? " disabled='disabled'" : null;
 			$html .= "<input{$id}{$type}{$class}{$name}{$value}{$disabled} />\n";
 		}
