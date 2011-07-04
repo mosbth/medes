@@ -8,7 +8,7 @@ define('MEDES_TEMPLATEENGINE_PASS', true);
 // For all classes, check if module IInstallable, call method for install
 
 // include the site specific config.php
-include(MEDES_SITE_PATH . '/config.php');
+include('config.php');
 
 // Create the main database, where the Medes configuration is.
 extract($this->cfg['db'][0]);
