@@ -1,9 +1,9 @@
 <?php
 
 // Use Medes bootstrap to gain access to environment
-define('MEDES_INSTANTIATE_PASS', false);
-define('MEDES_FRONTCONTROLLER_PASS', false);
-define('MEDES_TEMPLATEENGINE_PASS', false);
+define('MEDES_INSTANTIATE_PASS', true);
+define('MEDES_FRONTCONTROLLER_PASS', true);
+define('MEDES_TEMPLATEENGINE_PASS', true);
 include(__DIR__ . "/../index.php");
 
 // For all classes, check if module IInstallable, call method for install
