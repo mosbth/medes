@@ -6,7 +6,7 @@
 class CView {
 
   /**
-   * Variabels to use when rendering view. Array with key and value. The key becomes a variable
+   * Variable's to use when rendering view. Array with key and value. The key becomes a variable
    * name thats available in the included view file.
    * @var array
    */
@@ -31,11 +31,16 @@ class CView {
 	/**
 	 * Constructor
 	 */
-	public function __construct($def = array()) {
-		$this->vars = isset($def['vars']) ? $def['vars'] : null;
-		$this->path = isset($def['path']) ? $def['path'] : null;
-		$this->html = isset($def['html']) ? $def['html'] : null;
-		$this->php 	= isset($def['php']) ? $def['php'] : null;
+	public function __construct($def = null) {
+		$this->vars = $this->path = $this->html = $this->php = null;
+		if(is_array($def)) {
+			$this->vars = isset($def['vars']) ? $def['vars'] : null;
+			$this->path = isset($def['path']) ? $def['path'] : null;
+			$this->html = isset($def['html']) ? $def['html'] : null;
+			$this->php 	= isset($def['php'])  ? $def['php']  : null;
+		} else if(is_string($def) && !empty($def)) {
+			$this->html = $def;
+		}
 	}
 	
 	

@@ -100,8 +100,41 @@ class CForm {
 	/**
 	 * Add output as feedback to user.
 	 */
-	public function StoreInSession() {
+	/*public function StoreInSession() {
 		;
+	}
+	*/
+	
+	/**
+	 * Set a value of a form element.
+	 * @param string $key The key of the element.
+	 * @param string $value The value to set.
+	 */
+	public function SetValue($key, $value) {
+		if(isset($this->elements[$key])) {
+			$this->elements[$key]['value'] = $value;
+		} else {
+			throw new Exception(t('Key does not exist in form.'));
+		}
+	}
+	
+	
+	/**
+	 * Get a value of a form element. Use instead of POST to get validated values.
+	 * @param string $key The key of the element.
+	 * @param string $value The value to set.
+	 * @returns mixed the string or null if not set.
+	 */
+	public function GetValue($key) {
+		if(isset($this->elements[$key])) {
+			if(isset($this->elements[$key]['value'])) {
+				return $this->elements[$key]['value'];
+			} else {
+				return null;
+			}
+		} else {
+			throw new Exception(t('Key does not exist in form.'));
+		}
 	}
 	
 	
@@ -133,6 +166,20 @@ class CForm {
 			unset($_SESSION[self::sessionName]);
 		} 
 		
+		foreach($this->elements as $val) {
+			if(isset($val['name']) && isset($_POST[$val['name']])) {
+				if(isset($val['validate'])) {
+					// Do validation of incoming value, santize, filter, make sure its correct
+					$this->elements[$val['name']]['value'] = $_POST[$val['name']];
+				} else {
+					$this->elements[$val['name']]['value'] = $_POST[$val['name']];
+				}
+				if(empty($val['value']) && isset($val['mandatory'])) {
+					// Should not submit form, resend instead and display error message.
+				}
+			}
+		}
+
 		foreach($this->actions as $val) {
 			if(isset($val['name']) && isset($_POST[$val['name']]) && isset($val['callback'])) {
 				if($this->secretMatch) {
@@ -187,18 +234,22 @@ EOD;
 	public function GetHTMLForElements($elements) {
 		$html = null;
 		$i = 0;
-		foreach($elements as $val) {
+		foreach($elements as $key => $val) {
 			$defaultId = "form-input-" . $i++;
 			$id 		= isset($val['id']) ? "{$val['id']}" : $defaultId;
 			$label	= isset($val['label']) ? ($val['label'] . (isset($val['mandatory']) && $val['mandatory'] ? "<span class='form-element-mandatory'> *</span>" : null)) : null;
 			$class 	= isset($val['class']) ? " class='{$val['class']}'" : null;
-			$name 	= isset($val['name']) ? " name='{$val['name']}'" : $defaultId;
+			$name 	= isset($val['name']) ? " name='{$val['name']}'" : $key;
 			$script = isset($val['script']) ? " script='{$val['script']}'" : null;
 			$onChange = isset($val['onChange']) ? " onChange='{$val['onChange']}'" : null;
 
 			if(isset($val['type']) && $val['type'] == 'textarea') {
 				$value 	= isset($val['value']) ? $val['value'] : null;
 				$html .= "<p><label for='$id'>$label</label><br><textarea id='$id'{$class}{$name}{$script}{$onChange}>{$value}</textarea></p>\n";			
+			} 
+			else if(isset($val['type']) && $val['type'] == 'hidden') {
+				$value 	= isset($val['value']) ? " value='{$val['value']}'" : null;
+				$html .= "<input type='hidden' id='$id'{$class}{$name}{$script}{$onChange}{$value}/>\n";			
 			} 
 			else if(isset($val['type']) && $val['type'] == 'select') {
 				$options = null;

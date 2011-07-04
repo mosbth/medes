@@ -68,6 +68,17 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	public $req;
 	
 
+	/**
+   * feedback, store feedback to user between page requests.
+   * @var CRequest
+   */
+	public $feedback;
+	
+
+	/**
+	 * Session name for storing feedback between page requests
+	  */
+	const sessionNameFeedback = 'mds-feedback';
 	
 	
 	// CLEAN UP WITH PHPDOC LATER ON
@@ -162,7 +173,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		// A container for all views
 		$this->views = array();
 
-
+		// Init feedback
+		$this->feedback = null;
 
 		// TO BE REARRANGED		
 		// Set default values to be empty
@@ -298,13 +310,14 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	/**
 	 * Frontcontroller, route to controllers.
 	 */
-  public function FrontControllerRoute() {
-		$controller 		= $this->req->controller;
-		$action					= $this->req->action;
+  public function FrontControllerRoute($aController = null, $aAction = null) {
+		$controller 		= isset($aController) ? $aController : $this->req->controller;
+		$action					= isset($aAction) ? $aAction : $this->req->action;
 		$moduleExists 	= isset($this->cfg['config-db']['controllers'][$controller]);
 		$moduleEnabled 	= false;
 		$class					= false;
 		$classExists 		= false;
+		$canUrl 				= new CCanonicalUrl();
 
 		if($moduleExists) {
 			$moduleEnabled 	= ($this->cfg['config-db']['controllers'][$controller]['enabled'] == true);
@@ -312,6 +325,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			$classExists 		= class_exists($class);
 		}
 		
+		// Check if controller, action 
 		if($moduleExists && $moduleEnabled && $classExists) {
 			$rc = new ReflectionClass($class);
 			if($rc->implementsInterface('IController')) {
@@ -325,11 +339,17 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			} else {
 				throw new Exception(t('#class error: Controller does not implement interface IController.', array('#class'=>get_class())));
 			}
-		} else {
-			// 404
-			$v = new CView();
-			$v->AddStatic("<h2>404</h2>moduleExists=" . $moduleExists . ", moduleEnabled=" . $moduleEnabled . ", classExists=" . $classExists);
-			$this->AddView($v);
+		} 
+		// Check if canonical url exists
+		else if(($url = $canUrl->CheckUrl($this->req->GetQueryPartOfUrl()))) {
+			$this->req->ForwardTo($url);
+			$this->FrontControllerRoute();
+		} 
+		// Page not found 404
+		else { 
+			$this->AddFeedbackError(t('Frontcontroller did not find a matching page.'));
+			$this->AddFeedbackError("moduleExists=" . $moduleExists . ", moduleEnabled=" . $moduleEnabled . ", classExists=" . $classExists);
+			$this->FrontControllerRoute('error', 'code404'); // internal redirect
 		}
   
 		// time after front controller
@@ -394,6 +414,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
   
 		// Timer before render all views onto template
 		$this->timer['before-render'] = microtime(true); 
+		
+		// Create and print the header and codes, for example 200 404, etc
+		;
 		
 		// Include template file, this hands over control to the theme to make callbacks to $pp.
 		$pp = &$this;
@@ -600,7 +623,7 @@ EOD;
 		$height = $this->cfg['config-db']['theme']['logo']['height'];
 		$url		= $this->req->CreateUrlToControllerAction('home');
 		$title	= t('Home');
-		return "<a href='{$url}' title='{$title}'><img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/>";
+		return "<a href='{$url}' title='{$title}'><img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/></a>";
   }
 
 
@@ -855,5 +878,66 @@ EOD;
 		return $interval->format($format);
 	}
 
+
+	/**
+	 * Add output as feedback to user. Stored in session.
+	 */
+	public function AddFeedback($feedback) {
+		if(!isset($_SESSION[self::sessionNameFeedback])) {
+			$_SESSION[self::sessionNameFeedback] = array();
+		}
+		$_SESSION[self::sessionNameFeedback][] = $feedback;
+	}
+	
+	
+	/**
+	 * Get HTML for feedback.
+	 *
+	 * @return string The HTML for the feedback. 
+	 */
+	public function GetHTMLForFeedback() {
+		$html = null;
+		if(isset($_SESSION[self::sessionNameFeedback])) {		
+			foreach($_SESSION[self::sessionNameFeedback] as $val) {
+				$html .= "<p><output class='{$val['class']}'>{$val['message']}</output></p>\n";
+			}
+			unset($_SESSION[self::sessionNameFeedback]);
+		}
+		return $html;
+	}
+
+
+	/**
+	 * Add feedback as success message.
+	 */
+	public function AddFeedbackSuccess($feedback) {
+		$this->AddFeedback(array('class'=>'success', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as notice message.
+	 */
+	public function AddFeedbackNotice($feedback) {
+		$this->AddFeedback(array('class'=>'notice', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as alert message.
+	 */
+	public function AddFeedbackAlert($feedback) {
+		$this->AddFeedback(array('class'=>'alert', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as error message.
+	 */
+	public function AddFeedbackError($feedback) {
+		$this->AddFeedback(array('class'=>'error', 'message'=>$feedback));
+	}
+	
+	
 }
 

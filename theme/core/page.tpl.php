@@ -4,7 +4,7 @@
 	<?php echo $pp->GetHTMLForMeta(); ?>
 
 	<!-- Use PHP to set the page title dynamic -->
- 	<?php echo "<title>$this->pageTitle</title>"; ?>
+ 	<?php echo "<title>$pp->pageTitle</title>"; ?>
  	
 	<!-- Stylesheets and style -->
 	<?php echo $pp->GetHTMLForStyle(); ?>
@@ -35,7 +35,7 @@
  <div id="mds-header" class="container">
 
   <div id="mds-header-logo">
-   <a href="<?php echo $pp->PrependWithSiteUrl('home') ?>"><?php echo $pp->GetHTMLForLogo(); ?></a>
+   <?php echo $pp->GetHTMLForLogo(); ?>
   </div>
 
   <div id="mds-header-title"></div>

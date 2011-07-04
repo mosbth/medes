@@ -13,7 +13,7 @@ class CContentPage extends CContent {
    */
 
 	/**
-	 * The key to current article.
+	 * The key to current article.  // OBSOLETE??
 	 * @var string
    */	
 	private $key;
@@ -51,11 +51,53 @@ class CContentPage extends CContent {
 	}
 		
 
+	/**#@+
+	 * Utilities.
+	 */
+	public function ListAll() { return parent::ListByType(self::typeOfContent); }
+	/**#@-*/
+
+
 	/**
 	 * Set the key of the page. 
 	 */
 	public function SetKey($aKey) {
+		parent::SetKey($aKey);
 		$this->key = $aKey;
+	}
+
+
+	/**
+	 * Load the page. 
+	 * @param int $id The id to load, or use current id if already set.
+	 * @returns boolean if success of not.
+	 */
+	public function LoadById($id) {
+		$r = parent::Load($id);
+		$this->key = parent::GetKey();
+		return $r;
+	}
+
+
+	/**
+	 * Load the page. 
+	 * @param string $key The key of the page to load.
+	 * @returns boolean if success of not.
+	 */
+	public function LoadByKey($key) {
+		$r = parent::LoadByKey($key);
+		$this->key = parent::GetKey();
+		return $r;
+	}
+
+
+	/**
+	 * Does a page exists with this key?
+	 */
+	public function Exists($aKey=null) {
+		if(empty($this->key) && empty($aKey)) throw new Exception(t('Can not do action with empty key.'));
+		$key = isset($aKey) ? $aKey : $this->key; 
+		return $this->ExistsByKey($key);
 	}
 
 
@@ -97,14 +139,14 @@ class CContentPage extends CContent {
 	/**
 	 * Get page content. 
 	 */
-	public function GetContent($aKey=null) {
+/*	public function GetContent($aKey=null) {
 		if(isset($aKey)) $this->key = $aKey;
 		if(empty($this->key)) throw new Exception(t('Getting content with empty key.'));
 		
 		$this->a->LoadByKey($this->key);
 		return $this->a->GetContent();
 	}
-
+*/
 
 	/**
 	 * Get draft page content, if it exists, otherwise get page content. 
@@ -164,103 +206,6 @@ class CContentPage extends CContent {
 		}
 	}
 */
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get status bar with info about page. 
-	//
-	public function GetStatusBar($class="quiet small") {
-		// Is user authenticated?
-		$uc = CUserController::GetInstance();
-		$isAuthenticated = $uc->IsAuthenticated();
-		if(!$isAuthenticated) {
-			return "";
-		}
-		
-		// Is in editable mode o viewing mode
-		$isInEditMode = isset($_GET['e']);
-
-		// Get some values for page
-		$hasDraft = $this->a->GetDraftContent();
-		$published = $this->a->GetPublished();
-		$created = $this->a->GetCreated();
-		$modified = $this->a->GetModified();
-		$deleted = $this->a->GetDeleted();
-		
-		// Format dates
-		$tz = new DateTimeZone('UTC');
-		$timeCreated = CPrinceOfPersia::FormatDateTimeDiff($created, $tz);
-		$timeModified = CPrinceOfPersia::FormatDateTimeDiff($modified, $tz);
-		$timeDeleted = CPrinceOfPersia::FormatDateTimeDiff($deleted, $tz);
-		
-		// Get current querystring
-		//$qs = CPrinceOfPersia::GetQueryString();
-		
-		// Does this page really exists?
-		if(is_null($this->a->GetId())) {
-			return "<p class='{$class}'>This page does not exists, <a href='?p={$this->key}&amp;a=createPageByKey'>you may create it now</a>.</p>";
-		}
-
-		// Create html for the menu
-		$html = "<p class='{$class}'>";
-		if($deleted) {
-			$html .= "Page was deleted {$timeDeleted} ago and exists in the wastebasket. ";
-		} else {
-			$html .= $published ? "Page is published. " : "Page is not yet published. ";
-			$html .= $hasDraft ? "Draft exists. " : "";
-			$html .= $modified ? "Last modified in {$timeModified}. " : "Created {$timeCreated} ago. ";
-		}
-		$html .= " Owner is " . $this->a->GetOwner() . ". ";
-		$html .= $isInEditMode ? "<a href='?p={$this->key}'>View page</a>. ":"<a href='?p={$this->key}&amp;e'>Edit page</a>. ";
-/*
-		$html .= $isAuthenticated ? "<a href='?p={$this->key}&amp;a=newpage'>Create new page</a>. ":'';
-		$html .= $isAuthenticated ? "<a href='?a=viewpages'>View all pages</a>. ":'';
-		$restorePage = $isAuthenticated ? "<a href='?a=restorepage'>Restore this page</a> ":'';
-		$deletePage = $isAuthenticated ? "<a href='?a=deletepage'>Delete this page</a>. ":'';
-		$html .= $deleted ? "Page was deleted {$deleted} ({$restorePage}). " : $deletePage;
-*/
-		$html .= "</p>";
-		
-		return $html;
-	}
-
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Get page with standard html elements. 
-	//
-	public function GetViewSideMenu() {
-		// Get some values for page
-		$hasDraft = $this->a->GetDraftContent();
-		$published = $this->a->GetPublished();
-		$created = $this->a->GetCreated();
-		$modified = $this->a->GetModified();
-		$deleted = $this->a->GetDeleted();
-
-		// Get datetimes
-		$tz = new DateTimeZone('UTC');
-		$timePublished = CPrinceOfPersia::FormatDateTimeDiff($published, $tz);
-		$timeCreated = CPrinceOfPersia::FormatDateTimeDiff($created, $tz);
-		$timeModified = CPrinceOfPersia::FormatDateTimeDiff($modified, $tz);		
-		$timeDeleted = CPrinceOfPersia::FormatDateTimeDiff($deleted, $tz);
-
-		// Create html for the details
-		$details = "<h4>Details</h4><p>This page is named '{$this->key}'. <a href='?p={$this->key}&amp;a=renamePage'>Rename page</a>. ";
-		$details .= "Owner is " . $this->a->GetOwner() . ".</p>";
-		$details .= $modified ? "<p>Page created {$timeCreated} ago and last modified in {$timeModified}.</p>" : "<p>Page created {$timeCreated} ago.</p>";
-		$details .= $published ? "<p>Page published {$timePublished} ago. <a href='?p={$this->key}&amp;e&amp;a=unpublishPage'>Unpublish page</a>.</p>" : "<p>Page is not yet published. <a href='?p={$this->key}&amp;e&amp;a=publishPage'>Publish page now</a>.</p>";
-		$details .= "<p><a href='?p={$this->key}'>View page</a>.</p>";
-		$details .= $hasDraft ? "<p>Draft exists, <a href='?p={$this->key}&amp;draft'>preview it</a>. <a href='?p={$this->key}&amp;e&amp;a=destroyDraftPage'>Destroy draft</a>.</p>" : "";
-		$details .= $deleted ? "<p>Page was deleted {$timeDeleted} ago. <a href='?p={$this->key}&amp;e&amp;a=restorePage'>Restore page from wastebasket</a>.</p>" : "<p><a href='?p={$this->key}&amp;e&amp;a=deletePage'>Delete page to wastebasket</a>.</p>";
-		$details .= "<h4>All pages</h4>";
-		$details .= "<p><a href='?a=createPage'>Create new page</a>.</p>";
-		$details .= "<p><a href='?a=viewPages'>View all pages</a>.</p>";
-		$details .= "<p>There exists x published pages. <a href='?a=viewPages&amp;published'>View</a>.</p>";
-		$details .= "<p>There exists x unpublished pages. <a href='?a=viewPages&amp;unpublished'>View</a>.</p>";
-		$details .= "<p>There exists x deleted pages in the wastebasket. <a href='?a=viewPages&amp;deleted'>View</a>.</p>";
-		return $details;
-	}
 
 
 	// ------------------------------------------------------------------------------------
@@ -372,18 +317,6 @@ EOD;
 	}
 */
 
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Save page
-	//
-	protected function DoActionSaveDraftPage() {
-		if(empty($_GET['p'])) throw new Exception(sprintf(self::$lang['CALLING_METHOD_WITH_EMPTY_KEY'], __METHOD__));
-
-		$this->SaveDraftContent($_POST['content'], $_GET['p']);
-		CPrinceOfPersia::ReloadPageAndRemember(array("output"=>"Page was saved as draft.", "output-type"=>"success"));
-	}
-	
 
 	// ------------------------------------------------------------------------------------
 	//

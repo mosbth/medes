@@ -16,6 +16,7 @@ class CRequest {
 	 * @access public
    */
 	public $current;
+	public $forwardedFrom;
 	public $parts;
 	public $script;
 	public $dir;
@@ -107,6 +108,7 @@ class CRequest {
 		// Step 4
 		// Store it
   	$this->current	= $url;
+  	$this->forwardedFrom = null;
   	$this->parts		= $parts;
   	$this->script		= $script;
   	$this->dir 			= $dir;
@@ -126,10 +128,67 @@ class CRequest {
 
 
 	/**
+	 * Forward a request to from current (canonical) url another internal (not so canonical) url.
+	 *
+	 * Changes some parameters in the request and adds forwarded.
+	 *
+	 */
+  public function ForwardTo($to) {
+  	$to = trim($to, '/');
+  	$this->forwardedFrom 	= $this->current;
+  	$this->current				= $this->baseUrl . $to;
+  	$this->parts					= parse_url($this->current);
+  	//$this->script		= $_SERVER['SCRIPT_NAME'];
+  	$this->script = null;
+  	//$this->dir 			= rtrim(dirname($this->script), '\/');
+  	$this->dir = null;
+  	//$this->query 		= substr($parts['path'], strlen($dir));
+  	$this->query = null;
+  	$this->splits = $splits = explode('/', $to);
+
+		// If split is empty or equal to index.php, then use _GET['p'] to create controller/action,
+		if(empty($splits[0]) || strcasecmp($splits[0], 'index.php') == 0) {
+			if(isset($_GET['p'])) {
+				$splits	= explode('/', trim($_GET['p'], '/'));		
+			} else {
+				$splits['0'] = 'index';
+			}
+		}
+
+		// Set up controller and action from $to
+		$controller =  !empty($splits[0]) ? $splits[0] : 'index';
+		$action 		=  !empty($splits[1]) ? $splits[1] : 'index';
+		$args = $params = array();
+		if(!empty($splits[2])) {
+			$keys = $val = array();
+			for($i=2, $cnt=count($splits); $i<$cnt; $i+=2) {
+				$params[$splits[$i]] = !empty($splits[$i+1]) ? $splits[$i+1] : null;
+			}
+			$args = array_merge(array_keys($params), array_values($params));
+		}
+
+  	$this->controller = $controller;
+  	$this->action 		= $action;
+  	$this->params 		= $params;
+  	$this->args 			= $args;
+	}
+	
+
+	/**
+	 * Get query part of url, except the querystring started by ? 
+	 */
+	public function GetQueryPartOfUrl() {
+		return trim($this->query, '/');
+	}
+
+
+	/**
 	 * Get the url to the current page. 
 	 */
 	public function GetUrlToCurrentPage() {
-		if(!isset($this->current)) {
+		if(isset($this->forwardedFrom)) {
+			return $this->forwardedTo;
+		} else if(!isset($this->current)) {
 			$url = "http";
 			$url .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
 			$url .= "://";
@@ -141,6 +200,29 @@ class CRequest {
 		return $this->current;
 	}
 
+
+	/**
+	 * Redirect to another page.
+	 *
+	 * Can be called with variable amount of arguments.
+	 * 
+	 * @param string $controller
+	 * @param string $action
+	 * @param array $params array with values to be combined in url
+	 */
+  public function RedirectTo($aController = null, $aAction = null) {
+		$url = $this->CreateUrlToControllerAction($aController, $aAction);
+		$params = null;
+		$num = func_num_args();
+		if($num > 2) {
+			for($i=2; $i < $num; $i++) {
+				$params .= '/' . func_get_arg($i);
+			}
+		}
+  	header("Location: $url$params");
+  	exit;
+	}
+		
 
 	/**
 	 * Create url to page using current settings.

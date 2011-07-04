@@ -31,6 +31,15 @@ function t($key, $arg=null) {
 }
 
 /**
+ * Sanitizing text to be able to display it in a html-page.
+ * @param string text The text to be sanitized.
+ * @returns string The sanitized html.
+ */
+function sanitizeHtml($text) {	
+	return htmlentities($text, ENT_NOQUOTES, 'UTF-8', false);
+}
+
+/**
  * Interface for classes implementing the singleton pattern.
  */
 interface ISingleton {

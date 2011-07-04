@@ -44,6 +44,7 @@ class CArticle implements IUsesSQL, IModule {
 		"key", 						// text unique key,
 		"type", 					// text, use to identify articles of various content types such as article, blog, news, page, etc.
 		"title",					// text, the title of the article
+		"url",						// text, the canonical url to this article
 		"content",				// text, the actual content of the article
 
 		// drafts
@@ -135,7 +136,7 @@ class CArticle implements IUsesSQL, IModule {
 	 */
   public static function SQL($id=null) {
   	$query = array(
-  		'create table article' => 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, content text, draftTitle text, draftContent text, owner text, published datetime, created datetime, modified datetime, deleted datetime)',
+  		'create table article' => 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, url text, content text, draftTitle text, draftContent text, owner text, published datetime, created datetime, modified datetime, deleted datetime)',
   		'insert new article' => 'insert into article(%s,owner,published,created,modified,deleted) values(%s,?,null,datetime("now"),null,null)',
   		'update article' => 'update article set modified=datetime("now") %s where id=?',
   		'update article as published' => 'update article set published=datetime("now") where id=?',
@@ -147,6 +148,7 @@ class CArticle implements IUsesSQL, IModule {
 			'select article by id' => 'select * from article where id=?',
   		'select article by key' => 'select * from article where key=?',
   		'select article id by key' => 'select id from article where key=?',
+  		'select * by type' => 'select * from article where type=?',
   	);
   	if(!isset($query[$id])) {
   		throw new Exception(t('#class error: Out of range. Query = @id', array('#class'=>get_class(), '@id'=>$id)));
@@ -157,9 +159,16 @@ class CArticle implements IUsesSQL, IModule {
 
 	/**
 	 * Load article from db. Use $this->current to find out which article to load. 
+	 * @param int The id to load, overrides $current.
+	 * @returns boolean wether succeeded with loading or not.
 	 */
-  public function Load() {
+  public function Load($id = null) {
 
+		// id provided, use it
+		if(!empty($id)) {
+			$this->current['id'] = $id;
+		}
+		
 		// Article has id, use it
 		if(isset($this->current['id'])) {
 			$this->res = $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select article by id'), array($this->current['id']));
@@ -179,10 +188,13 @@ class CArticle implements IUsesSQL, IModule {
 			$key = $this->current['key'];
 			$this->ClearCurrent();
 			$this->current['key'] = $key;
+			return false;
 		} else if(empty($this->res[0])) {
 			$this->ClearCurrent();
+			return false;
 		} else {		
 			$this->current = $this->res[0];
+			return true;
 		}
 	}
 
@@ -195,7 +207,7 @@ class CArticle implements IUsesSQL, IModule {
 			$this->SetKey($key);
 		}
 		$this->SetId(null);
-		$this->Load();
+		return $this->Load();
 	}
 	
 
@@ -293,6 +305,16 @@ class CArticle implements IUsesSQL, IModule {
 	
 
 	/**
+	 * List all articles of specified type. 
+	 * @param string $type the type of articles to show.
+	 * @returns array with information on articles.
+	 */
+	public function ListByType($type) {
+		return $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select * by type'), array($type));
+	}
+
+
+	/**
 	 * Rename article key. 
 	 */
 	public function RenameKey($key, $newKey) {
@@ -355,6 +377,9 @@ class CArticle implements IUsesSQL, IModule {
 
 	public function SetContent($value) { $this->current['content'] = $value; }
 	public function GetContent() { return $this->current['content']; }
+
+	public function SetCanonicalUrl($value) { $this->current['url'] = $value; }
+	public function GetCanonicalUrl() { return $this->current['url']; }
 
 	public function SetDraftTitle($value) { $this->current['draftTitle'] = $value; }
 	public function GetDraftTitle() { return $this->current['draftTitle']; }
