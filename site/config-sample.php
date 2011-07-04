@@ -25,7 +25,8 @@ $pp->cfg['db']['driver_options'] = null;
 /*
  * Define siteurl other than default. Set to null to disable and let $pp figure it out.
  */
-$pp->cfg['general']['siteurl'] = null;
+$pp->cfg['general']['base_url'] = null;
+//$pp->cfg['general']['base_url'] = 'http://example.com/medes';
 
 /*
  * Define session name
