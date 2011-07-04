@@ -17,10 +17,10 @@ error_reporting(-1);
  * Add database settings. Used to setup the PDO database object.
  * @see PDO::__construct()
  */
-$pp->cfg['db']['dsn'] = 'sqlite:' . MEDES_SITE_PATH . '/data/._htdb.sqlite';
-$pp->cfg['db']['username'] = null;
-$pp->cfg['db']['password'] = null;
-$pp->cfg['db']['driver_options'] = null;
+$pp->cfg['db'][0]['dsn'] = 'sqlite:' . MEDES_SITE_PATH . '/data/.htdb.sqlite';
+$pp->cfg['db'][0]['username'] = null;
+$pp->cfg['db'][0]['password'] = null;
+$pp->cfg['db'][0]['driver_options'] = null;
 
 /*
  * Define siteurl other than default. Set to null to disable and let $pp figure it out.

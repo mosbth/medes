@@ -3,10 +3,16 @@
 // Use Medes bootstrap to gain access to fully populated $pp
 define('MEDES_FRONTCONTROLLER_PASS', true);
 define('MEDES_TEMPLATEENGINE_PASS', true);
-include(__DIR__ . "/../index.php");
+//include(__DIR__ . "/../index.php");
 
 // For all classes, check if module IInstallable, call method for install
 
+// include the site specific config.php
+include(MEDES_SITE_PATH . '/config.php');
+
+// Create the main database, where the Medes configuration is.
+extract($this->cfg['db'][0]);
+$db = new CDatabaseController($dsn, $username, $password, $driver_options);
 
 // Set configuration
 $a=array(
@@ -122,9 +128,7 @@ $a=array(
 );
 $b = serialize($a);
 
-$q = $pp->SQL('save pp:config');
-$pp->db->ExecuteQuery($q, array($b));
+$q = 'update pp set value=? where module="CPrinceOfPersia" and key="config"';
+$db->ExecuteQuery($q, array($b));
 
-$cfg = $pp->db->ExecuteSelectQueryAndFetchAll($pp->SQL('load pp:config'));
-echo "<pre>", print_r(unserialize($cfg[0]['value']), true), "</pre>";
 
