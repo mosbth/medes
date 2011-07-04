@@ -12,7 +12,7 @@ define('MEDES_SITE_PATH', __DIR__);
 include(MEDES_SITE_PATH . '/config.php');
 
 // Create the main database, where the Medes configuration is.
-extract($this->cfg['db'][0]);
+extract($cfg['db'][0]);
 $db = new CDatabaseController($dsn, $username, $password, $driver_options);
 
 // Set configuration
