@@ -43,8 +43,9 @@ include(MEDES_INSTALL_PATH . '/src/CPrinceOfPersia/bootstrap.php');
  * Using defines available in this file during setup, everything else can be configured in a 
  * config.php on per site basis.
  */
-$pp = CPrinceOfPersia::GetInstance();
-
+if(!(defined('MEDES_INSTANTIATE_PASS') && MEDES_INSTANTIATE_PASS == true)) {
+  $pp = CPrinceOfPersia::GetInstance();
+}
 
 // ------------------------------ PHASE: Frontcontroller -----------------------------------------
 
