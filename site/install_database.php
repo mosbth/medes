@@ -7,13 +7,13 @@
 
 // For all classes, check if module IInstallable, call method for install
 
-define('MEDES_SITE_PATH', __DIR__);
+//define('MEDES_SITE_PATH', __DIR__);
 // include the site specific config.php
-include(MEDES_SITE_PATH . '/config.php');
+//include(MEDES_SITE_PATH . '/config.php');
 
 // Create the main database, where the Medes configuration is.
-extract($cfg['db'][0]);
-$db = new CDatabaseController($dsn, $username, $password, $driver_options);
+//extract($cfg['db'][0]);
+$db = new CDatabaseController('sqlite:' . __DIR__ . 'data/.htdb.sqlite', null, null, null);
 
 // Set configuration
 $a=array(
