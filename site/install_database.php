@@ -13,6 +13,7 @@
 
 // Create the main database, where the Medes configuration is.
 //extract($cfg['db'][0]);
+include("../src/CDatabaseController/CDatabaseController.php");
 $db = new CDatabaseController('sqlite:' . __DIR__ . 'data/.htdb.sqlite', null, null, null);
 
 // Set configuration
