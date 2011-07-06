@@ -187,7 +187,7 @@ class CRequest {
 	 */
 	public function GetUrlToCurrentPage() {
 		if(isset($this->forwardedFrom)) {
-			return $this->forwardedTo;
+			return $this->forwardedFrom;
 		} else if(!isset($this->current)) {
 			$url = "http";
 			$url .= (@$_SERVER["HTTPS"] == "on") ? 's' : '';
