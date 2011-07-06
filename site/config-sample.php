@@ -14,10 +14,15 @@
 error_reporting(-1); 
 
 /*
+ * The path to the writable data dorectory, for storage, databases and uploaded files.
+ */
+define('MEDES_DATA_PATH', MEDES_SITE_PATH . '/data');
+
+/*
  * Add database settings. Used to setup the PDO database object.
  * @see PDO::__construct()
  */
-$pp->cfg['db'][0]['dsn'] = 'sqlite:' . MEDES_SITE_PATH . '/data/.htdb.sqlite';
+$pp->cfg['db'][0]['dsn'] = 'sqlite:' . MEDES_DATA_PATH . '/.htdb.sqlite';
 $pp->cfg['db'][0]['username'] = null;
 $pp->cfg['db'][0]['password'] = null;
 $pp->cfg['db'][0]['driver_options'] = null;

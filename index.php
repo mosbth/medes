@@ -25,7 +25,7 @@ define('MEDES_INSTALL_PATH', __DIR__);
 // Define the path to the sites directory
 if(!defined('MEDES_SITE_PATH')) {
 	/**
-	 * The path to the Medes installation directory.
+	 * The path to the Medes site specific directory.
 	 *
 	 * Override by defining it in a site's index.php, before including Medes index.php.
 	 */
@@ -45,7 +45,11 @@ include(MEDES_INSTALL_PATH . '/src/CPrinceOfPersia/bootstrap.php');
  */
 if(!(defined('MEDES_INSTANTIATE_PASS') && MEDES_INSTANTIATE_PASS == true)) {
   $pp = CPrinceOfPersia::GetInstance();
+} else {
+  // only include the site specific config.php
+  include(MEDES_SITE_PATH . '/config.php');
 }
+
 
 // ------------------------------ PHASE: Frontcontroller -----------------------------------------
 

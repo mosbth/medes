@@ -565,7 +565,7 @@ EOD;
 			if($menu['enabled']) {
 				if(isset($menu['callback'])) {
 					if(is_callable($menu['callback'])) {
-						call_user_func($menu['callback'], &$menu['items']);
+						$menu['items'] = call_user_func($menu['callback'], $menu['items']);
 					} else {
 						throw new Exception(t("Menu callback is not callable."));
 					}
@@ -582,7 +582,7 @@ EOD;
 	/**
 	 * Callback function, modify the items of the loginmenu
 	 */
-	public static function ModifyLoginMenu(&$menu) {
+	public static function ModifyLoginMenu($menu) {
 		global $pp;
 		if($pp->uc->IsAuthenticated()) {
 			unset($menu['login']);
@@ -595,12 +595,13 @@ EOD;
 			unset($menu['acp']);
 			unset($menu['logout']);			
 		}
+		return $menu;
   }
 
 	/**
 	 * Callback function, check and set menu item to current
 	 */
-	public static function ModifyMenuDisplayCurrent(&$menu) {
+	public static function ModifyMenuDisplayCurrent($menu) {
 		global $pp;
 		foreach($menu as $key=>$val) {
 			$alt1 = $pp->req->controller;
@@ -609,6 +610,7 @@ EOD;
 				$menu[$key]['active'] = true;
 			}
 		}
+		return $menu;
   }
 
 

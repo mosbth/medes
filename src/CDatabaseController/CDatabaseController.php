@@ -64,12 +64,11 @@ class CDatabaseController {
   }
 
 
-	// ------------------------------------------------------------------------------------
-	//
-  // Return rows affected of last INSERT, UPDATE, DELETE
-	//
+	/**
+	 * Return rows affected of last INSERT, UPDATE, DELETE
+	 */
   public function RowCount() {
-	   return is_null(self::$stmt) ? self::$stmt : self::$stmt->rowCount();
+	   return is_null($this->stmt) ? $this->stmt : $this->stmt->rowCount();
   }
 
 
