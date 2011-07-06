@@ -10,3 +10,7 @@ Edit the settings array if needed.
 Do as it say.
 
 Point to setup.php?update to save updated configuration array to database.
+
+3. Create a user in the database.
+
+For example: sqlite> insert into user (account, email, password, algorithm) values ('adm', 'adm@dbwebb.se', 'adm', 'plain');

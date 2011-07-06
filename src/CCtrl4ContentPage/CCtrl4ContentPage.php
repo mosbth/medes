@@ -63,7 +63,7 @@ class CCtrl4ContentPage implements IController {
 		$c = new CContentPage($_POST['key']);
 		if(!$c->Exists()) {
 			$c->SaveContent(t("<h1>New page</h1>\n\n<p>Edit this text to modify your custom page.</p>"), $key);
-			header("Location: " . $pp->req->CreateUrlToControllerAction(null, 'view', $key));
+			header("Location: " . $pp->req->CreateUrlToControllerAction(null, 'edit', $key));
 			exit;
 		}
 		
