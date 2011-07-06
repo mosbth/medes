@@ -342,8 +342,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		} 
 		// Check if canonical url exists
 		else if(($url = $canUrl->CheckUrl($this->req->GetQueryPartOfUrl()))) {
-			$this->req->ForwardTo($url);
-			$this->FrontControllerRoute();
+			//$this->req->ForwardTo($url);
+			//$this->FrontControllerRoute();
+			$this->ForwardTo($url);
 		} 
 		// Page not found 404
 		else { 
@@ -357,6 +358,15 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	}
 
 
+	/**
+	 * Forward to another url
+	 */
+	public function ForwardTo($url) {
+		$this->req->ForwardTo($url);
+		$this->FrontControllerRoute();
+	}
+	
+	
 	// ---------------------------------------------------------------------------------------------
 	//
 	// Template Engine and View, related stuff.
