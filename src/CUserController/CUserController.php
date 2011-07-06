@@ -91,6 +91,8 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
  	 * Implementing interface IModule. Initiating when module is installed.
  	 */
 	public function InstallModule() {
+		global $pp;
+  	$this->db->ExecuteQuery(self::SQL('create table user'));		
 	}
 	
 
