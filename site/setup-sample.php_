@@ -183,7 +183,7 @@ $pp->db->ExecuteQuery($query['create table pp']);
 echo "OK.</p>";
 
 echo "<p>Creating/Checking database table for users...";
-$o = new CUserController();
+$o = CUserController::GetInstance();
 $o->InstallModule();
 echo "OK.</p>";
 
