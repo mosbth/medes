@@ -1,12 +1,12 @@
-Install a new site.
+Install a new site. Go to the site directory and do:
 
-1. Create a config.php
+1. Create a setup.php
 
-$ cp config-sample.php config.php
-Edit it if needed.
+$ cp setup-sample.php_ setup.php
+Edit the settings array if needed.
 
-2. Create a database
+2. Point webbrowser to setup.php
 
-sqlite> create table if not exists pp(module text, key text, value text, primary key(module, key));
-sqlite> insert into pp (module, key) values ('CPrinceOfPersia', 'config');
-http://www.anderspbygg.se/m2/site/install_database.php
+Do as it say.
+
+Point to setup.php?update to save updated configuration array to database.

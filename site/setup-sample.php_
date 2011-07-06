@@ -44,7 +44,7 @@ $a=array(
 		'home' => array('enabled' => true,'class' => 'CCtrl4Home'),
 		'user' => array('enabled' => true,'class' => 'CCtrl4User'),
 		'developer' => array('enabled' => true,'class' => 'CCtrl4Developer'),
-		'theme' => array('enabled' => true,'class' => 'CCtrl4Theme'),
+		'themes' => array('enabled' => true,'class' => 'CCtrl4Theme'),
 		'cpage' => array('enabled' => true,'class' => 'CCtrl4ContentPage'),
 		'canurl' => array('enabled' => true,'class' => 'CCtrl4CanonicalUrl'),
 	),
@@ -55,24 +55,9 @@ $a=array(
 			'id' => 'mds-nav-relatedsites',
 			'class' => null,
 			'items' => array(
-				array(
-					'text' => 'mikaelroos',
-					'href' => 'http://mikaelroos.se/',
-					'class' => '',
-					'title' => t('Just Me'),
-				),
-				array(
-					'text' => 'phpmedes',
-					'href' => 'http://phpmedes.org/',
-					'class' => '',
-					'title' => t('Homepage for PHPMedes'),
-				),
-				array(
-					'text' => 'dbwebb',
-					'href' => 'http://dbwebb.se/',
-					'class' => '',
-					'title' => t('Educational site for development with databases and webapplications'),
-				),
+				array('text' => 'mikaelroos', 'href' => 'http://mikaelroos.se/', 'class' => '', 'title' => t('Just Me'),),
+				array('text' => 'phpmedes', 'href' => 'http://phpmedes.org/', 'class' => '', 'title' => t('Homepage for PHPMedes'),),
+				array('text' => 'dbwebb', 'href' => 'http://dbwebb.se/', 'class' => '', 'title' => t('Educational site for development with databases and webapplications'),),
 			),
 		),
 		'login' => array(
@@ -81,30 +66,10 @@ $a=array(
 			'class' => null,
 			'callback' => 'CPrinceofPersia::ModifyLoginMenu',
 			'items' => array(
-				'login' => array(
-					'text' => 'login',
-					'href' => 'user/login',
-					'class' => '',
-					'title' => 'Login as user',
-				),
-				'settings' => array(
-					'text' => 'settings',
-					'href' => 'user/settings',
-					'class' => '',
-					'title' => 'View/edit settings for this account and for this site',
-				),
-				'acp' => array(
-					'text' => 'acp',
-					'href' => 'acp',
-					'class' => '',
-					'title' => 'Admin Control Panel',
-				),
-				'logout' => array(
-					'text' => 'logout',
-					'href' => 'user/logout',
-					'class' => '',
-					'title' => 'Logout',
-				),
+			  'login'     => array('text' => 'login', 'href' => 'user/login', 'class' => '', 'title' => 'Login as user',),
+				'settings'  => array('text' => 'settings', 'href' => 'user/settings', 'class' => '', 'title' => 'View/edit settings for this account and for this site',),
+				'acp'       => array('text' => 'acp', 'href' => 'acp', 'class' => '', 'title' => 'Admin Control Panel',),
+				'logout'    => array('text' => 'logout', 'href' => 'user/logout', 'class' => '', 'title' => 'Logout',),
 			),
 		),
 		'main' => array(
@@ -115,7 +80,7 @@ $a=array(
 			'items' => array(
 				array('text' => 'home', 'href' => 'home', 'class' => '', 'title' => 'Home',),
 				array('text' => 'developer', 'href' => 'developer', 'class' => '', 'title' => 'Aid for the developer',),
-				array('text' => 'theme', 'href' => 'theme', 'class' => '', 'title' => 'Aid for the themer',),
+				array('text' => 'themes', 'href' => 'themes', 'class' => '', 'title' => 'Aid for the themer',),
 				array('text' => 'pages', 'href' => 'cpage/edit', 'class' => '', 'title' => 'pages',),
 				array('text' => 'canurls', 'href' => 'canurl/edit', 'class' => '', 'title' => 'canurls',),
 			),
@@ -123,8 +88,8 @@ $a=array(
 	),
 	'theme'=> array(
 		'name'=>'Medes Core Theme',
-		'pathOnDisk'=>__DIR__ . '/medes_latest/theme/core',
-		'url'=>'medes_latest/theme/core',
+		'pathOnDisk'=>MEDES_INSTALL_PATH . '/theme/core',
+		'url'=>'theme/core',
 		'logo'=>array(
 			'src'=>'img/logo_medes_330x70.png',
 			'alt'=>'Medes Logo',
@@ -145,13 +110,23 @@ $a=array(
 $b = serialize($a);
 
 
+// Check if .htaccess exists
+echo "<p>Checking .htaccess exists (does not check content though...)...";
+
+if(is_readable(MEDES_INSTALL_PATH . '/.htaccess')) {
+  echo "exists in MEDES_INSTALL_PATH...";
+} 
+
+echo "OK.</p>";
+
+
 // Check if data directory exists and is writeable
-echo "<p>Checking site/data is writable by webserver...";
+echo "<p>Checking site/data exists and is writable by webserver...";
 
 if(is_dir(MEDES_DATA_PATH)) {
   echo "directory exists...";
 } else {
-  echo "directory does not exists. Create it or define MEDES_DATA_PATH.</p>";
+  echo "directory does not exists... Create it or define MEDES_DATA_PATH.</p>";
   die("<p>Fix the error and then reload this page and try again.</p>");
 }
 
@@ -207,7 +182,18 @@ echo "<p>Creating/Checking database table for \$pp...";
 $pp->db->ExecuteQuery($query['create table pp']);
 echo "OK.</p>";
 
-// Saving configuration to database
+echo "<p>Creating/Checking database table for articles...";
+$o = new CArticle();
+$o->InstallModule();
+echo "OK.</p>";
+
+echo "<p>Creating/Checking database table for canurls...";
+$o = new CCanonicalUrl();
+$o->InstallModule();
+echo "OK.</p>";
+
+
+// Updating configuration to database
 if(isset($_GET['update'])) {
   echo "<p>Updating config to database...";
   $pp->db->ExecuteQuery($query['save pp:config'], array($b));
