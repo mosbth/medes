@@ -92,7 +92,7 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
  	 */
 	public function InstallModule() {
 		global $pp;
-  	$this->db->ExecuteQuery(self::SQL('create table user'));		
+  	$pp->db->ExecuteQuery(self::SQL('create table user'));		
 	}
 	
 
