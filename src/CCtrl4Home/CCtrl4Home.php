@@ -14,6 +14,7 @@ class CCtrl4Home implements IController {
 
 		if(isset($pp->cfg['config-db']['home'])) {
 			$pp->req->ForwardTo($pp->cfg['config-db']['home']['href']);
+			exit;
 		}
 
 		$pp->AddView(new CView(array('html'=>'<h1>Index Controller</h1><p>Welcome!</p>')));
