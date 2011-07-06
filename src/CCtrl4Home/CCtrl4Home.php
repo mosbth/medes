@@ -12,12 +12,11 @@ class CCtrl4Home implements IController {
 	public function Index() {	
 		global $pp;
 
-		if(isset($pp->req->forwardedFrom)) {
-			$pp->AddView(new CView('<h1>Index Controller</h1><p>Welcome!</p>'));		
-		} else if(isset($pp->cfg['config-db']['home'])) {
+		if(isset($pp->cfg['config-db']['home'])) {
 			$pp->ForwardTo($pp->cfg['config-db']['home']['href']);
-		} 
-		$pp->AddView(new CView('<h1>Index Controller</h1><p>Welcome!</p>'));
+		} else {
+			$pp->AddView(new CView('<h1>Index Controller</h1><p>Welcome!</p>'));
+		}
 	}
 
 

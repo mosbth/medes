@@ -363,6 +363,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 */
 	public function ForwardTo($url) {
 		$this->req->ForwardTo($url);
+		//echo "<pre>", print_r($this->req, true), "</pre>";
+		//exit;
 		$this->FrontControllerRoute();
 	}
 	

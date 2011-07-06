@@ -134,6 +134,12 @@ class CRequest {
 	 *
 	 */
   public function ForwardTo($to) {
+  	if(strpos($to, '?')) {
+	  	$to = substr($to, 0, strpos($to, '?'));
+			if($to[strlen($to)] != '/') {
+				$to = dirname($to);
+			}
+		}
   	$to = trim($to, '/');
   	$this->forwardedFrom 	= $this->current;
   	$this->current				= $this->baseUrl . $to;
@@ -143,7 +149,7 @@ class CRequest {
   	//$this->dir 			= rtrim(dirname($this->script), '\/');
   	$this->dir = null;
   	//$this->query 		= substr($parts['path'], strlen($dir));
-  	$this->query = null;
+  	$this->query = $to;
   	$this->splits = $splits = explode('/', $to);
 
 		// If split is empty or equal to index.php, then use _GET['p'] to create controller/action,
