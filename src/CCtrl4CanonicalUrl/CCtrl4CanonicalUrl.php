@@ -6,49 +6,22 @@
  */
 class CCtrl4CanonicalUrl implements IController {
 
-	/**
- 	 * Implementing interface IController. All controllers must have an index action.
-	 */
-	public function Index() {	
-		$pp = CPrinceOfPersia::GetInstance();
-		$pp->AddView(new CView('<h1>Canonical Url Controller</h1><p>Welcome!</p>'));
-	}
-
+	/**#@+
+	 * @access private
+   */
 
 	/**
- 	 * Display all items in table, ready to edit.
-	 */
-	public function EditShowAll() {	
-		global $pp;
-		
-		$c = new CCanonicalUrl();
-		$all = $c->ListAll();
-		
-		$html = "<h1>All Canonical Urls</h1>\n<table>\n<tr><th>" . t('Canonical') . "</th><th>" . t('Real') . "</th><th>" . t('Actions') . "</th></tr>\n";
-		foreach($all as $val) {
-			//$view = "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'view', $val['key']) . "'>" . t('view') . "</a> ";
-			$edit = "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'edit', $val['id']) . "'>" . t('edit') . "</a> ";
-			$html .= "<tr><td>{$val['url']}</td><td>{$val['real_url']}</td><td>{$edit}</td></tr>\n";
-		}
-		$html .= "</table>\n";
-		
-		$pp->pageTitle = t('All urls: ');
-		$pp->AddView(new CView(), 0, 'sidebar2');
-		$pp->AddView(new CView($html));		
-	}
+	 * The form.  
+	 * @var string
+   */	
+	private $f;
+	/**#@-*/
 
-
-	/**
- 	 * Get page in edit mode.
-	 */
-	public function Edit() {	
-		global $pp;
-
-		if(!isset($pp->req->args[0])) {
-			$this->EditShowAll();
-			return;
-		}
-
+  /**
+   * Constructor 
+   */
+  public function __construct() {
+    global $pp;
 		$f = new CForm();
 		$f->id = 'mds-form-canurl-edit';
 		$f->class = 'mds-form-canurl-edit';
@@ -99,6 +72,54 @@ class CCtrl4CanonicalUrl implements IController {
 				'callback' => array($this, 'DoCreate'),
 			),
 		);
+		$this->f = $f;
+  }
+  
+  
+	/**
+ 	 * Implementing interface IController. All controllers must have an index action.
+	 */
+	public function Index() {	
+		$pp = CPrinceOfPersia::GetInstance();
+		$pp->AddView(new CView('<h1>Canonical Url Controller</h1><p>Welcome!</p>'));
+	}
+
+
+	/**
+ 	 * Display all items in table, ready to edit.
+	 */
+	public function EditShowAll() {	
+		global $pp;
+		
+		$c = new CCanonicalUrl();
+		$all = $c->ListAll();
+		
+		$html = "<h1>All Canonical Urls</h1>\n<table>\n<tr><th>" . t('Canonical') . "</th><th>" . t('Real') . "</th><th>" . t('Actions') . "</th></tr>\n";
+		foreach($all as $val) {
+			//$view = "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'view', $val['key']) . "'>" . t('view') . "</a> ";
+			$edit = "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'edit', $val['id']) . "'>" . t('edit') . "</a> ";
+			$html .= "<tr><td>{$val['url']}</td><td>{$val['real_url']}</td><td>{$edit}</td></tr>\n";
+		}
+		$html .= "</table>\n";
+		
+		$pp->pageTitle = t('All urls: ');
+		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView($html));		
+	}
+
+
+	/**
+ 	 * Get page in edit mode.
+	 */
+	public function Edit() {	
+		global $pp;
+
+		if(!isset($pp->req->args[0])) {
+			$this->EditShowAll();
+			return;
+		}
+
+		$f = &$this->f;
 		$f->CheckDoSubmitted();
 		
 		$c = new CCanonicalUrl();
@@ -131,6 +152,24 @@ class CCtrl4CanonicalUrl implements IController {
 		$c->SetRealUrl($form->GetValue('realurl'));
 		$c->Save();
 		$pp->req->RedirectTo(null, 'edit', $c->GetId());
+	}
+
+
+	/**
+ 	 * Create new item.
+	 */
+	public function Create() {	
+		global $pp;
+
+		$f = &$this->f;
+		$f->CheckDoSubmitted();
+		unset($f->actions['save']);
+		unset($f->actions['reset']);
+		unset($f->actions['delete']);
+		
+		$pp->pageTitle = t('Create a new Canonical Url');
+		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<h1>Create a Canonical Url:</h1>" . $f->GetHTML()));
 	}
 
 
