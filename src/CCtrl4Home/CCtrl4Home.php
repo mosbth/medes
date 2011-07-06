@@ -10,7 +10,7 @@ class CCtrl4Home implements IController {
  	 * Implementing interface IController. All controllers must have an index action.
 	 */
 	public function Index() {	
-		$pp = CPrinceOfPersia::GetInstance();
+		global $pp;
 		$pp->AddView(new CView(array('html'=>'<h1>Index Controller</h1><p>Welcome!</p>')));
 	}
 

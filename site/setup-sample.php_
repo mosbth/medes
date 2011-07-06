@@ -38,6 +38,7 @@ $a=array(
 	'messages' => array(
 		'copyright' => '&copy; PHPMedes, free and opensource software.',
 	),
+	'home' => array('title' => 'The Homepage', 'href' => 'home'),
 	'controllers' => array(
 		'index' => array('enabled' => true,'class' => 'CCtrl4Home'),
 		'error' => array('enabled' => true,'class' => 'CCtrl4Error'),

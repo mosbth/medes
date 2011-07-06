@@ -623,8 +623,13 @@ EOD;
 		$alt 		= $this->cfg['config-db']['theme']['logo']['alt'];
 		$width 	= $this->cfg['config-db']['theme']['logo']['width'];
 		$height = $this->cfg['config-db']['theme']['logo']['height'];
-		$url		= $this->req->CreateUrlToControllerAction('home');
-		$title	= t('Home');
+		if(isset($this->cfg['config-db']['home'])) {
+			$url 		= $this->cfg['config-db']['home']['href'];
+			$title	= t($this->cfg['config-db']['home']['title']);		
+		} else {
+			$url 		= $this->req->CreateUrlToControllerAction('home');
+			$title	= t('Home');
+		}
 		return "<a href='{$url}' title='{$title}'><img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/></a>";
   }
 
