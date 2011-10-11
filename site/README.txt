@@ -21,3 +21,8 @@ Point to setup.php?update to save updated configuration array to database.
 
 For example: 
 sqlite> insert into user (account, email, password, algorithm) values ('adm', 'adm@dbwebb.se', 'adm', 'plain');
+
+
+// Make own modifications to theme
+5. Copy style.css from style_sample.css and enable it in theme configuration. Edit it to
+make own changes to theme.
