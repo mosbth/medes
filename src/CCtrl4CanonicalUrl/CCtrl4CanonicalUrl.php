@@ -80,8 +80,9 @@ class CCtrl4CanonicalUrl implements IController {
  	 * Implementing interface IController. All controllers must have an index action.
 	 */
 	public function Index() {	
-		$pp = CPrinceOfPersia::GetInstance();
-		$pp->AddView(new CView('<h1>Canonical Url Controller</h1><p>Welcome!</p>'));
+		//$pp = CPrinceOfPersia::GetInstance();
+		//$pp->AddView(new CView('<h1>Canonical Url Controller</h1><p>Welcome!</p>'));
+		$this->EditShowAll();
 	}
 
 
