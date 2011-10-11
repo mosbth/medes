@@ -36,6 +36,7 @@ $a=array(
 		'version'=>MEDES_VERSION,	
 	),
 	'messages' => array(
+		'title' => false,
 		'footer' => '<p>This is the footer</p>',
 		'copyright' => '<p>&copy; PHPMedes, free and opensource software.</p>',
 	),

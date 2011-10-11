@@ -38,7 +38,7 @@
    <?php echo $pp->GetHTMLForLogo(); ?>
   </div>
 
-  <div id="mds-header-title"></div>
+  <div id="mds-header-title"><?php echo $pp->GetHTMLMessage('title'); ?></div>
 
   <div id="mds-header-menu"><?php echo $pp->GetHTMLForMenu('main'); ?></div>
 
