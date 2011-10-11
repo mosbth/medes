@@ -106,11 +106,14 @@ $a=array(
 				'type'=>'text/css',
 				'media'=>'screen',
 			),
-			array(
-				'file'=>'../site/style.css',
+/* enable to make modifications in site-directory */
+/*
+    array(
+				'file'=>'../../site/style.css',
 				'type'=>'text/css',
 				'media'=>'screen',
 			),
+*/
 		),
 		'regions'=>array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer_column1', 'footer_column2', 'footer_column3', 'footer_column4', 'footer'),
 	),
