@@ -80,8 +80,8 @@
 <div id="mds-bottom-wrap">
  <footer id="mds-bottom" class="container">
 
-  <p><?php echo $pp->GetHTMLMessage('copyright'); ?></p>
-	
+  <?php echo $pp->GetHTMLMessage('footer'); ?>	
+  <?php echo $pp->GetHTMLMessage('copyright'); ?>	
   <?php echo $pp->GetHTMLForDeveloper(); ?>
 
  </footer>

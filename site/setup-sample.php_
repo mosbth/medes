@@ -34,9 +34,11 @@ include(__DIR__ . "/../index.php");
 $a=array(
 	'medes'=>array(
 		'version'=>MEDES_VERSION,	
+		'display_developer'=>true,
 	),
 	'messages' => array(
-		'copyright' => '&copy; PHPMedes, free and opensource software.',
+		'footer' => '<p>This is the footer</p>',
+		'copyright' => '<p>&copy; PHPMedes, free and opensource software.</p>',
 	),
 	//'home' => array('title' => 'The Homepage', 'href' => 'home1'),
 	'controllers' => array(

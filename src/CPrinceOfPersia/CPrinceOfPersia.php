@@ -653,7 +653,7 @@ EOD;
 	public function GetHTMLMessage($aMessage) {
 		if(isset($this->cfg['config-db']['messages'][$aMessage])) {
 			return $this->cfg['config-db']['messages'][$aMessage];
-		} else {
+	} else {
 			throw new Exception(t("Message '{$aMessage}' does not exist in config."));
 		}
   }
@@ -663,6 +663,10 @@ EOD;
 	 * Get html for debug menu, usually used during development 
 	 */
 	public function GetHTMLForDeveloper() {
+	  if(!$this->cfg['config-db']['medes']['display_developer']) {
+	    return;
+	  }
+	  
 		$url = $this->req->GetUrlToCurrentPage();
 		$time = round(microtime(true) - $this->timer['first'], 5)*1000;
 		$numQueries = $this->db->numQueries;
