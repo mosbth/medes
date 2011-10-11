@@ -663,7 +663,7 @@ EOD;
 	 * Get html for debug menu, usually used during development 
 	 */
 	public function GetHTMLForDeveloper() {
-	  if(!$this->cfg['config-db']['medes']['display_developer']) {
+	  if(!$this->cfg['config-db']['theme']['developer_tools']) {
 	    return;
 	  }
 	  

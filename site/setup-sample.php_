@@ -34,7 +34,6 @@ include(__DIR__ . "/../index.php");
 $a=array(
 	'medes'=>array(
 		'version'=>MEDES_VERSION,	
-		'display_developer'=>true,
 	),
 	'messages' => array(
 		'footer' => '<p>This is the footer</p>',
@@ -99,6 +98,7 @@ $a=array(
 			'width'=>330,
 			'height'=>70,
 		),
+		'developer_tools'=>true,
 		'favicon'=>'img/favicon.png',
 		'stylesheets'=>array(
 			array(
