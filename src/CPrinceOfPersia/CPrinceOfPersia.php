@@ -615,10 +615,11 @@ EOD;
 	 */
 	public static function ModifyMenuDisplayCurrent($menu) {
 		global $pp;
+    $alt1 = $pp->req->controller;
+    $alt2 = "{$alt1}/{$pp->req->action}";
+    $alt3 = isset($pp->req->forwardedQuery) ? $pp->req->forwardedQuery : null;
 		foreach($menu as $key=>$val) {
-			$alt1 = $pp->req->controller;
-			$alt2 = "{$alt1}/{$pp->req->action}";
-			if(($val['href'] == $alt1) || ($val['href'] == $alt2)) {
+			if(($val['href'] == $alt1) || ($val['href'] == $alt2) || ($val['href'] == $alt3)) {
 				$menu[$key]['active'] = true;
 			}
 		}

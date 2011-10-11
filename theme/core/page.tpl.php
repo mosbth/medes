@@ -33,15 +33,9 @@
 <!-- header -->
 <div id="mds-header-wrap">
  <div id="mds-header" class="container">
-
-  <div id="mds-header-logo">
-   <?php echo $pp->GetHTMLForLogo(); ?>
-  </div>
-
+  <div id="mds-header-logo"><?php echo $pp->GetHTMLForLogo(); ?></div>
   <div id="mds-header-title"><?php echo $pp->GetHTMLMessage('title'); ?></div>
-
   <div id="mds-header-menu"><?php echo $pp->GetHTMLForMenu('main'); ?></div>
-
  </div>
 </div>
 

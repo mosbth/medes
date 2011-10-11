@@ -17,6 +17,7 @@ class CRequest {
    */
 	public $current;
 	public $forwardedFrom;
+	public $forwardedQuery;
 	public $parts;
 	public $script;
 	public $dir;
@@ -72,7 +73,7 @@ class CRequest {
   	$url 		= $this->GetUrlToCurrentPage();
   	$parts 	= parse_url($url);
   	$script	= $_SERVER['SCRIPT_NAME'];
- 		$dir 		= rtrim(dirname($script), '\/');
+ 		$dir 		= rtrim(dirname($script), '/');
  		$query	= substr($parts['path'], strlen($dir));
  		$splits = explode('/', trim($query, '/'));
 
@@ -128,7 +129,7 @@ class CRequest {
 
 
 	/**
-	 * Forward a request to from current (canonical) url another internal (not so canonical) url.
+	 * Forward a request from current (canonical) url to another internal (not so canonical) url.
 	 *
 	 * Changes some parameters in the request and adds forwarded.
 	 *
@@ -140,8 +141,15 @@ class CRequest {
 				$to = dirname($to);
 			}
 		}
+
+  	$parts 	= parse_url($this->current);
+  	$script	= $_SERVER['SCRIPT_NAME'];
+ 		$dir 		= rtrim(dirname($script), '/');
+ 		$query	= trim(substr($parts['path'], strlen($dir)), '/');
+
   	$to = trim($to, '/');
   	$this->forwardedFrom 	= $this->current;
+  	$this->forwardedQuery	= $query;
   	$this->current				= $this->baseUrl . $to;
   	$this->parts					= parse_url($this->current);
   	//$this->script		= $_SERVER['SCRIPT_NAME'];
