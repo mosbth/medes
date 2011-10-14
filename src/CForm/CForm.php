@@ -253,9 +253,9 @@ EOD;
 			} 
 			else if(isset($val['type']) && $val['type'] == 'select') {
 				$options = null;
-				foreach($val['options'] as $opt) {
-					$selected = isset($val['value']) && $opt['value'] == $val['value'] ? " selected=selected" : null ;
-					$options .= "<option value='{$opt['value']}'{$selected}>{$opt['option']}</option>";
+				foreach($val['options'] as $optkey => $optval) {
+					$selected = isset($val['value']) && $optkey == $val['value'] ? " selected=selected" : null ;
+					$options .= "<option value='{$optkey}'{$selected}>{$optval}</option>";
 				}
 				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
 			} 

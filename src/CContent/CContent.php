@@ -55,6 +55,24 @@ abstract class CContent {
 	}
 
 
+	/**
+	 * Get content and preprocess according to its filter, if any. useful when adding content
+	 * directly to a view.
+	 * @param string $aKey The key of the content
+	 * @return array with the key to the view and with the preprocessed content.
+	 */
+	public function GetFilteredContent() {
+    $content = $this->GetContent();
+    $filter  = $this->GetFilter();
+    $type = 'html';
+    switch($filter) {
+      case 'php':   $type = 'php'; break;
+      case 'text':  $content = nl2br(strip_tags($content), true); break;
+    }
+		return array($type=>$content);
+	}
+
+
 	/**#@+
 	 * Utilities.
 	 */
@@ -76,6 +94,8 @@ abstract class CContent {
 	public function SetCanonicalUrl($val) { return $this->a->SetCanonicalUrl($val); }
 	public function GetContent() { return $this->a->GetContent(); }
 	public function SetContent($val) { return $this->a->SetContent($val); }
+	public function GetFilter() { return $this->a->GetFilter(); }
+	public function SetFilter($val) { return $this->a->SetFilter($val); }
 	/**#@-*/
 
 }

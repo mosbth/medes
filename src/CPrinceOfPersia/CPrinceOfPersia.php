@@ -324,7 +324,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			$class					= $this->cfg['config-db']['controllers'][$controller]['class'];
 			$classExists 		= class_exists($class);
 		}
-		
+
 		// Check if controller, action 
 		if($moduleExists && $moduleEnabled && $classExists) {
 			$rc = new ReflectionClass($class);
@@ -344,6 +344,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		else if(($url = $canUrl->CheckUrl($this->req->GetQueryPartOfUrl()))) {
 			//$this->req->ForwardTo($url);
 			//$this->FrontControllerRoute();
+			echo "forward to $url";
 			$this->ForwardTo($url);
 		} 
 		// Page not found 404

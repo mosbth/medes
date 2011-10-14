@@ -81,27 +81,20 @@ class CCtrl4ContentPage implements IController {
 		$html = null;
 		
 		// Key exists, show one page
-		if(isset($pp->req->args[0])) {
-			$c = new CContentPage();
-			if(!$c->LoadByKey($pp->req->args[0])) {
-				$pp->AddFeedbackError(t('Page does not exists.'));
-				$pp->FrontControllerRoute('error', 'code404');
-				//header("Location: " . $pp->req->CreateUrlToControllerAction('error', 'code404'));
-				//exit;	
-			}
-			$html = $c->GetContent();
-
-/*			if(isset($_GET['draft'])) {
-				$content = $this->GetDraftContent();		
-			}
-			$menu = $this->GetStatusBar();
-*/			
-		} else {
-			$html = t("<h1>Show all pages not implemented</h1>\n");
-		
+		if(!isset($pp->req->args[0])) {
+		  $this->EditShowAll();
+		  return;
 		}
 
-		$pp->AddView(new CView(array('html'=>$html)));
+    // Display one page		
+    $c = new CContentPage();
+    if(!$c->LoadByKey($pp->req->args[0])) {
+      $pp->AddFeedbackError(t('Page does not exists.'));
+      $pp->FrontControllerRoute('error', 'code404');
+      //header("Location: " . $pp->req->CreateUrlToControllerAction('error', 'code404'));
+      //exit;	
+    }
+		$pp->AddView(new CView($c->GetFilteredContent()));
 	}
 
 
@@ -176,6 +169,17 @@ class CCtrl4ContentPage implements IController {
 				'class' => 'wide',
 				'name' => 'content',
 			),
+			'filter' => array(
+				'label' => 'Allowed content is:',
+				'type' => 'select',
+				'class' => 'wide',
+				'name' => 'filter',
+				'options' => array(
+				  'text' => 'Plain Text',
+				  'html' => 'HTML',
+				  'php' => 'PHP',
+				),
+			),
 		);
 		$f->actions = array(
 /*			'publish' => array(
@@ -208,9 +212,10 @@ class CCtrl4ContentPage implements IController {
 		
 		//$content = $c->GetDraftContent();
 		$f->SetValue('id', $c->GetId());
-		$f->SetValue('content', sanitizeHtml($c->GetContent()));
 		$f->SetValue('key', sanitizeHtml($c->GetKey()));
 		$f->SetValue('title', sanitizeHtml($c->GetTitle()));
+		$f->SetValue('content', sanitizeHtml($c->GetContent()));
+		$f->SetValue('filter', sanitizeHtml($c->GetFilter()));
 		//$f->SetValue('can_url', sanitizeHtml($c->GetCanonicalUrl()));
 		//$disabled = $pp->uc->IsAdministrator() ? "" : "disabled";	
 		//$statusBar = $this->GetStatusBar();
@@ -247,10 +252,13 @@ class CCtrl4ContentPage implements IController {
 		$c->SetKey($form->GetValue('key'));
 		//$c->SetCanonicalUrl($form->GetValue('can_url'));
 		$c->SetContent($form->GetValue('content'));
+		$c->SetFilter($form->GetValue('filter'));
 		$c->Save();
 		$pp->req->RedirectTo(null, 'edit', $c->GetKey());
 	}
 
+
+  // BELOW IS OBSOLETE, WILL BE REWRITTEN
 
 	// ------------------------------------------------------------------------------------
 	//

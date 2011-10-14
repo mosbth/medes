@@ -187,7 +187,7 @@ class CContentPage extends CContent {
 
 	// ====================================================================================
 	//
-	//	Code below relates to views
+	//	Code below relates to views. OBSOLETE?
 	//
 
 /*

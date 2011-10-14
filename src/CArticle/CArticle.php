@@ -46,6 +46,7 @@ class CArticle implements IUsesSQL, IModule {
 		"title",					// text, the title of the article
 		"url",						// text, the canonical url to this article
 		"content",				// text, the actual content of the article
+		"filter",				  // text, function to use to filter the content, is it text, html or php or other?
 
 		// drafts
 		"draftTitle",			// text, a draft title
@@ -136,7 +137,7 @@ class CArticle implements IUsesSQL, IModule {
 	 */
   public static function SQL($id=null) {
   	$query = array(
-  		'create table article' => 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, url text, content text, draftTitle text, draftContent text, owner text, published datetime, created datetime, modified datetime, deleted datetime)',
+  		'create table article' => 'create table if not exists article(id integer primary key autoincrement, key text unique, type text, title text, url text, content text, filter text, draftTitle text, draftContent text, owner text, published datetime, created datetime, modified datetime, deleted datetime)',
   		'insert new article' => 'insert into article(%s,owner,published,created,modified,deleted) values(%s,?,null,datetime("now"),null,null)',
   		'update article' => 'update article set modified=datetime("now") %s where id=?',
   		'update article as published' => 'update article set published=datetime("now") where id=?',
@@ -377,6 +378,9 @@ class CArticle implements IUsesSQL, IModule {
 
 	public function SetContent($value) { $this->current['content'] = $value; }
 	public function GetContent() { return $this->current['content']; }
+
+	public function SetFilter($value) { $this->current['filter'] = $value; }
+	public function GetFilter() { return $this->current['filter']; }
 
 	public function SetCanonicalUrl($value) { $this->current['url'] = $value; }
 	public function GetCanonicalUrl() { return $this->current['url']; }

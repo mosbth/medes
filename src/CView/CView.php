@@ -71,8 +71,8 @@ class CView {
 	/**
 	 * Add html/php that should be parsed by eval.
 	 */
-	public function AddDynamic($code) {
-		$this->code .= $code;
+	public function AddDynamic($php) {
+		$this->php .= $php;
 	}
 	
 	
@@ -96,8 +96,8 @@ class CView {
 			echo $this->html;
 		}
 
-		if(isset($this->code)) {
-			eval('?>' . $this->code);
+		if(isset($this->php)) {
+			eval('?>' . $this->php);
 		}
 
 		if(isset($this->path)) {
