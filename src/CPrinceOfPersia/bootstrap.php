@@ -35,8 +35,8 @@ function t($key, $arg=null) {
  * @param string text The text to be sanitized.
  * @returns string The sanitized html.
  */
-function sanitizeHtml($text) {	
-	return htmlentities($text, ENT_NOQUOTES, 'UTF-8', false);
+function sanitizeHTML($text) {	
+	return htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8', false);
 }
 
 /**

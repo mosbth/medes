@@ -67,7 +67,7 @@ abstract class CContent {
     $type = 'html';
     switch($filter) {
       case 'php':   $type = 'php'; break;
-      case 'text':  $content = nl2br(strip_tags($content), true); break;
+      case 'text':  $content = nl2br(sanitizeHTML($content), true); break;
     }
 		return array($type=>$content);
 	}
