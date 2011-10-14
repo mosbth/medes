@@ -344,7 +344,6 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		else if(($url = $canUrl->CheckUrl($this->req->GetQueryPartOfUrl()))) {
 			//$this->req->ForwardTo($url);
 			//$this->FrontControllerRoute();
-			echo "forward to $url";
 			$this->ForwardTo($url);
 		} 
 		// Page not found 404
