@@ -94,6 +94,7 @@ class CCtrl4ContentPage implements IController {
       //header("Location: " . $pp->req->CreateUrlToControllerAction('error', 'code404'));
       //exit;	
     }
+    $pp->SetPageTitle($c->GetTitle());
 		$pp->AddView(new CView($c->GetFilteredContent()));
 	}
 

@@ -35,8 +35,12 @@ $a=array(
 	'medes'=>array(
 		'version'=>MEDES_VERSION,	
 	),
+	'site'=>array(
+		'default_title'=>'No title set',		
+		'prepend_title'=>null,		
+	),
 	'messages' => array(
-		'title' => false,
+		'sitetitle' => false,
 		'footer' => '<p>This is the footer</p>',
 		'copyright' => '<p>&copy; PHPMedes, free and opensource software.</p>',
 	),

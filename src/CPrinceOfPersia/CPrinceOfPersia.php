@@ -479,6 +479,24 @@ EOD;
 
 
 	/**
+	 * Set the page title 
+	 */
+	public function SetPageTitle($title) {
+		$this->pageTitle = $title;
+  }
+
+
+	/**
+	 * Get the page title 
+	 */
+	public function GetPageTitle() {
+    $title  = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['site']['default_title'];
+    $title .= (isset($this->cfg['site']['prepend_title'])) ? $this->cfg['site']['prepend_title'] : null;
+    return sanitizeHTML($title);
+  }
+
+
+	/**
 	 * Get html for header 
 	 */
 	public function GetHTMLForMeta() {
@@ -661,7 +679,7 @@ EOD;
 
 
 	/**
-	 * Get html for debug menu, usually used during development 
+	 * Get html for debug menu, usually used during development, disable using config.
 	 */
 	public function GetHTMLForDeveloper() {
 	  if(!$this->cfg['config-db']['theme']['developer_tools']) {
