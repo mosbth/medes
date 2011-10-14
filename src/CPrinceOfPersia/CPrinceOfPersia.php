@@ -193,7 +193,6 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->pageStyleLinks=array();
 		$this->pageScript=null;
 		$this->pageScriptLinks=array();
-		$this->googleAnalytics=null;
 		$this->pageUseListForMenus=false;
 		
 		// page content is default null
@@ -561,25 +560,22 @@ EOD;
 	 * Get html for script
 	 */
 	public function GetHTMLForScript() {
-		return;
-		$scriptlinks='';
-		foreach($this->pageScriptLinks as $val) {
-			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/javascript'";
-			$src = "src='" . $this->PrependWithSiteUrl($val['src']) . "'";
-			$scriptlinks .= "<script {$type} {$src}></script>\n";
+    if(!isset($this->cfg['config-db']['js'])) {
+		  return;
 		}
 		
-		$script = isset($this->config['tracker']) ? "\n{$this->config['tracker']}\n" : "";
-		$script .= isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : "";
-
-		// Google analytics tracker code
-		
-		$html = <<<EOD
-{$scriptlinks}
-{$script}
-
-EOD;
-
+		$js = $this->cfg['config-db']['js'];
+		$html = null;
+    if(isset($js['external'])) {
+      foreach($js['external'] as $val) {
+        $type = (isset($val['type'])) ? $val['type'] : "type='text/javascript'";
+        $src  = (isset($val['src'])) ? $this->PrependWithSiteUrl($val['src']) : null;
+        $html .= "<script {$type} src='{$src}'></script>\n";
+      }
+    }
+    
+		$html .= isset($js['tracker']) ? "{$js['tracker']}\n" : "";
+		$html .= isset($this->pageScript) ? "<script type='text/javascript'>\n{$this->pageStyle}\n</script>\n" : null;
 		return $html;		
   }
 

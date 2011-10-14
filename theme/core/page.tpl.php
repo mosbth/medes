@@ -4,7 +4,7 @@
 	<?php echo $pp->GetHTMLForMeta(); ?>
 
 	<!-- Use PHP to set the page title dynamic -->
- 	<?php echo "<title>$pp->pageTitle</title>"; ?>
+ 	<?php echo "<title>", $pp->GetPageTitle(), "</title>"; ?>
  	
 	<!-- Stylesheets and style -->
 	<?php echo $pp->GetHTMLForStyle(); ?>
@@ -16,9 +16,6 @@
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-
-	<!-- Support Google Analytics -->
-	<?php if(!empty($pp->googleAnalytics)) echo $pp->googleAnalytics; ?>
 
 </head>
 <body>

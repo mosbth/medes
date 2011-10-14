@@ -106,18 +106,10 @@ $a=array(
 		'developer_tools'=>true,
 		'favicon'=>'img/favicon.png',
 		'stylesheets'=>array(
-			array(
-				'file'=>'screen.css',
-				'type'=>'text/css',
-				'media'=>'screen',
-			),
-/* enable to make modifications in site-directory */
+      array('file'=>'screen.css','type'=>'text/css','media'=>'screen'),
+      /* enable to make modifications, and add stylesheets, in site-directory */
 /*
-    array(
-				'file'=>'../../site/style.css',
-				'type'=>'text/css',
-				'media'=>'screen',
-			),
+      'site-mods'=>array('file'=>'../../site/style.css','media'=>'screen'),
 */
 		),
 		'regions'=>array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer_column1', 'footer_column2', 'footer_column3', 'footer_column4', 'footer'),
