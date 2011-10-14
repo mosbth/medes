@@ -437,6 +437,14 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			if(is_file($tplFunctions)) {
 				include $tplFunctions;
 			}
+			if(isset($pp->cfg['config-db']['theme']['functions'])) {
+			  foreach($pp->cfg['config-db']['theme']['functions'] as $val) {
+			    $file = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/$val";
+          if(is_file($file)) {
+            include $file;
+          }
+			  }
+			}			
 			include $tplFile;
 		} else {
 			throw new Exception(t('#class error: Template file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$tplFile)));			

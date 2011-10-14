@@ -108,12 +108,21 @@ $a=array(
 		'stylesheets'=>array(
       array('file'=>'screen.css','type'=>'text/css','media'=>'screen'),
       /* enable to make modifications, and add stylesheets, in site-directory */
-/*
-      'site-mods'=>array('file'=>'../../site/style.css','media'=>'screen'),
-*/
+/*    'site-mods'=>array('file'=>'../../site/style.css','media'=>'screen'),*/
 		),
+    /* enable to add own functions to theme */
+/*    'functions'=>array('../../site/theme/functions.php'),*/
 		'regions'=>array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer_column1', 'footer_column2', 'footer_column3', 'footer_column4', 'footer'),
 	),
+
+	// Include these javascript files
+	'js'=> array(
+		'external'=>array(
+		  'jquery'=>array('src'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'),
+		  'colorbox'=>array('src'=>'site/js/colorbox/colorbox/jquery.colorbox-min.js'),
+		),
+		'tracker'=>null,
+  ),
 );
 $b = serialize($a);
 
