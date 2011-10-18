@@ -7,6 +7,10 @@
  *
  * @package MedesCore
  */
+
+/**
+ * Dynamically change the content width depending on sidebar-content exists.
+ */
 function core_CalculateContentWidth(&$hasSidebar1, &$hasSidebar2, &$classContent, &$classSidebar1, &$classSidebar2) {
 	global $pp;
 	

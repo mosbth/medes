@@ -431,12 +431,15 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		
 		// Include template file, this hands over control to the theme to make callbacks to $pp.
 		$pp = &$this;
+		// Start by checking there is a template file.
 		$tplFile = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/page.tpl.php";
 		if(is_file($tplFile)) {
+		  // Is there a functions.php that comes with the theme?
 			$tplFunctions = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/functions.php";
 			if(is_file($tplFunctions)) {
 				include $tplFunctions;
 			}
+			// Dose the user have their own functions.php-files?
 			if(isset($pp->cfg['config-db']['theme']['functions'])) {
 			  foreach($pp->cfg['config-db']['theme']['functions'] as $val) {
 			    $file = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/$val";
@@ -444,12 +447,17 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
             include $file;
           }
 			  }
-			}			
+			}
+			// Call the preprocess function for this request, if there is any.
+			$func = 'hook_preprocess_' . str_replace('/', '_', $this->req->GetQueryPartOfUrl());
+			if(function_exists($func)) {
+			  call_user_func($func);
+			}
+			// Hand over to the template file thar renders the page.
 			include $tplFile;
 		} else {
 			throw new Exception(t('#class error: Template file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$tplFile)));			
 		}
-		//$this->te->Render();
 
 		// last timer
 		$this->timer['last'] = microtime(true); 
