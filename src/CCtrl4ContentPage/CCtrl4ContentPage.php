@@ -215,7 +215,6 @@ class CCtrl4ContentPage implements IController {
 		$f->SetValue('id', $c->GetId());
 		$f->SetValue('key', sanitizeHtml($c->GetKey()));
 		$f->SetValue('title', sanitizeHtml($c->GetTitle()));
-		$f->SetValue('preprocess', sanitizeHtml($c->GetPreprocess()));
 		$f->SetValue('content', sanitizeHtml($c->GetContent()));
 		$f->SetValue('filter', sanitizeHtml($c->GetFilter()));
 		//$f->SetValue('can_url', sanitizeHtml($c->GetCanonicalUrl()));
@@ -258,6 +257,18 @@ class CCtrl4ContentPage implements IController {
 		$c->Save();
 		$pp->req->RedirectTo(null, 'edit', $c->GetKey());
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // BELOW IS OBSOLETE, WILL BE REWRITTEN
