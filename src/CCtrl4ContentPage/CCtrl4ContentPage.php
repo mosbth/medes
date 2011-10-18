@@ -11,7 +11,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function Index() {	
 		global $pp;
-		$pp->AddView(new CView(array('html'=>'<h1>ContentPage objects</h1><p>Welcome!</p>')));
+		$this->EditShowAll();
 	}
 
 
@@ -164,6 +164,12 @@ class CCtrl4ContentPage implements IController {
 				'name' => 'can_url',
 			),
 */
+			'preprocess' => array(
+				'label' => 'Preprocess:',
+				'type' => 'textarea',
+				'class' => 'wide',
+				'name' => 'preprocess',
+			),
 			'content' => array(
 				'label' => 'Content:',
 				'type' => 'textarea',
@@ -215,6 +221,7 @@ class CCtrl4ContentPage implements IController {
 		$f->SetValue('id', $c->GetId());
 		$f->SetValue('key', sanitizeHtml($c->GetKey()));
 		$f->SetValue('title', sanitizeHtml($c->GetTitle()));
+		$f->SetValue('preprocess', sanitizeHtml($c->GetPreprocess()));
 		$f->SetValue('content', sanitizeHtml($c->GetContent()));
 		$f->SetValue('filter', sanitizeHtml($c->GetFilter()));
 		//$f->SetValue('can_url', sanitizeHtml($c->GetCanonicalUrl()));
@@ -252,6 +259,7 @@ class CCtrl4ContentPage implements IController {
 		$c->SetTitle($form->GetValue('title'));
 		$c->SetKey($form->GetValue('key'));
 		//$c->SetCanonicalUrl($form->GetValue('can_url'));
+		$c->SetPreprocess($form->GetValue('preprocess'));
 		$c->SetContent($form->GetValue('content'));
 		$c->SetFilter($form->GetValue('filter'));
 		$c->Save();

@@ -66,6 +66,7 @@ class CCtrl4User implements IController {
 		);
 		$f->CheckDoSubmitted();
 		
+		$pp->setPageTitle(t('Login user'));
 		$html = t("<h1>Login</h1>\n<p>Login using your userid and password.</p>");
 		$html .= $f->GetHTML();
 

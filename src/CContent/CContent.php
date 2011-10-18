@@ -96,6 +96,8 @@ abstract class CContent {
 	public function SetContent($val) { return $this->a->SetContent($val); }
 	public function GetFilter() { return $this->a->GetFilter(); }
 	public function SetFilter($val) { return $this->a->SetFilter($val); }
+	public function GetPreprocess() { return $this->a->GetPreprocess(); }
+	public function SetPreprocess($val) { return $this->a->SetPreprocess($val); }
 	/**#@-*/
 
 }
