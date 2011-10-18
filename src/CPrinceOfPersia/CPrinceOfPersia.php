@@ -535,9 +535,11 @@ EOD;
 		$baseurl = $this->req->baseUrl . trim($this->cfg['config-db']['theme']['url'], '/');
 		$stylesheets = $this->cfg['config-db']['theme']['stylesheets'];
 		foreach($stylesheets as $style) {
-			$media = isset($style['media']) ? "media='{$style['media']}' " : null;
-			$type = isset($style['type']) ? "type='{$style['type']}' " : null;	
-			$html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
+		  if(!isset($style['enabled']) || $style['enabled']) {
+			  $media = isset($style['media']) ? "media='{$style['media']}' " : null;
+			  $type = isset($style['type']) ? "type='{$style['type']}' " : null;	
+			  $html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
+			}
 		}
 		$faviconHref= $this->PrependWithSiteUrl($this->cfg['config-db']['theme']['favicon']);
 		$html .= "<link rel='shortcut icon' href='{$faviconHref}'/>\n";
@@ -584,9 +586,11 @@ EOD;
 		$html = null;
     if(isset($js['external'])) {
       foreach($js['external'] as $val) {
-        $type = (isset($val['type'])) ? $val['type'] : "type='text/javascript'";
-        $src  = (isset($val['src'])) ? $this->PrependWithSiteUrl($val['src']) : null;
-        $html .= "<script {$type} src='{$src}'></script>\n";
+  		  if(!isset($val['enabled']) || $val['enabled']) {
+          $type = (isset($val['type'])) ? $val['type'] : "type='text/javascript'";
+          $src  = (isset($val['src'])) ? $this->PrependWithSiteUrl($val['src']) : null;
+          $html .= "<script {$type} src='{$src}'></script>\n";
+        }
       }
     }
     
