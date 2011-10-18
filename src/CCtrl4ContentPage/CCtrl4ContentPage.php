@@ -164,12 +164,6 @@ class CCtrl4ContentPage implements IController {
 				'name' => 'can_url',
 			),
 */
-			'preprocess' => array(
-				'label' => 'Preprocess:',
-				'type' => 'textarea',
-				'class' => 'wide',
-				'name' => 'preprocess',
-			),
 			'content' => array(
 				'label' => 'Content:',
 				'type' => 'textarea',
@@ -259,7 +253,6 @@ class CCtrl4ContentPage implements IController {
 		$c->SetTitle($form->GetValue('title'));
 		$c->SetKey($form->GetValue('key'));
 		//$c->SetCanonicalUrl($form->GetValue('can_url'));
-		$c->SetPreprocess($form->GetValue('preprocess'));
 		$c->SetContent($form->GetValue('content'));
 		$c->SetFilter($form->GetValue('filter'));
 		$c->Save();
