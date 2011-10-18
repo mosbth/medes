@@ -161,7 +161,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 
 		// Init global controllers and variables
 		$this->uc = CUserController::GetInstance();
-		$this->if = CInterceptionFilter::GetInstance();
+		$this->if = new CInterceptionFilter();
 
 		// Init the requst object, fill with values from the current request
 		$this->req = new CRequest();

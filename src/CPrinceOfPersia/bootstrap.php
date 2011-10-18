@@ -9,12 +9,13 @@
  * Enable auto-load of class declarations.
  */
 function __autoload($aClassName) {
-	$file = MEDES_INSTALL_PATH . "/src/{$aClassName}/{$aClassName}.php";
-	if(is_file($file)) {
-		require_once($file);
+	$file1 = MEDES_INSTALL_PATH . "/src/{$aClassName}/{$aClassName}.php";
+	$file2 = MEDES_INSTALL_PATH . "/site/src/{$aClassName}/{$aClassName}.php";
+	if(is_file($file1)) {
+		require_once($file1);
+	} elseif(is_file($file2)) {
+		require_once($file2);
 	}
-
-	// TODO: Also look for files in MEDES_SITE_PATH/src to enable for each site to add autoload classes
 }
 
 /**

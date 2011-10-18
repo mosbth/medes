@@ -23,12 +23,6 @@ class CContentPage extends CContent {
 	 * @var string
    */	
 	const typeOfContent = "CContentPage";
-
-	/**
-	 * Aids in protecting access.
-	 * @var CInterceptionFilter
-   */	
-	private $if; 
 	/**#@-*/
 
 	
@@ -39,7 +33,6 @@ class CContentPage extends CContent {
 	public function __construct($aKey="") {
 		parent::__construct();
 		$this->key = $aKey;
-		$this->if = CInterceptionFilter::GetInstance();
 	}
 	
 	

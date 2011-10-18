@@ -1,54 +1,43 @@
 <?php
-// ===========================================================================================
-//
-// File: CInterceptionFilter.php
-//
-// Description: Class CInterceptionFilter
-// Used to check access, authority.
-//
-//
-// Author: Mikael Roos, mos@bth.se
-//
+/**
+ * Check access and authority and take measurements.
+ * 
+ * @package MedesCore
+ */
+class CInterceptionFilter {
 
+	/**#@+
+	 * @access private
+   */
 
-class CInterceptionFilter implements ISingleton {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Internal variables
-	//
-	protected static $instance = null;
-	protected $iUc;
-//	protected $iPc;
+	/**
+	 * 
+	 * @var string
+   */	
+	//protected $iUc;
+  //protected $iPc;
+	/**#@-*/
 
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Constructor
-	//
-	protected function __construct() { 
-		/* $this->iUc = CUserController::GetInstance();
-		$this->iPc = CPageController::GetInstanceAndLoadLanguage(__FILE__); */
+	/**
+	 * Constructor
+	 */
+	public function __construct() { ; }
+	
+	
+	/**
+   * Check if user has signed in or redirect user to sign in page
+	 */
+	static public function UserIsSignedInOrRedirectToSignIn() {
+	  global $pp;
+    if(!$pp->uc->IsAuthenticated()) {
+      echo "need to login";      
+    }
 	}
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Destructor
-	//
-	public function __destruct() { ; }
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Singleton, get the instance or create a new one.
-	//
-	public static function GetInstance() {
-		if(self::$instance == NULL) self::$instance = new CInterceptionFilter(); 
-		return self::$instance;
-	}
-	
-
 /*
 	// ------------------------------------------------------------------------------------
 	//
@@ -73,20 +62,6 @@ class CInterceptionFilter implements ISingleton {
 			
 			if(!isset($gPage)) {
 					die($pc->lang['NO_DIRECT_ACCESS']);
-			}
-	}
-	
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Check if user has signed in or redirect user to sign in page
-	//
-	public function UserIsSignedInOrRedirectToSignIn() {
-			
-			if(!$this->iUc->IsAuthenticated()) { 
-					$this->iPc->SetSessionMessage('redirectOnSignin', $this->iPc->CurrentURL());
-					$this->iPc->SetSessionMessage('infoMessage', $pc->lang['PAGE_NEEDS_SIGIN']);
-					$this->iPc->RedirectToModuleAndPage('', 'login', '');
 			}
 	}
 	

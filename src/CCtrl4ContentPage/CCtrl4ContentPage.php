@@ -6,6 +6,7 @@
  */
 class CCtrl4ContentPage implements IController {
 
+
 	/**
  	 * Implementing interface IController. All controllers must have an index action.
 	 */
@@ -20,6 +21,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function Create() {	
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
 		
 		$f = new CForm();
 		$f->id = 'mds-form-cpage-create';
@@ -57,6 +59,8 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function DoCreateByKey($form) {
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
+
 		$key = isset($_POST['key']) ? $_POST['key'] : null;  
 		if(!$key) throw new Exception(t('Missing key.'));
 
@@ -104,6 +108,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function EditShowAll() {	
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
 		
 		$c = new CContentPage();
 		$all = $c->ListAll();
@@ -127,6 +132,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function Edit() {	
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
 
 		if(!isset($pp->req->args[0])) {
 			$this->EditShowAll();
@@ -235,6 +241,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function DoPublish($form) {
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
 	}
 	
 
@@ -243,6 +250,7 @@ class CCtrl4ContentPage implements IController {
 	 */
 	public function DoSave($form) {
 		global $pp;
+    $pp->if->UserIsSignedInOrRedirectToSignIn();
 		
 		$c = new CContentPage();		
 		if(!$c->LoadById($form->GetValue('id'))) {

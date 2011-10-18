@@ -118,8 +118,8 @@ $a=array(
 	// Include these javascript files
 	'js'=> array(
 		'external'=>array(
-		  'jquery'=>array('src'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'),
-		  'colorbox'=>array('src'=>'site/js/colorbox/colorbox/jquery.colorbox-min.js'),
+/*    'jquery'=>array('src'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'),
+		  'colorbox'=>array('src'=>'site/js/colorbox/colorbox/jquery.colorbox-min.js'), */
 		),
 		'tracker'=>null,
   ),
