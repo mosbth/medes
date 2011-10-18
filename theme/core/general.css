@@ -80,7 +80,7 @@ body{background:#FFF;}
 */
 a{color:inherit;}
 a:link{}
-a:visited{}
+a:visited{color:inherit;}
 a:hover{text-decoration:none;color:#5C0A0A;}
 a:active{}
 
