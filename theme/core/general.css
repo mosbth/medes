@@ -80,8 +80,8 @@ body{background:#FFF;}
 */
 a{color:inherit;}
 a:link{}
-a:visited{color:#5C0A0A;}
-a:hover{text-decoration:none;color:#5C0A0A;}
+a:visited{}
+a:hover,a:focus{text-decoration:none;color:#5C0A0A;}
 a:active{}
 
 /* a element without href */
