@@ -181,15 +181,15 @@ class CForm {
 		}
 
 		foreach($this->actions as $val) {
-			if(isset($val['name']) && isset($_POST[$val['name']]) && isset($val['callback'])) {
-				if($this->secretMatch) {
-					call_user_func($val['callback'], $this);
-					return true;
-				}
-				else {
+			if(isset($val['name']) && isset($_POST[$val['name']])) {
+				if(!$this->secretMatch) {
 					$this->AddFeedback(array('class'=>'error', 'message'=>'Secret message does not match.'));
 					return false;				
 				}
+        if(isset($val['callback'])) {
+					call_user_func($val['callback'], $this);
+				}
+				return true;
 			}
 		}
 		return false;
