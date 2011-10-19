@@ -394,7 +394,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 */
 	public static function ViewCompare($a, $b) {
 		if($a['prio'] == $b['prio']) {
-			return 0;
+			return 1;
 		}
 		return $a['prio'] > $b['prio'] ? 1 : -1;
 	}
@@ -403,7 +403,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 * Render all views for a specific region
 	 */
 	public function RenderViewsForRegion($region) {
-		uasort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
+		usort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
 		foreach($this->views[$region] as $view) {
 			$view['view']->Render();
 		}
