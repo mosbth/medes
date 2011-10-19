@@ -403,7 +403,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 * Render all views for a specific region
 	 */
 	public function RenderViewsForRegion($region) {
-		usort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
+		uasort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
 		foreach($this->views[$region] as $view) {
 			$view['view']->Render();
 		}

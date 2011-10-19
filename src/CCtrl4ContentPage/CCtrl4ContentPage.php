@@ -179,7 +179,7 @@ class CCtrl4ContentPage implements IController {
 			'filter' => array(
 				'label' => 'Allowed content is:',
 				'type' => 'select',
-				'class' => 'wide',
+				//'class' => 'wide',
 				'name' => 'filter',
 				'options' => array(
 				  'text' => 'Plain Text',
