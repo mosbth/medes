@@ -187,7 +187,7 @@ class CForm {
 					return false;				
 				}
         if(isset($val['callback'])) {
-					call_user_func($val['callback'], $this);
+					call_user_func($val['callback'], $this, true);
 				}
 				return true;
 			}
@@ -256,6 +256,14 @@ EOD;
 				foreach($val['options'] as $optkey => $optval) {
 					$selected = isset($val['value']) && $optkey == $val['value'] ? " selected=selected" : null ;
 					$options .= "<option value='{$optkey}'{$selected}>{$optval}</option>";
+				}
+				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
+			} 
+			else if(isset($val['type']) && $val['type'] == 'checkbox') {
+				$options = null;
+				foreach($val['options'] as $optkey => $optval) {
+					$checked = isset($val['value']) && $optkey == $val['value'] ? " checked" : null ;
+					$options .= "<input type='checkbox' value='{$optkey}'{$checked}/>{$optval}<br/>";
 				}
 				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
 			} 
