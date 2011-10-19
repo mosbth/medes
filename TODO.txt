@@ -1,16 +1,46 @@
-# v1.0 First major stable release (2011-06-23)
-Support for all major browsers
+#
+# TODO and release planning
+#
 
-# v0.2 First stable release (2010-12-23)
-Introduce object for Prince of Persia, $pp
-Flexible navbar using sitemap, robots.txt
+
+#
+# v1.0 First major stable release
+# To be or the ultimale goal.
+#
+Support for all major browsers
+Common CMS functionality
+
+
+#
+# v0.8 
+# Majority of features implemented. Stabile.
+#
 Installation procedure
+Flexible upgrading 
+
+
+#
+# v0.4 
+# Planned as first offical release
+#
+Flexible navbar using sitemap, robots.txt
 How to write a addon
 addon blog
 addon pageeditor
 addon stylesheet chooser
 
-# current
+
+#
+# v0.2 
+# A minimum of features, and usability, still ok to hosting a set of websites for testing purpose.
+#
+Basic features.
+
+
+#
+# Current release, only internal development release
+# Unsorted things to do
+#
 config navigation, change how its stored.
 update procedure should work when site is already installed, instead of doing a fresh install
 
@@ -46,16 +76,9 @@ enable the admin password and use it.
 
 upgrade.php?
 
+
 # v0.1 First development version (2010-10-22)
 First release ever.
 
-#
-# Persia is an improved and more technical version of Medes
-# Persia will be the output from the dbwebbx courses.
-#
-# Persia v1.0 (things not in Medes)
-Frontcontroller
-Pagecontroller ($pc)
-$pc support html5 xhtml5, xhtml-strict
-Databasecontroller ($db)
-Usercontroller ($uc)
+ .   
+..:  Copyright 2011 by Mikael Roos (me@mikaelroos.se)

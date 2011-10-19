@@ -1,28 +1,37 @@
-Install a new site. Go to the site directory and do:
+#
+# Do your own site-modifications in this directory.
+#
 
-// Always needed.
-1. Copy config.php from config_sample.php, and modify it.
-
-// Instead of doing a nice installation phase. To be replaced with installation procedure and admin interface.
-2. Create a setup.php
-
-$ cp setup-sample.php_ setup.php
-Edit the settings array if needed.
-
-// Run setup.php
-3. Point webbrowser to setup.php
-
-Do as it say.
-
-Point to setup.php?update to save updated configuration array to database.
-
-// Create the adminuser
-4. Create a user in the database.
-
-For example: 
-sqlite> insert into user (account, email, password, algorithm) values ('adm', 'adm@dbwebb.se', 'adm', 'plain');
+#
+# Modifying current theme by adding own stylesheet
+#
 
 
-// Make own modifications to theme
-5. Copy style.css from style_sample.css and enable it in theme configuration. Edit it to
-make own changes to theme.
+#
+# Adding own template functions in a function.php
+#
+
+
+#
+# Using hook_preprocess_{$pagerequest}() to do last minute modifications before rendering the page
+# with the template engine.
+#
+
+
+#
+# Adding JavaScript
+#
+
+
+#
+# Adding a own controller/action
+#
+
+
+#
+# Adding a php-file that includes all settings in the framework
+#
+
+
+ .   
+..:  Copyright 2011 by Mikael Roos (me@mikaelroos.se)
