@@ -17,14 +17,47 @@ javaScript, PHP and SQL.
 
 # FILE AND DIRECTORY STRUCTURE
 
+Here is a quick overview of the files and directory structure. More information can be found in 
+the README.txt in the subdirectories.
+
 README.txt
 LICENSE.txt
 INSTALL.txt
 TODO.txt
 .htaccess
 index.php
+(humans.txt)
+(robots.txt)
+(sitemap.xml)
 
+site/
+  README.txt
+  config-sample.txt
+  setup-sample.txt-
 
+  data/
+    README.txt
+
+  theme/
+    README.txt
+    functions-sample.php
+    style-sample.css
+
+img/
+  README.txt
+  (more files...)
+
+js/
+  README.txt
+  (more files...)
+
+src/
+  README.txt
+  (more files)
+
+theme/
+  README.txt
+  (more files)
 
 
  .   
