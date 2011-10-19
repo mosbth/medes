@@ -150,6 +150,10 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 
 		// Set default date/time-zone
 		date_default_timezone_set($this->cfg['server']['timezone']);
+    
+    // Set default character encoding to use for multibyte strings
+    mb_internal_encoding($this->cfg['general']['character_encoding']);
+		$this->pageCharset = $this->cfg['general']['character_encoding'];
 
 		// Create the main database, where the Medes configuration is.
 		extract($this->cfg['db'][0]);
@@ -181,7 +185,6 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->pageDocType='html5';
 		$this->pageContentType='text/html';
 		$this->pageLang='sv';
-		$this->pageCharset='utf-8';
 		$this->pageTitle=null;
 		$this->pageKeywords=null;
 		$this->pageDescription=null;

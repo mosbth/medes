@@ -43,4 +43,8 @@ $pp->cfg['session']['name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_N
  */
 $pp->cfg['server']['timezone'] = 'Europe/Stockholm';
 
+/*
+ * Set internal character encoding to UTF-8
+ */
+$pp->cfg['general']['character_encoding'] = 'UTF-8';
 
