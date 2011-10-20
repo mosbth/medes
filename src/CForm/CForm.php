@@ -152,7 +152,7 @@ class CForm {
 				  return isset($this->elements[$key]['value'][$optionkey]);
 				} else {
 				  echo "single";
-				  return isset($this->elements[$key]['value'];
+				  return $this->elements[$key]['value'] === $optionkey;
 				}
 			} else {
 				return null;
