@@ -195,9 +195,6 @@ class CForm {
 				if(isset($val['validate'])) {
 					// Do validation of incoming value, santize, filter, make sure its correct
 					$this->elements[$val['name']]['value'] = $_POST[$val['name']];
-				} elseif(isset($val['default'])) {
-				  // Has default values, use them
-					$this->elements[$val['name']]['value'] = $val['default'];				
 				} else {
 				  // Get values from post array
 					$this->elements[$val['name']]['value'] = $_POST[$val['name']];
@@ -205,6 +202,9 @@ class CForm {
 				if(empty($val['value']) && isset($val['mandatory'])) {
 					// Should not submit form, resend instead and display error message.
 				}
+			} elseif(isset($val['name']) && isset($val['default'])) {
+				// Has default values, use them
+				$this->elements[$val['name']]['value'] = $val['default'];				
 			}
 		}
 
