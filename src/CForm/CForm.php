@@ -202,10 +202,10 @@ class CForm {
 				if(empty($val['value']) && isset($val['mandatory'])) {
 					// Should not submit form, resend instead and display error message.
 				}
-			} elseif(isset($val['name']) && isset($val['default'])) {
+			} /* elseif(isset($val['name']) && isset($val['default'])) {
 				// Has default values, use them
 				$this->elements[$val['name']]['value'] = $val['default'];				
-			}
+			} must be called before callback to enable defaults */
 		}
 
 		foreach($this->actions as $val) {
