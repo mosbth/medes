@@ -212,7 +212,11 @@ class CForm {
 					return false;				
 				}
         if(isset($val['callback'])) {
-					call_user_func($val['callback'], $this, true);
+          if(isset($val['callback-args'])) {
+  					call_user_func($val['callback'], $this, $val['callback-args']);
+  				} else {
+  					call_user_func($val['callback'], $this);
+  				}
 				}
 				return true;
 			}
@@ -264,7 +268,8 @@ EOD;
 			$id 		= isset($val['id']) ? "{$val['id']}" : $defaultId;
 			$label	= isset($val['label']) ? ($val['label'] . (isset($val['mandatory']) && $val['mandatory'] ? "<span class='form-element-mandatory'> *</span>" : null)) : null;
 			$class 	= isset($val['class']) ? " class='{$val['class']}'" : null;
-			$name 	= isset($val['name']) ? " name='{$val['name']}'" : " name='{$key}'";
+			$onlyname = isset($val['name']) ? $val['name'] : $key;
+			$name 	= " name='{$onlyname}'";
 			$script = isset($val['script']) ? " script='{$val['script']}'" : null;
 			$onChange = isset($val['onChange']) ? " onChange='{$val['onChange']}'" : null;
 
@@ -288,7 +293,7 @@ EOD;
 				$options = null;
 				$name = substr($name, 0, strlen($name)-1) . "[]'";
 				foreach($val['options'] as $optkey => $optval) {
-					$checked = isset($val['value']) && $optkey == $val['value'] ? " checked" : null;
+					$checked = $this->IsOptionChecked($onlyname, $optkey) ? " checked" : null;
 					$options .= "<input id='$id' type='checkbox'{$class}{$name}{$script}{$onChange} value='{$optkey}'{$checked}/>{$optval}<br/>";
 				}
 				$html .= "<p><label for='$id'>$label</label><br>{$options}</p>\n";			
