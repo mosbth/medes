@@ -239,7 +239,7 @@ EOD;
 			$id 		= isset($val['id']) ? "{$val['id']}" : $defaultId;
 			$label	= isset($val['label']) ? ($val['label'] . (isset($val['mandatory']) && $val['mandatory'] ? "<span class='form-element-mandatory'> *</span>" : null)) : null;
 			$class 	= isset($val['class']) ? " class='{$val['class']}'" : null;
-			$name 	= isset($val['name']) ? " name='{$val['name']}'" : $key;
+			$name 	= isset($val['name']) ? " name='{$val['name']}'" : " name='{$key}'";
 			$script = isset($val['script']) ? " script='{$val['script']}'" : null;
 			$onChange = isset($val['onChange']) ? " onChange='{$val['onChange']}'" : null;
 
@@ -254,15 +254,16 @@ EOD;
 			else if(isset($val['type']) && $val['type'] == 'select') {
 				$options = null;
 				foreach($val['options'] as $optkey => $optval) {
-					$selected = isset($val['value']) && $optkey == $val['value'] ? " selected=selected" : null ;
+					$selected = isset($val['value']) && $optkey == $val['value'] ? " selected=selected" : null;
 					$options .= "<option value='{$optkey}'{$selected}>{$optval}</option>";
 				}
 				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
 			} 
 			else if(isset($val['type']) && $val['type'] == 'checkbox') {
 				$options = null;
+				$name = substr($name, 0, strlen($name)-1) . "[]'";
 				foreach($val['options'] as $optkey => $optval) {
-					$checked = isset($val['value']) && $optkey == $val['value'] ? " checked" : null ;
+					$checked = isset($val['value']) && $optkey == $val['value'] ? " checked" : null;
 					$options .= "<input id='$id' type='checkbox'{$class}{$name}{$script}{$onChange} value='{$optkey}'{$checked}/>{$optval}<br/>";
 				}
 				$html .= "<p><label for='$id'>$label</label><br>{$options}</p>\n";			
