@@ -14,8 +14,8 @@
    Basic structural settings
 
 */
-html{background:#EEE;overflow-y:scroll;} 
-body{background:#FFF;} 
+html{background:#eee;overflow-y:scroll;} 
+body{background:#fff;} 
 
 
 /* #mds-top
@@ -24,7 +24,7 @@ body{background:#FFF;}
    sitelinks and the login/profile menu. 
 
 */
-#mds-top-wrap{border-bottom:1px solid #EEE;padding:0 1em 4px 1em;background:transparent;color:#666;}
+#mds-top-wrap{border-bottom:1px solid #eee;padding:0 1em 4px 1em;background:transparent;color:#666;}
 #mds-top-left{float:left;}
 #mds-top-right{float:right;}
 
@@ -35,7 +35,7 @@ body{background:#FFF;}
 	site menu.
 	
 */
-#mds-header-wrap{}
+#mds-header-wrap{padding:0 8px;}
 #mds-header{}
 #mds-header-logo{}
 #mds-header-title{}
@@ -47,7 +47,7 @@ body{background:#FFF;}
 	Main content with sidebars
 
 */
-#mds-content-wrap{min-height:20em;}
+#mds-content-wrap{min-height:20em;padding:0 8px;}
 .mds-content-row-wrap{}
 .mds-content-row{}
 .mds-content{}
@@ -60,7 +60,7 @@ body{background:#FFF;}
    The footer of the content part.
 
 */
-#mds-footer-wrap{}
+#mds-footer-wrap{padding:0 8px;}
 #mds-footer{}
 
 
@@ -70,7 +70,7 @@ body{background:#FFF;}
    copyright and links.
 
 */
-#mds-bottom-wrap{border-top:1px solid #CCC;background:#EEE;}
+#mds-bottom-wrap{border-top:1px solid #ccc;background:#eee;padding:0 8px;}
 #mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
 
 
