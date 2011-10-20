@@ -263,9 +263,9 @@ EOD;
 				$options = null;
 				foreach($val['options'] as $optkey => $optval) {
 					$checked = isset($val['value']) && $optkey == $val['value'] ? " checked" : null ;
-					$options .= "<input type='checkbox' value='{$optkey}'{$checked}/>{$optval}<br/>";
+					$options .= "<input id='$id' type='checkbox'{$class}{$name}{$script}{$onChange} value='{$optkey}'{$checked}/>{$optval}<br/>";
 				}
-				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
+				$html .= "<p><label for='$id'>$label</label><br>{$options}</p>\n";			
 			} 
 			else {
 				$type 	= isset($val['type']) ? " type='{$val['type']}'" : null;
