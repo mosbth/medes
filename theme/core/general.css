@@ -175,7 +175,9 @@ textarea.wide { width: 660px; height: 350px; }
 .justify{text-align:justify;}
 .strong{font-weight:bold;}
 .hide{display:none;}
-.wordwrap{word-wrap:break-word;}
+.break-word{
+  word-wrap:break-word; /* CSS3 */	
+	-ms-word-wrap: break-word; /* IE8 */}
 
 output{display:inline;font-style:italic;}
 
