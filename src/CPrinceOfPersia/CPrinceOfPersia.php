@@ -508,9 +508,9 @@ EOD;
 	 * Get the page title 
 	 */
 	public function GetPageTitle() {
-    $title  = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['config-db']['site']['default_title'];
-    $title .= (isset($this->cfg['config-db']['site']['prepend_title'])) ? $this->cfg['config-db']['site']['prepend_title'] : null;
-    return sanitizeHTML($title);
+    $title    = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['config-db']['site']['default_title'];
+    $prepend  = (isset($this->cfg['config-db']['site']['prepend_title'])) ? $this->cfg['config-db']['site']['prepend_title'] : null;
+    return sanitizeHTML("{$prepend}{$title}");
   }
 
 
