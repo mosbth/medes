@@ -148,10 +148,9 @@ class CForm {
 		if(isset($this->elements[$key])) {
 			if(isset($this->elements[$key]['value'])) {
 				if(is_array($this->elements[$key]['value'])) {
-				  echo "array:$optionkey:", print_r($this->elements[$key]['value']);
 				  return in_array($optionkey, $this->elements[$key]['value']);
 				} else {
-				  echo "single";
+				  echo "single?";
 				  return $this->elements[$key]['value'] === $optionkey;
 				}
 			} else {
