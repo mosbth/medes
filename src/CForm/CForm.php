@@ -136,6 +136,31 @@ class CForm {
 			throw new Exception(t('Key does not exist in form.'));
 		}
 	}
+
+
+	/**
+	 * Check if a checkbox is checked (perhaps valid for more types).
+	 * @param string $key The key of the element.
+	 * @param string $optionkey The key of the option to check.
+	 * @returns boolean.
+	 */
+	public function IsOptionChecked($key, $optionkey) {
+		if(isset($this->elements[$key])) {
+			if(isset($this->elements[$key]['value'])) {
+				if(is_array($this->elements[$key]['value'])) {
+				  echo "array";
+				  return isset($this->elements[$key]['value'][$optionkey]);
+				} else {
+				  echo "single";
+				  return isset($this->elements[$key]['value'];
+				}
+			} else {
+				return null;
+			}
+		} else {
+			throw new Exception(t('Key does not exist in form.'));
+		}
+	}
 	
 	
 	/**
