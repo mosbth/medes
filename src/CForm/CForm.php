@@ -195,7 +195,7 @@ class CForm {
 				if(isset($val['validate'])) {
 					// Do validation of incoming value, santize, filter, make sure its correct
 					$this->elements[$val['name']]['value'] = $_POST[$val['name']];
-				} elseif(isset($val['default']) {
+				} elseif(isset($val['default'])) {
 				  // Has default values, use them
 					$this->elements[$val['name']]['value'] = $val['default'];				
 				} else {
