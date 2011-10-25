@@ -1,0 +1,9 @@
+/* phpmedes: style/core/screen.css */
+/* actual stylesheet to use, gathers all other styles into one stylesheet */
+
+@import url(reset.css);
+@import url(grid.css);
+@import url(typography.css);
+@import url(forms.css);
+@import url(general.css);
+

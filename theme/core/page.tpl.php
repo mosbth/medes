@@ -4,10 +4,13 @@
 	<?php echo $pp->GetHTMLForMeta(); ?>
 
 	<!-- Use PHP to set the page title dynamic -->
- 	<?php echo "<title>", $pp->GetPageTitle(), "</title>"; ?>
+ 	<?php echo $pp->GetHTMLForPageTitle(); ?>
  	
 	<!-- Stylesheets and style -->
 	<?php echo $pp->GetHTMLForStyle(); ?>
+
+	<!-- Favicon -->
+	<?php echo $pp->GetHTMLForFavicon(); ?>
 
 	<!-- Script -->
 	<?php echo $pp->GetHTMLForScript(); ?>
@@ -39,7 +42,6 @@
 
 <!-- content -->
 <div id="mds-content-wrap" class="prepend-top append-bottom">
-
  <div class="mds-content-row-wrap">
   <div class="mds-content-row container">
 

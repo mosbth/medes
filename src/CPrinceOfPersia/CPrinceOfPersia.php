@@ -507,10 +507,10 @@ EOD;
 	/**
 	 * Get the page title 
 	 */
-	public function GetPageTitle() {
+	public function GetHTMLForPageTitle() {
     $title    = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['config-db']['site']['default_title'];
     $prepend  = (isset($this->cfg['config-db']['site']['prepend_title'])) ? $this->cfg['config-db']['site']['prepend_title'] : null;
-    return sanitizeHTML("{$prepend}{$title}");
+    return "<title>" . sanitizeHTML("{$prepend}{$title}") . "</title>";
   }
 
 
@@ -528,13 +528,20 @@ EOD;
 
 
 	/**
+	 * Get code for the favicon
+	 */
+	public function GetHTMLForFavicon() {
+		$baseurl = $this->req->baseUrl . trim($this->cfg['config-db']['theme']['url'], '/');
+		$favicon = trim($this->cfg['config-db']['theme']['favicon'], '/');
+		return "<link rel='shortcut icon' href='{$baseurl}/{$favicon}'/>\n";
+  }
+
+
+	/**
 	 * Create html to include stylesheets based on theme choosen in config
 	 */ 
 	public function GetHTMLForStyle() {
-
 		$html = null;		
-
-		// get all stylesheets
 		$baseurl = $this->req->baseUrl . trim($this->cfg['config-db']['theme']['url'], '/');
 		$stylesheets = $this->cfg['config-db']['theme']['stylesheets'];
 		foreach($stylesheets as $style) {
@@ -544,35 +551,6 @@ EOD;
 			  $html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
 			}
 		}
-		$faviconHref= $this->PrependWithSiteUrl($this->cfg['config-db']['theme']['favicon']);
-		$html .= "<link rel='shortcut icon' href='{$faviconHref}'/>\n";
-
-/*		
-		isset($this->config['styletheme']['stylesheet']) ? "{$pathToTheme}/{$this->config['styletheme']['stylesheet']}" : "style/core/screen_compatibility.css";
-		$print = isset($this->config['styletheme']['print']) ? "<link rel='stylesheet' media='print' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['print']}'/>\n" : "";
- 		$ie = isset($this->config['styletheme']['ie']) ? "<!--[if IE]><link rel='stylesheet' media='screen, projection' type='text/css' href='{$pathToTheme}/{$this->config['styletheme']['ie']}'><![endif]-->\n" : "";
-		$style = isset($this->pageStyle) ? "<style type='text/css'>{$this->pageStyle}</style>\n" : "";
-		$favicon = empty($this->pageFaviconLink) ? null : $this->PrependWithSiteUrl($this->pageFaviconLink);
-		$favicon = is_null($favicon) ? '' : "<link rel='shortcut icon' type='{$this->pageFaviconType}' href='{$favicon}'/>\n";
-
-		$stylelinks='';
-		foreach($this->pageStyleLinks as $val) {
-			$media = isset($val['media']) ? "media='{$val['media']}'" : "media='all'";
-			$type = isset($val['type']) ? "type='{$val['type']}'" : "type='text/css'";
-			$href = "href='" . $this->PrependWithSiteUrl($val['href']) . "'";
-			$stylelinks .= "<link rel='stylesheet' {$media} {$type} {$href}/>\n";
-		}
-		$html = <<<EOD
-<link rel="stylesheet" media="all" type="text/css" href="{$stylesheet}"/>
-{$print}
-{$ie}
-{$stylelinks}
-{$style}
-{$favicon}
-
-EOD;
-*/		
-
 		return $html;
 	}
 
@@ -669,7 +647,8 @@ EOD;
 	 * @return string
 	 */
 	public function GetHTMLForLogo() {
-		$href 	= $this->PrependWithSiteUrl($this->cfg['config-db']['theme']['logo']['src']);
+		$baseurl = $this->req->baseUrl . trim($this->cfg['config-db']['theme']['url'], '/');
+		$src 	  = trim($this->cfg['config-db']['theme']['logo']['src'], '/');
 		$alt 		= $this->cfg['config-db']['theme']['logo']['alt'];
 		$width 	= $this->cfg['config-db']['theme']['logo']['width'];
 		$height = $this->cfg['config-db']['theme']['logo']['height'];
@@ -680,7 +659,7 @@ EOD;
 			$url 		= $this->req->CreateUrlToControllerAction('home');
 			$title	= t('Home');
 		}
-		return "<a href='{$url}' title='{$title}'><img src='{$href}' alt='{$alt}' width='{$width}' height='{$height}'/></a>";
+		return "<a href='{$url}' title='{$title}'><img src='{$baseurl}/{$src}' alt='{$alt}' width='{$width}' height='{$height}'/></a>";
   }
 
 
