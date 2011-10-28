@@ -22,7 +22,7 @@ class CCtrl4CanonicalUrl implements IController {
    */
   public function __construct() {
     global $pp;
-    $pp->if->UserIsSignedInOrRedirectToSignIn();
+    //$pp->if->UserIsSignedInOrRedirectToSignIn();
     
 		$f = new CForm();
 		$f->id = 'mds-form-canurl-edit';
