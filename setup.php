@@ -89,7 +89,7 @@ echo "<p>Directory <code>site/data</code> is writable by webserver...";
 if(is_writable(MEDES_DATA_PATH)) {
   echo "OK.</p>";
 } else {
-  echo "NOK.</p><p><b>The directory <code>site/data</code> is not writable by the webserver.<b> Make directory writable by webserver.</p>";
+  echo "NOK.</p><p><b>The directory <code>site/data</code> is not writable by the webserver.</b> Make directory writable by webserver.</p>";
   die($errmsg);
 }
 
@@ -99,7 +99,7 @@ if(is_writable(MEDES_DATA_PATH)) {
 //
 echo "<p>Verify database settings from <code>site/config.php</code>...";
 if(isset($pp->cfg['db'][0]['dsn'])) {
-  echo "OK.";
+  echo "OK.</p>";
 } else {
   echo "NOK.</p><p><b>No entry for first database exists in <code>site/config.php</code>.</b> Edit the file and correct the database entry.</p>";
   die($errmsg);
@@ -175,8 +175,10 @@ if(empty($cfg)) {
   $cfg = $pp->db->ExecuteSelectQueryAndFetchAll($query['load pp:config']);
 }
 $pp->cfg['config-db'] = unserialize($cfg[0]['value']);
-echo "OK.</p><p><a href='index.php'>Visit the site</a>.";
-echo "<p>Current configuration is (<a href='?update'>update configuration from <code>site/config_setup.php</code></a>):</p><pre>", print_r($pp->cfg['config-db'], true), "</pre>";
+echo "OK.</p>";
+echo "<p><a href='index.php'>Visit the site</a>.";
+echo "<p><a href='?update'>Save new configuration to database (I have made updates to the file: <code>site/config_setup.php</code></a>).";
+echo "<p>Current configuration is:</p><pre>", print_r($pp->cfg['config-db'], true), "</pre>";
 
 
 
