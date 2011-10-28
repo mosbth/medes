@@ -19,47 +19,13 @@ $ git clone git://github.com/mosbth/medes.git
 or
 $ wget https://github.com/mosbth/medes/zipball/master --no-check-certificate; unzip master
 
-Go into the medes directory.
 
+# 2. POINT A BROWSER TO THE INSTALLATION
 
-# 2. CREATE AND MODIFY config.php
-
-(This might be replaced by a nice installation procedure.)
-$ cd site; cp config-sample.php config.php
-
-Review your config.php and modify if needed. The sample-file works without modification.
-
-
-# 3. CREATE AND MODIFY setup.php
-
-(This will be replaced by the installation procedure.)
-$ cd site; cp setup-sample.php_ setup.php
-
-Edit the settings array if needed.
-
-
-# 4. EXECUTE setup.php
-
-(This will be replaced by the installation procedure.)
-Point your browser to setup.php. Do as it say, follow the instructions.
-Point to setup.php?update to update the setup once its created.
-
-
-# 5. CREATE A USER IN THE DATABASE.
-
-(This will be replaced by the installation procedure.)
-Create the first user in the database.
-
-For example (insert useraccount 'adm' with password 'adm'): 
-sqlite> insert into user (account, email, password, algorithm) values ('adm', 'adm@dbwebb.se', 'adm', 'plain');
-
-
-# 6. READY
-
-Point your browser to the main directory. You are ready to use your website.
+Point your webbrowser to the url of the installation and follow the instructions.
 
 Make your own modifications in the site-directory. The file site/README.txt is a good place to 
-start.
+proceed.
 
 
  .   
