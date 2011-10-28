@@ -15,8 +15,9 @@
 
 // Change site path if needed, default is in MEDES_INSTALL_PATH/site
 //define('MEDES_SITE_PATH', SOMEWHERE . 'site');
-define('MEDES_SITE_PATH', __DIR__ . 'site');
-
+if(!defined('MEDES_SITE_PATH')) {
+  define('MEDES_SITE_PATH', __DIR__ . 'site');
+}
 
 // Check if config.php exists
 echo "<p>Checking site/config.php...";
