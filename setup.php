@@ -175,7 +175,7 @@ if(empty($cfg)) {
   $cfg = $pp->db->ExecuteSelectQueryAndFetchAll($query['load pp:config']);
 }
 $pp->cfg['config-db'] = unserialize($cfg[0]['value']);
-echo "OK.</p>";
+echo "OK.</p><p><a href='index.php'>Visit the site</a>.";
 echo "<p>Current configuration is (<a href='?update'>update configuration from <code>site/config_setup.php</code></a>):</p><pre>", print_r($pp->cfg['config-db'], true), "</pre>";
 
 
