@@ -155,7 +155,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
     mb_internal_encoding($this->cfg['general']['character_encoding']);
 		$this->pageCharset = $this->cfg['general']['character_encoding'];
 
-		// Create the main database, where the Medes configuration is.
+		// Create the main database controller, where the Medes configuration is.
 		extract($this->cfg['db'][0]);
 		$this->db = new CDatabaseController($dsn, $username, $password, $driver_options);
 
@@ -180,24 +180,28 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		// Init feedback
 		$this->feedback = null;
 
-		// TO BE REARRANGED		
+    // These page specific items can be changed dynamically before rendering the page
+		$this->pageDocType      = 'html5';
+		$this->pageContentType  = 'text/html';
+		$this->pageLang         = 'sv';
+		$this->pageTitle        = null;
+		$this->pageKeywords     = $this->cfg['theme']['meta']['keywords'];
+		$this->pageDescription  = $this->cfg['theme']['meta']['description'];
+		$this->pageAuthor       = $this->cfg['theme']['meta']['author'];
+		$this->pageCopyright    = $this->cfg['theme']['meta']['copyright'];
+    
+    
+		// TO BE REARRANGED	OBSOLETE?
 		// Set default values to be empty
-		$this->pageDocType='html5';
-		$this->pageContentType='text/html';
-		$this->pageLang='sv';
-		$this->pageTitle=null;
-		$this->pageKeywords=null;
-		$this->pageDescription=null;
-		$this->pageAuthor=null;
-		$this->pageCopyright=null;
-		$this->pageFaviconLink='img/favicon.png';
-		$this->pageFaviconType='img/png';
+		//$this->pageFaviconLink='img/favicon.png';
+		//$this->pageFaviconType='img/png';
 		$this->pageStyle=null;
 		$this->pageStyleLinks=array();
 		$this->pageScript=null;
 		$this->pageScriptLinks=array();
 		$this->pageUseListForMenus=false;
 		
+		// TO BE REARRANGED	OBSOLETE?	
 		// page content is default null
 		$this->pageTop=null;
 		$this->pageHeader=null;
@@ -435,17 +439,17 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		// Include template file, this hands over control to the theme to make callbacks to $pp.
 		$pp = &$this;
 		// Start by checking there is a template file.
-		$tplFile = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/page.tpl.php";
+		$tplFile = $pp->cfg['config-db']['theme']['realpath'] . "/page.tpl.php";
 		if(is_file($tplFile)) {
 		  // Is there a functions.php that comes with the theme?
-			$tplFunctions = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/functions.php";
+			$tplFunctions = $pp->cfg['config-db']['theme']['realpath'] . "/functions.php";
 			if(is_file($tplFunctions)) {
 				include $tplFunctions;
 			}
 			// Dose the user have their own functions.php-files?
 			if(isset($pp->cfg['config-db']['theme']['functions'])) {
 			  foreach($pp->cfg['config-db']['theme']['functions'] as $val) {
-			    $file = $pp->cfg['config-db']['theme']['pathOnDisk'] . "/$val";
+			    $file = $pp->cfg['config-db']['theme']['realpath'] . "/$val";
           if(is_file($file)) {
             include $file;
           }
@@ -508,8 +512,8 @@ EOD;
 	 * Get the page title 
 	 */
 	public function GetHTMLForPageTitle() {
-    $title    = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['config-db']['site']['default_title'];
-    $prepend  = (isset($this->cfg['config-db']['site']['prepend_title'])) ? $this->cfg['config-db']['site']['prepend_title'] : null;
+    $title    = (isset($this->pageTitle)) ? $this->pageTitle : $this->cfg['config-db']['theme']['pagetitle']['default'];
+    $prepend  = (isset($this->cfg['config-db']['theme']['pagetitle']['prepend'])) ? $this->cfg['config-db']['theme']['pagetitle']['prepend'] : null;
     return "<title>" . sanitizeHTML("{$prepend}{$title}") . "</title>";
   }
 
@@ -519,10 +523,10 @@ EOD;
 	 */
 	public function GetHTMLForMeta() {
 		$meta = "<meta charset='{$this->pageCharset}'/>\n";
-		$meta .= is_null($this->pageKeywords) ? '' : "<meta name='keywords' content='{$this->pageKeywords}'/>\n";
-		$meta .= is_null($this->pageDescription) ? '' : "<meta name='description' content='{$this->pageDescription}'/>\n";
-		$meta .= is_null($this->pageAuthor) ? '' : "<meta name='author' content='{$this->pageAuthor}'/>\n";
-		$meta .= is_null($this->pageCopyright) ? '' : "<meta name='copyright' content='{$this->pageCopyright}'/>\n";
+		$meta .= is_null($this->pageKeywords)     ? null : "<meta name='keywords' content='{$this->pageKeywords}'/>\n";
+		$meta .= is_null($this->pageDescription)  ? null : "<meta name='description' content='{$this->pageDescription}'/>\n";
+		$meta .= is_null($this->pageAuthor)       ? null : "<meta name='author' content='{$this->pageAuthor}'/>\n";
+		$meta .= is_null($this->pageCopyright)    ? null : "<meta name='copyright' content='{$this->pageCopyright}'/>\n";
 		return $meta;
   }
 
@@ -668,9 +672,9 @@ EOD;
 	 * @return string
 	 */
 	public function GetHTMLMessage($aMessage) {
-		if(isset($this->cfg['config-db']['messages'][$aMessage])) {
-			return $this->cfg['config-db']['messages'][$aMessage];
-	} else {
+		if(isset($this->cfg['config-db']['theme']['messages'][$aMessage])) {
+			return $this->cfg['config-db']['theme']['messages'][$aMessage];
+	  } else {
 			throw new Exception(t("Message '{$aMessage}' does not exist in config."));
 		}
   }
@@ -729,6 +733,9 @@ EOD;
 
 
 	// ------------------------------------ end of Template Engine related -------------------------
+
+
+	// ------------------------------------ IS BELOW OBSOLETE CODE? -------------------------
 
 
 	/**

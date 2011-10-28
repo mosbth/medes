@@ -1,0 +1,173 @@
+<?php
+/**
+ * Configuration array for medes. 
+ *
+ * Edit it and use setup.php to populate the database with it.
+ *
+ * @package MedesCore
+ */
+$cfg = array(
+
+
+/**
+ * Internal stuff for medes.
+ *
+ * May be used for keeping track of what version is currently installed.
+ *
+ */
+'medes' => array(
+	'version' => MEDES_VERSION,		
+),
+
+
+/**
+ * Define the controllers, their classname and enable/disable them.
+ *
+ * The array-key is matched against the url, for example: 
+ * the url 'user/login' would instantiate the controller with the key "user", that is CCtrl4User
+ * and call the method "login" in that class. This process is managed in:
+ * $pp->FrontControllerRoute();
+ * and this method is called in the frontcontroller phase from index.php.
+ */
+'controllers' => array(
+  'index'     => array('enabled' => true,'class' => 'CCtrl4Home'),
+  'error'     => array('enabled' => true,'class' => 'CCtrl4Error'),
+  'home'      => array('enabled' => true,'class' => 'CCtrl4Home'),
+  'user'      => array('enabled' => true,'class' => 'CCtrl4User'),
+  'developer' => array('enabled' => true,'class' => 'CCtrl4Developer'),
+  'themes'    => array('enabled' => true,'class' => 'CCtrl4Theme'),
+  'cpage'     => array('enabled' => true,'class' => 'CCtrl4ContentPage'),
+  'canurl'    => array('enabled' => true,'class' => 'CCtrl4CanonicalUrl'),
+),
+// UNSURE ON THIS. DEFINES THE HOMEPAGE; WHERE SHOULD IT BE, PART OF SITE, CONTROLLERS OR CANURL?
+//'home' => array('title' => 'The Homepage', 'href' => 'home1'), 
+
+
+/**
+ * Define menus and menu items.
+ *
+ * The menus are called from the template page, for example page.tpl.php, using the method:
+ * echo $pp->GetHTMLForMenu('relatedsites');
+ * The class and method responsible for creating the actual menu is:
+ * CNavigation::GenerateMenu();
+ * 
+ */
+'menus' => array(
+  'list-style' => false,
+  
+  // Here comes the menu called 'relatedsites'
+  'relatedsites' => array(
+    'enabled' => true,
+    'id'      => 'mds-nav-relatedsites',
+    'class'   => null,
+    'items'   => array(
+      array('text' => 'mikaelroos', 'href' => 'http://mikaelroos.se/',  'class' => '', 'title' => t('Just Me'),),
+      array('text' => 'phpmedes',   'href' => 'http://phpmedes.org/',   'class' => '', 'title' => t('Homepage for PHPMedes'),),
+      array('text' => 'dbwebb',     'href' => 'http://dbwebb.se/',      'class' => '', 'title' => t('Educational site for development with databases and webapplications'),),
+    ),
+  ),
+
+  // Here is the login menu, it will change look depending on the user is authenticated or not
+  'login' => array(
+    'enabled'   => true,
+    'id'        => 'mds-nav-login',
+    'class'     => null,
+    'callback'  => 'CPrinceofPersia::ModifyLoginMenu',
+    'items'     => array(
+      'login'     => array('text' => 'login',     'href' => 'user/login',     'class' => '', 'title' => t('Login as user'),),
+      'settings'  => array('text' => 'settings',  'href' => 'user/settings',  'class' => '', 'title' => t('View/edit settings for this account and for this site'),),
+      'acp'       => array('text' => 'acp',       'href' => 'acp',            'class' => '', 'title' => t('Admin Control Panel'),),
+      'logout'    => array('text' => 'logout',    'href' => 'user/logout',    'class' => '', 'title' => t('Logout'),),
+    ),
+  ),
+  
+  // This is the main navigation menu
+  'main' => array(
+    'enabled'   => true,
+    'id'        => 'mds-nav-main',
+    'class'     => 'mds-nav-main',
+    'callback'  => 'CPrinceofPersia::ModifyMenuDisplayCurrent',
+    'items'     => array(
+      array('text' => 'home', 'href' => 'home', 'class' => '', 'title' => 'Home',),
+      array('text' => 'developer', 'href' => 'developer', 'class' => '', 'title' => 'Aid for the developer',),
+      array('text' => 'themes', 'href' => 'themes', 'class' => '', 'title' => 'Aid for the themer',),
+      array('text' => 'pages', 'href' => 'cpage/edit', 'class' => '', 'title' => 'pages',),
+      array('text' => 'canurls', 'href' => 'canurl/edit', 'class' => '', 'title' => 'canurls',),
+      array('text' => 'moped', 'href' => 'moped', 'class' => '', 'title' => 'canurls',),
+    ),
+  ),
+),
+
+
+/**
+ * Define theme and enable site specific modifications.
+ *
+ * The templateengine is the last part that is called from index.php:
+ * $pp->TemplateEngineRender();
+ * It consists of settings, stylesheets, functions and template files which are all combined
+ * when rendering the defined views to the resulting page with its regions.
+ * 
+ */
+'theme'=> array(
+  'name'      => 'Medes Core Theme',
+  'regions'   => array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer_column1', 'footer_column2', 'footer_column3', 'footer_column4', 'footer'),
+  'realpath'  => MEDES_INSTALL_PATH . '/theme/core',
+  'url'       => 'theme/core', // Will prepend urlpath to favicon, logo and stylesheets
+  'favicon'   => 'img/favicon.png',
+  'logo'      => array('src'=>'img/logo_medes_330x70.png', 'alt'=>'Medes Logo', 'width'=>330, 'height'  => 70,),
+  'stylesheets' => array(
+    array('file'=>'style/screen.css','type'=>'text/css','media'=>'screen'),
+
+    // enable to make site modifications by adding stylesheets in site-directory 
+    //'site-mods' => array('file' => MEDES_SITE_PATH . '/css/style.css', 'media'=>'screen'),
+  ),
+
+  // enable to add own functions to theme 
+  'functions' => array(MEDES_SITE_PATH . '/theme/functions.php',),
+  
+  'developer_tools' => true, // Should the developer tools be displayed?=
+	
+  // Add values and extract them in your template page using echo $pp->GetHTMLMessage('footer');
+  'messages' => array(
+    'sitetitle' => null,
+    'footer'    => '<p>This is the footer</p>',
+    'copyright' => '<p>&copy; PHPMedes, free and opensource software.</p>',
+  ),
+  
+  // Add a default page title when pages does not create their own. Get it through echo $pp->GetHTMLForPageTitle();
+  'pagetitle' => array(
+    'default' => 'No title set',		
+    'prepend' => 'phpmedes: ',		
+  ),
+
+  // Add meta entries as strings and use them in the template with echo $pp->GetHTMLForMeta();
+  'meta' => array(
+    'keywords'    => null,		
+    'description' => null,		
+    'author'      => null,		
+    'copyright'   => null,		
+  ),
+),
+
+
+/**
+ * Add javascript.
+ *
+ * Its the template file that calls the methods for getting the HTML to display for including
+ * javaScript external files:
+ * echo $pp->GetHTMLForScript();
+ * The tracker is pure Javascript with the <javascript>-tags included.
+ * 
+ */
+'js'=> array(
+  'external' => array(
+    //'jquery'    => array('enabled'=>true, 'src'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'),
+  ),
+  'tracker' => null,
+),
+
+
+/**
+ * End of configuration array.
+ */
+);

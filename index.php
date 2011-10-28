@@ -1,6 +1,6 @@
 <?php
 /**
- * Setting up Medes, managing the request, prepares the reply and serves it.
+ * Index for starting up Medes, managing the request, prepares the reply and serves it.
  *
  * A page request is handled in the following way:
  * 1. Bootstrapping, setting up and checking the environment.
