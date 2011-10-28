@@ -40,7 +40,7 @@ $cfg = array(
   'canurl'    => array('enabled' => true,'class' => 'CCtrl4CanonicalUrl'),
   'acp'       => array('enabled' => true,'class' => 'CCtrl4AdminControlPanel'),
 ),
-// UNSURE ON THIS (CHECK index controller). DEFINES THE HOMEPAGE; WHERE SHOULD IT BE, PART OF SITE, CONTROLLERS OR CANURL?
+// Define your own homepage
 //'home' => array('title' => 'The Homepage', 'href' => 'home1'), 
 
 
