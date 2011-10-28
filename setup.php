@@ -32,7 +32,6 @@ if(is_readable(MEDES_SITE_PATH . '/config.php')) {
   echo "NOK.</p><p><b>The file does not exists.</b> Copy <code>site/config-sample.php</code> to <code>site/config.php</code>, review it and edit if needed.</p>";
   die($errmsg);
 }
-date_default_timezone_set($pp->cfg['server']['timezone']);
 
 
 //
@@ -44,6 +43,7 @@ define('MEDES_INSTANTIATE_PASS', true);
 define('MEDES_FRONTCONTROLLER_PASS', true);
 define('MEDES_TEMPLATEENGINE_PASS', true);
 include(__DIR__ . "/index.php");
+date_default_timezone_set($pp->cfg['server']['timezone']);
 
 
 //
