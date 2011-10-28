@@ -19,7 +19,9 @@ if(!defined('MEDES_SITE_PATH')) {
   define('MEDES_SITE_PATH', __DIR__ . '/site');
 }
 
-// Check if config.php exists
+//
+// Check if config.php exists, its essential
+//
 echo "<h1>PHPMedes setup</h1><p>File site/config.php exists... ";
 
 if(is_readable(MEDES_SITE_PATH . '/config.php')) {
@@ -38,7 +40,7 @@ if(is_readable(MEDES_SITE_PATH . '/config.php')) {
 define('MEDES_INSTANTIATE_PASS', true);
 define('MEDES_FRONTCONTROLLER_PASS', true);
 define('MEDES_TEMPLATEENGINE_PASS', true);
-include(__DIR__ . "index.php");
+include(__DIR__ . "/index.php");
 
 
 // Define configuration
