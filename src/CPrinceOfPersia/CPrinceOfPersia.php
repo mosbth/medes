@@ -186,14 +186,14 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->feedback = null;
 
     // These page specific items can be changed dynamically before rendering the page
-		$this->pageDocType      = $this->cfg['theme']['doctype']['doctype'];
-		$this->pageContentType  = $this->cfg['theme']['doctype']['contenttype'];
-		$this->pageLang         = $this->cfg['theme']['doctype']['lang'];
+		$this->pageDocType      = $this->cfg['config-db']['theme']['doctype']['doctype'];
+		$this->pageContentType  = $this->cfg['config-db']['theme']['doctype']['contenttype'];
+		$this->pageLang         = $this->cfg['config-db']['theme']['doctype']['lang'];
 		$this->pageTitle        = null;
-		$this->pageKeywords     = $this->cfg['theme']['meta']['keywords'];
-		$this->pageDescription  = $this->cfg['theme']['meta']['description'];
-		$this->pageAuthor       = $this->cfg['theme']['meta']['author'];
-		$this->pageCopyright    = $this->cfg['theme']['meta']['copyright'];
+		$this->pageKeywords     = $this->cfg['config-db']['theme']['meta']['keywords'];
+		$this->pageDescription  = $this->cfg['config-db']['theme']['meta']['description'];
+		$this->pageAuthor       = $this->cfg['config-db']['theme']['meta']['author'];
+		$this->pageCopyright    = $this->cfg['config-db']['theme']['meta']['copyright'];
     
     
 		// TO BE REARRANGED	OBSOLETE?

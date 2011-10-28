@@ -176,8 +176,8 @@ if(empty($cfg)) {
 }
 $pp->cfg['config-db'] = unserialize($cfg[0]['value']);
 echo "OK.</p>";
-echo "<p><a href='index.php'>Visit the site</a>.";
 echo "<p><a href='?update'>Save new configuration to database (I have made updates to the file: <code>site/config_setup.php</code></a>).";
+echo "<p><a href='index.php'>Visit the site</a>.";
 echo "<p>Current configuration is:</p><pre>", print_r($pp->cfg['config-db'], true), "</pre>";
 
 
