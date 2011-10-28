@@ -125,7 +125,7 @@ $query = array(
   'load pp:config'    => 'select value from pp where module="CPrinceOfPersia" and key="config"',
   'save pp:config'    => 'update pp set value=? where module="CPrinceOfPersia" and key="config"',
   'create pp:config'  => 'insert into pp (module, key, value) values ("CPrinceOfPersia", "config", ?)',
-  'create adm user'   => 'insert into user (account, email, password, algorithm) values (?, ?, ?, ?)';
+  'create adm user'   => 'insert into user (account, email, password, algorithm) values (?, ?, ?, ?)',
 );
 
 
