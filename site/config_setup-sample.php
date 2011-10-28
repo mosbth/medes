@@ -129,7 +129,7 @@ $cfg = array(
 	
   // Add values and extract them in your template page using echo $pp->GetHTMLMessage('footer');
   'messages' => array(
-    'sitetitle' => null,
+    'sitetitle' => '',
     'footer'    => '<p>This is the footer</p>',
     'copyright' => '<p>&copy; PHPMedes, free and opensource software.</p>',
   ),
