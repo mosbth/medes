@@ -88,76 +88,81 @@ interface IUsesSQL {
   public static function SQL($id=null);
 }
 
+
+// ========= BELOW IS OBSOLETE AND SHOULD BE REMOVED WHEN VERIFIED
+
 /**
  * Interface for class that interacts with the database. 
  * @depreciated (?)
  */
-interface IDatabaseObject {
+//interface IDatabaseObject {
 
 	/**
 	 * Get SQL that this object support. 
 	 * @return string containing the SQL-code.
 	 */
-  public static function GetSQL($which=null);
+  //public static function GetSQL($which=null);
 
 	/**
 	 * Insert new object to database. 
 	 * @return boolean true on success, else false.
 	 */
-	public function Insert();
+	//public function Insert();
 	
 	/**
 	 * Update existing object in database. 
 	 * @return boolean true on success, else false.
 	 */
-	public function Update();
+	//public function Update();
 	
 	/**
 	 * Save object to database. Manage if insert or update.
 	 * @return boolean true on success, else false.
 	 */
-	public function Save();
+	//public function Save();
 	
 	/**
 	 * Load object from database.
 	 * @return boolean true on success, else false.
 	 */
-	public function Load();
+	//public function Load();
 	
 	/**
 	 * Delete object from database.
 	 * @param boolean $really Put object in wastebasket (false) or really delete row from table (true).
 	 * @return boolean true on success, else false.
 	 */
-	public function Delete($really=false);
-}
+	//public function Delete($really=false);
+//}
 
 /**
  * Interface for classes implementing a frontcontroller (?) pattern.
  * @depreciated
  */
-interface IFrontController {
+/*interface IFrontController {
 	public static function DoIt();
-}
+}*/
 
 /**
  * Manage _GET and _POST requests and redirect or return the resulting html. 
  * @depreciated
  */
-interface IActionHandler {
+/*interface IActionHandler {
 	public function ActionHandler();
 }
+*/
 
 /**
  * Gather all language-strings behind one method.
  * @depreciated
  */
-interface ILanguage {
+/*interface ILanguage {
 	public static function InitLanguage($language=null);
 }
+*/
 
 /**
  * Interface for addons.
  * @depreciated
  */
-interface IAddOn {}
+//interface IAddOn {}
