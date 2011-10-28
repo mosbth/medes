@@ -20,12 +20,12 @@ if(!defined('MEDES_SITE_PATH')) {
 }
 
 // Check if config.php exists
-echo "<h1>PHPMedes setup</h1><p>Checking site/config.php...";
+echo "<h1>PHPMedes setup</h1><p>File site/config.php exists...";
 
 if(is_readable(MEDES_SITE_PATH . '/config.php')) {
-  echo "file exists. OK.";
+  echo "OK.";
 } else {
-  echo "file does not exists. Copy site/config-sample.php to site/config.php and edit it.</p>";
+  echo "NOK.</p><p>The file does not exists. Copy site/config-sample.php to site/config.php, review it and edit if needed.</p>";
   die("<p>Fix the error and then reload this page and try again.</p>");
 }
 

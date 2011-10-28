@@ -19,10 +19,12 @@ $ git clone git://github.com/mosbth/medes.git
 or
 $ wget https://github.com/mosbth/medes/zipball/master --no-check-certificate; unzip master
 
+Go into the medes directory.
+
 
 # 2. CREATE AND MODIFY config.php
 
-(This might be replaced by the installation procedure.)
+(This might be replaced by a nice installation procedure.)
 $ cd site; cp config-sample.php config.php
 
 Review your config.php and modify if needed. The sample-file works without modification.

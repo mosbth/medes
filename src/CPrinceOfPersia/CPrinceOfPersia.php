@@ -146,7 +146,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		if(is_file($configFile)) {
 		  include($configFile);
 		} else {
-		  die(t('The file site/config.php is missing. <a href="setup.php">Run setup.php</a>.'));
+		  die(t('The file <code>site/config.php</code> is missing. <a href="setup.php">Run setup.php</a>.'));
 		}
 
 		// Start a named session
