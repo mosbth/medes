@@ -737,6 +737,66 @@ EOD;
   }
 
 
+	/**
+	 * Add output as feedback to user. Stored in session.
+	 */
+	public function AddFeedback($feedback) {
+		if(!isset($_SESSION[self::sessionNameFeedback])) {
+			$_SESSION[self::sessionNameFeedback] = array();
+		}
+		$_SESSION[self::sessionNameFeedback][] = $feedback;
+	}
+	
+	
+	/**
+	 * Get HTML for feedback.
+	 *
+	 * @return string The HTML for the feedback. 
+	 */
+	public function GetHTMLForFeedback() {
+		$html = null;
+		if(isset($_SESSION[self::sessionNameFeedback])) {		
+			foreach($_SESSION[self::sessionNameFeedback] as $val) {
+				$html .= "<p><output class='{$val['class']}'>{$val['message']}</output></p>\n";
+			}
+			unset($_SESSION[self::sessionNameFeedback]);
+		}
+		return $html;
+	}
+
+
+	/**
+	 * Add feedback as success message.
+	 */
+	public function AddFeedbackSuccess($feedback) {
+		$this->AddFeedback(array('class'=>'success', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as notice message.
+	 */
+	public function AddFeedbackNotice($feedback) {
+		$this->AddFeedback(array('class'=>'notice', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as alert message.
+	 */
+	public function AddFeedbackAlert($feedback) {
+		$this->AddFeedback(array('class'=>'alert', 'message'=>$feedback));
+	}
+	
+	
+	/**
+	 * Add feedback as error message.
+	 */
+	public function AddFeedbackError($feedback) {
+		$this->AddFeedback(array('class'=>'error', 'message'=>$feedback));
+	}
+
+
 	// ------------------------------------ end of Template Engine related -------------------------
 
 
@@ -744,6 +804,7 @@ EOD;
 
 
 	/**
+	 * SEEMS TO BE OBSOLETE
 	 * Set a link by adding the siteurl
 	 * @param: $aUrl string a link to a resource
 	 * @return: string
@@ -930,65 +991,6 @@ EOD;
 		return $interval->format($format);
 	}
 
-
-	/**
-	 * Add output as feedback to user. Stored in session.
-	 */
-	public function AddFeedback($feedback) {
-		if(!isset($_SESSION[self::sessionNameFeedback])) {
-			$_SESSION[self::sessionNameFeedback] = array();
-		}
-		$_SESSION[self::sessionNameFeedback][] = $feedback;
-	}
-	
-	
-	/**
-	 * Get HTML for feedback.
-	 *
-	 * @return string The HTML for the feedback. 
-	 */
-	public function GetHTMLForFeedback() {
-		$html = null;
-		if(isset($_SESSION[self::sessionNameFeedback])) {		
-			foreach($_SESSION[self::sessionNameFeedback] as $val) {
-				$html .= "<p><output class='{$val['class']}'>{$val['message']}</output></p>\n";
-			}
-			unset($_SESSION[self::sessionNameFeedback]);
-		}
-		return $html;
-	}
-
-
-	/**
-	 * Add feedback as success message.
-	 */
-	public function AddFeedbackSuccess($feedback) {
-		$this->AddFeedback(array('class'=>'success', 'message'=>$feedback));
-	}
-	
-	
-	/**
-	 * Add feedback as notice message.
-	 */
-	public function AddFeedbackNotice($feedback) {
-		$this->AddFeedback(array('class'=>'notice', 'message'=>$feedback));
-	}
-	
-	
-	/**
-	 * Add feedback as alert message.
-	 */
-	public function AddFeedbackAlert($feedback) {
-		$this->AddFeedback(array('class'=>'alert', 'message'=>$feedback));
-	}
-	
-	
-	/**
-	 * Add feedback as error message.
-	 */
-	public function AddFeedbackError($feedback) {
-		$this->AddFeedback(array('class'=>'error', 'message'=>$feedback));
-	}
 	
 	
 }

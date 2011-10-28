@@ -123,6 +123,7 @@ class CCtrl4ContentPage implements IController {
 		
 		$pp->pageTitle = t('All pages: ');
 		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction(null, 'create') . "'>Create new</a></p>"));		
 		$pp->AddView(new CView($html));		
 	}
 
@@ -275,7 +276,7 @@ class CCtrl4ContentPage implements IController {
 
 
 
-
+/*
 
 
 
@@ -342,13 +343,13 @@ class CCtrl4ContentPage implements IController {
 		}
 		$html .= " Owner is " . $this->a->GetOwner() . ". ";
 		$html .= $isInEditMode ? "<a href='?p={$this->key}'>View page</a>. ":"<a href='?p={$this->key}&amp;e'>Edit page</a>. ";
-/*
+
 		$html .= $isAuthenticated ? "<a href='?p={$this->key}&amp;a=newpage'>Create new page</a>. ":'';
 		$html .= $isAuthenticated ? "<a href='?a=viewpages'>View all pages</a>. ":'';
 		$restorePage = $isAuthenticated ? "<a href='?a=restorepage'>Restore this page</a> ":'';
 		$deletePage = $isAuthenticated ? "<a href='?a=deletepage'>Delete this page</a>. ":'';
 		$html .= $deleted ? "Page was deleted {$deleted} ({$restorePage}). " : $deletePage;
-*/
+
 		$html .= "</p>";
 		
 		return $html;
@@ -430,23 +431,6 @@ class CCtrl4ContentPage implements IController {
 			return "<p>404 eller förklaring till denna sidan, olika om inloggad eller ej, kan bli front till att söka bland artiklar, en pagecp, även som a=search&amp;q=searchstring, visa senast uppdaterade och visa ens egna artiklar .</p>";		
 		}
 	}
-
-
-	public function Test() {	
-		global $pp;
-		
-		$p = new ContentPage();
-		
-/*		
-		$this->key = "template-page";
-		$this->title = "Template using CContentPage to store content in database";
-		$this->SaveContent($content);
 */
-
-		$html = "<h1>ContentPage objects</h1><p>Welcome!</p>";
-		
-		$pp->AddView(new CView(array('html'=>$html)));
-	}
-
 
 } // End of class

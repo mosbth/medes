@@ -107,6 +107,7 @@ class CCtrl4CanonicalUrl implements IController {
 		
 		$pp->pageTitle = t('All urls: ');
 		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction(null, 'create') . "'>Create new</a></p>"));		
 		$pp->AddView(new CView($html));		
 	}
 
