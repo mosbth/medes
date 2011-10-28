@@ -125,6 +125,7 @@ $query = array(
   'load pp:config'    => 'select value from pp where module="CPrinceOfPersia" and key="config"',
   'save pp:config'    => 'update pp set value=? where module="CPrinceOfPersia" and key="config"',
   'create pp:config'  => 'insert into pp (module, key, value) values ("CPrinceOfPersia", "config", ?)',
+  'create adm user'   => 'insert into user (account, email, password, algorithm) values (?, ?, ?, ?)';
 );
 
 
@@ -171,6 +172,8 @@ $cfg = $pp->db->ExecuteSelectQueryAndFetchAll($query['load pp:config']);
 if(empty($cfg)) {
   echo "config does not exists, inserting new configuration...";
   $pp->db->ExecuteQuery($query['create pp:config'], array($b));
+  echo "inserting default user adm:adm...";
+  $pp->db->ExecuteQuery($query['create adm user'], array("adm", "adm@dbwebb.se", "adm", "plain"));
   echo "loading config again...";
   $cfg = $pp->db->ExecuteSelectQueryAndFetchAll($query['load pp:config']);
 }
