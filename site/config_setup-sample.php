@@ -119,7 +119,7 @@ $cfg = array(
     array('file'=>'style/screen.css','type'=>'text/css','media'=>'screen'),
 
     // enable to make site modifications by adding stylesheets in site-directory 
-    //'site-mods' => array('file' => MEDES_SITE_PATH . '/css/style.css', 'media'=>'screen'),
+    //'site-mods' => array('file' => MEDES_SITE_PATH . '/theme/style.css', 'media'=>'screen'),
   ),
 
   // enable to add own functions to theme 
