@@ -93,7 +93,6 @@ $cfg = array(
       array('text' => 'themes', 'href' => 'themes', 'class' => '', 'title' => 'Aid for the themer',),
       array('text' => 'pages', 'href' => 'cpage/edit', 'class' => '', 'title' => 'pages',),
       array('text' => 'canurls', 'href' => 'canurl/edit', 'class' => '', 'title' => 'canurls',),
-      array('text' => 'moped', 'href' => 'moped', 'class' => '', 'title' => 'canurls',),
     ),
   ),
 ),
