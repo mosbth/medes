@@ -142,7 +142,12 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		set_exception_handler(array($this, 'DefaultExceptionHandler'));
 
 		// include the site specific config.php
-		include(MEDES_SITE_PATH . '/config.php');
+    $configFile = MEDES_SITE_PATH . '/config.php';
+		if(is_file($configFile)) {
+		  include($configFile);
+		} else {
+		  include('setup.php');
+		}
 
 		// Start a named session
 		session_name($this->cfg['session']['name']);
@@ -152,8 +157,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		date_default_timezone_set($this->cfg['server']['timezone']);
     
     // Set default character encoding to use for multibyte strings
-    mb_internal_encoding($this->cfg['general']['character_encoding']);
 		$this->pageCharset = $this->cfg['general']['character_encoding'];
+    mb_internal_encoding($this->pageCharset);
 
 		// Create the main database controller, where the Medes configuration is.
 		extract($this->cfg['db'][0]);
@@ -181,9 +186,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->feedback = null;
 
     // These page specific items can be changed dynamically before rendering the page
-		$this->pageDocType      = 'html5';
-		$this->pageContentType  = 'text/html';
-		$this->pageLang         = 'sv';
+		$this->pageDocType      = $this->cfg['theme']['doctype']['doctype'];
+		$this->pageContentType  = $this->cfg['theme']['doctype']['contenttype'];
+		$this->pageLang         = $this->cfg['theme']['doctype']['lang'];
 		$this->pageTitle        = null;
 		$this->pageKeywords     = $this->cfg['theme']['meta']['keywords'];
 		$this->pageDescription  = $this->cfg['theme']['meta']['description'];

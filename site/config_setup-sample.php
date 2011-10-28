@@ -140,8 +140,16 @@ $cfg = array(
     'prepend' => 'phpmedes: ',		
   ),
 
+  // Add entries for the specific doctype
+  'doctype' => array(
+    'doctype'     => 'html5',		
+    'contenttype' => 'text/html',
+    'lang'        => 'en',
+  ),
+
   // Add meta entries as strings and use them in the template with echo $pp->GetHTMLForMeta();
   'meta' => array(
+    'language'    => 'en',		
     'keywords'    => null,		
     'description' => null,		
     'author'      => null,		
