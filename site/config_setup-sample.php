@@ -123,7 +123,7 @@ $cfg = array(
   ),
 
   // enable to add own functions to theme 
-  'functions' => array(MEDES_SITE_PATH . '/theme/functions.php',),
+  //'functions' => array(MEDES_SITE_PATH . '/theme/functions.php',),
   
   'developer_tools' => true, // Should the developer tools be displayed?=
 	
