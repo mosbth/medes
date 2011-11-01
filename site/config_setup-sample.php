@@ -24,7 +24,6 @@ $cfg = array(
 /**
  * General settings.
  *
- * 
  */
 'general'=> array(
   'clean_url' => true, //set to false if mod_rewrite is unavalable
