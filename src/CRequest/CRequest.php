@@ -266,9 +266,7 @@ class CRequest {
 	 *
 	 * This is to support those sites where mod_rewrite (or equal) to clean urls does not work.
 	 * 
-	 * @param string $controller
-	 * @param string $action
-	 * @param array $params array with values to be combined in url
+	 * @param string $url
 	 */
 	public function CleanUrl($url) {
 		global $pp;
@@ -280,6 +278,25 @@ class CRequest {
 		}
 	}
 	
+
+	/**
+	 * Create an absolute url from the argument which may be absolute or relative.
+	 *
+	 * @param string $url
+	 */
+	public function CheckUrl($url) {
+		if(strpos($url, '://') || $url[0] == '/') {
+			return $url;
+		}
+
+		$url = trim($url, '/');
+		if(empty($url)) {
+			return null;
+		}
+		
+		return $this->CleanUrl($url);
+	}
+
 
 	// ------------------------------------------------------------------------------------
 	//

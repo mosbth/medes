@@ -44,7 +44,7 @@ class CNavigation {
 				$title = " title=\"" . t($value['title']) . "\"";
 			
 			if(isset($value['href']))
-				$html .= "<a href=\"" . $pp->PrependWithSiteUrl($value['href']) . "\"{$title}{$classes}>{$value['text']}</a>";
+				$html .= "<a href=\"" . $pp->req->CheckUrl($value['href']) . "\"{$title}{$classes}>{$value['text']}</a>";
 			else
 				$html .= "<a{$title}{$classes}>" . t($value['text']) . "</a>";
 
