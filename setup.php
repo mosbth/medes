@@ -16,7 +16,7 @@
 // Change site path if needed, default is in MEDES_INSTALL_PATH/site
 //define('MEDES_SITE_PATH', SOMEWHERE . 'site');
 if(!defined('MEDES_SITE_PATH')) {
-  define('MEDES_SITE_PATH', __DIR__ . '/site');
+  define('MEDES_SITE_PATH', dirname(__FILE__) . '/site');
 }
 
 $errmsg = "<p>Fix the error and then reload this page and try again.</p>";
