@@ -248,7 +248,6 @@ class CRequest {
 	 * @param array $params array with values to be combined in url
 	 */
 	public function CreateUrlToControllerAction($controller = null, $action = null, $params = null) {
-		$base = $this->baseUrl;
 		$controller = isset($controller) ? $controller : $this->controller;
 		$action = isset($action) ? "/$action" : null;
 		$params = null;
@@ -258,7 +257,7 @@ class CRequest {
 				$params .= '/' . func_get_arg($i);
 			}
 		}
-		return "$base$controller$action$params";
+		return $this->CleanUrl("$controller$action$params");
 	}
 	
 
