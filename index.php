@@ -20,7 +20,7 @@ define('MEDES_VERSION', 'v0.18 latest');
 /**
  * The path to the Medes installation directory.
  */
-define('MEDES_INSTALL_PATH', __DIR__);
+define('MEDES_INSTALL_PATH', dirname(__FILE__));
 
 // Define the path to the sites directory
 if(!defined('MEDES_SITE_PATH')) {
