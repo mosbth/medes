@@ -15,7 +15,7 @@
 /**
  * The Medes version.
  */
-define('MEDES_VERSION', 'v0.18 latest');
+define('MEDES_VERSION', 'v0.2.0 latest');
 
 /**
  * The path to the Medes installation directory.
@@ -59,6 +59,7 @@ if(!(defined('MEDES_INSTANTIATE_PASS') && MEDES_INSTANTIATE_PASS == true)) {
 if(!(defined('MEDES_FRONTCONTROLLER_PASS') && MEDES_FRONTCONTROLLER_PASS == true)) {
 	$pp->FrontControllerRoute();
 }
+
 
 // ------------------------------ PHASE: Template engine -----------------------------------------
 

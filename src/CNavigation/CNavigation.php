@@ -1,51 +1,18 @@
 <?php
-// ===========================================================================================
-//
-// File: CNavigation.php
-//
-// Description: ake1 will write this
-//
-// Author: Rickard Gimerstedt
-//
-// History:
-// 2010-10-28: Created
-//
-
+/**
+ * Create menus for navigation.
+ * 
+ * @package MedesCore
+ */
 class CNavigation {
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Protected internal variables
-	//
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Public internal variables
-	//
-	
-
-	// ------------------------------------------------------------------------------------
-	//
-	// Constructor
-	//
-	protected function __construct() {;}
-	
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Destructor
-	//
-	public function __destruct() {;}
-	
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// One-liner on what the method does
-	//
-	// $array = array of arrays containing text, url and active status
-	// $list = present menu as list
-	// $class = class of nav-element
-	//
+	/**
+	 * Constructor. 
+	 * @param array $array array of arrays containing text, url and active status
+	 * @para boolean $list present menu as list
+	 * @param string $id id of nav-element
+	 * @param string $class class of nav-element
+	 */
 	public static function GenerateMenu($array, $list=false, $id=null, $class=null) {
 		global $pp;
 		$id 		= isset($id) ? "id='$id' " : null;

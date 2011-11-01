@@ -380,6 +380,17 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	}
 	
 	
+	/**
+	 * Check if we support clean urls.
+	 */
+	public function SupportCleanUrl() {
+		if(isset($pp->cfg['config-db']['general']['clean_url']) && $pp->cfg['config-db']['general']['clean_url'] === false) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 	// ---------------------------------------------------------------------------------------------
 	//
 	// Template Engine and View, related stuff.

@@ -224,8 +224,8 @@ class CRequest {
 	 * @param string $action
 	 * @param array $params array with values to be combined in url
 	 */
-  public function RedirectTo($aController = null, $aAction = null) {
-		$url = $this->CreateUrlToControllerAction($aController, $aAction);
+  public function RedirectTo($aController = null, $aAction = null, $aParams = null) {
+		$url = $this->CreateUrlToControllerAction($aController, $aAction, $aParams);
 		$params = null;
 		$num = func_num_args();
 		if($num > 2) {
@@ -247,7 +247,7 @@ class CRequest {
 	 * @param string $action
 	 * @param array $params array with values to be combined in url
 	 */
-	public function CreateUrlToControllerAction($controller = null, $action = null) {
+	public function CreateUrlToControllerAction($controller = null, $action = null, $params = null) {
 		$base = $this->baseUrl;
 		$controller = isset($controller) ? $controller : $this->controller;
 		$action = isset($action) ? "/$action" : null;
@@ -259,6 +259,26 @@ class CRequest {
 			}
 		}
 		return "$base$controller$action$params";
+	}
+	
+
+	/**
+	 * Enable support of canonical urls or through querystring, depending on configuration.
+	 *
+	 * This is to support those sites where mod_rewrite (or equal) to clean urls does not work.
+	 * 
+	 * @param string $controller
+	 * @param string $action
+	 * @param array $params array with values to be combined in url
+	 */
+	public function CleanUrl($url) {
+		global $pp;
+		$base = $this->baseUrl;
+		if($pp->SupportCleanUrl()) {
+			return "$base$url";
+		} else {
+			return "$base?p=$url";
+		}
 	}
 	
 
