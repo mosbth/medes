@@ -42,7 +42,7 @@ if(is_readable(MEDES_SITE_PATH . '/config.php')) {
 define('MEDES_INSTANTIATE_PASS', true);
 define('MEDES_FRONTCONTROLLER_PASS', true);
 define('MEDES_TEMPLATEENGINE_PASS', true);
-include(__DIR__ . "/index.php");
+include(dirname(__FILE__) . "/index.php");
 date_default_timezone_set($pp->cfg['server']['timezone']);
 
 
