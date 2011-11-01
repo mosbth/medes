@@ -918,7 +918,7 @@ EOD;
 	// @param DateTimeZone|string|null $endTimeZone
 	// @return string
 	//
-	public static function FormatDateTimeDiff($start, $startTimeZone=null, $end=null, $endTimeZone=null) {
+/*	public static function FormatDateTimeDiff($start, $startTimeZone=null, $end=null, $endTimeZone=null) {
 
 		if(!($start instanceof DateTime)) {
 			if($startTimeZone instanceof DateTimeZone) {
@@ -980,6 +980,7 @@ EOD;
 				}
 		}
 */
+/*
 		// We use the two biggest parts
 		if(count($format) > 1) {
 				$format = array_shift($format)." and ".array_shift($format);
@@ -990,8 +991,8 @@ EOD;
 		// Prepend 'since ' or whatever you like
 		return $interval->format($format);
 	}
+*/
 
-	
 	
 }
 
