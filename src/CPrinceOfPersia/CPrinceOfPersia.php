@@ -336,7 +336,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			$classExists 		= class_exists($class);
 		}
 
-		// Check if controller, action 
+    // Check if controller, action 
 		if($moduleExists && $moduleEnabled && $classExists) {
 			$rc = new ReflectionClass($class);
 			if($rc->implementsInterface('IController')) {
@@ -352,7 +352,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 			}
 		} 
 		// Check if canonical url exists
-		else if(($url = $canUrl->CheckUrl($this->req->GetQueryPartOfUrl()))) {
+		else if(($url = $canUrl->CheckUrl($this->req->GetCanonicalUrl()))) {
 			//$this->req->ForwardTo($url);
 			//$this->FrontControllerRoute();
 			$this->ForwardTo($url);
@@ -644,6 +644,7 @@ EOD;
 		}
 		return $menu;
   }
+
 
 	/**
 	 * Callback function, check and set menu item to current

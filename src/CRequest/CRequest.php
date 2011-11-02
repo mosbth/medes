@@ -197,6 +197,20 @@ class CRequest {
 
 
 	/**
+	 * Get query part of url, except the querystring started by ? 
+	 */
+	public function GetCanonicalUrl() {
+	  if(isset($this->get['p'])) {
+	    $p = trim($this->get['p'], '/');
+	    if(!empty($p)) {
+	      return trim($p, '/');
+	    }
+	  }
+		return trim($this->query, '/');
+	}
+
+
+	/**
 	 * Get the url to the current page. 
 	 */
 	public function GetUrlToCurrentPage() {
