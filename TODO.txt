@@ -1,26 +1,25 @@
 #
-# TODO and release planning
+# Release versions, TODO and release planning
 #
 
+# (2011-11-01) v0.2 Second development version 
+Released as example code for course dbwebb2.
+Major refactoring. 
 
-#
-# v1.0 First major stable release
-# To be or the ultimale goal.
-#
-Support for all major browsers
-Common CMS functionality
+# (2010-10-22) v0.1 First development version 
+First release ever.
 
 
-#
-# v0.8 
-# Majority of features implemented. Stabile.
-#
-Installation procedure
-Flexible upgrading 
-
+# THESE ARE PLANNED RELEASES
 
 #
 # v0.4 
+# A minimum of features, and usability, still ok to hosting a set of websites for testing purpose.
+#
+Basic features and usable as a PHP based MVC inspired framework.
+
+#
+# v0.6 
 # Planned as first offical release
 #
 Flexible navbar using sitemap, robots.txt
@@ -29,56 +28,20 @@ addon blog
 addon pageeditor
 addon stylesheet chooser
 
+#
+# v0.8 
+# Majority of features implemented. Stabile.
+#
+Installation procedure
+Flexible upgrading 
 
 #
-# v0.2 
-# A minimum of features, and usability, still ok to hosting a set of websites for testing purpose.
+# v1.0 First major stable release
+# To be or the ultimale goal.
 #
-Basic features.
+Support for all major browsers
+Common CMS functionality
 
-
-#
-# Current release, only internal development release
-# Unsorted things to do
-#
-config navigation, change how its stored.
-update procedure should work when site is already installed, instead of doing a fresh install
-
-CNews
-CNewsLetter
-CBlog
-CForum
-
-CInstall
-install as development site with grid and all modules on navbar (dev)
-install normal site
-
-
-CNavigation (navbar:selected, admin-menu:class per item, admin-menu:separator)
-install empty system 
-topmenu left
-topmenu right (login/logout as admin)
-footer menu
-logo links to sitelink
-change the look of the header with logo/navbar (compact, page, full width)
-change the look of the footer (page, full width)
-addon blog
-addon stylesheet chooser
-
-checker, check whats installed and not (filter_input_array)
-
-simple style supporting older browsers
-
-check latest version (stable, development)
-link to central download of latest versions
-
-enable the admin password and use it.
-
-upgrade.php?
-
-
-# v0.1 First development version (2010-10-22)
-First release ever.
 
  .   
 ..:  Copyright 2011 by Mikael Roos (me@mikaelroos.se)

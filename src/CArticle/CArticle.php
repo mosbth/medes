@@ -150,6 +150,7 @@ class CArticle implements IUsesSQL, IModule {
   		'select article by key' => 'select * from article where key=?',
   		'select article id by key' => 'select id from article where key=?',
   		'select * by type' => 'select * from article where type=?',
+  		'select * by type no deleted' => 'select * from article where type=? and deleted is null',
   	);
   	if(!isset($query[$id])) {
   		throw new Exception(t('#class error: Out of range. Query = @id', array('#class'=>get_class(), '@id'=>$id)));
@@ -308,10 +309,15 @@ class CArticle implements IUsesSQL, IModule {
 	/**
 	 * List all articles of specified type. 
 	 * @param string $type the type of articles to show.
+	 * @param boolean $deleted default false, set to true to include deleted pages 
 	 * @returns array with information on articles.
 	 */
-	public function ListByType($type) {
-		return $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select * by type'), array($type));
+	public function ListByType($type, $deleted=false) {
+	  if($deleted) {	  
+  		return $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select * by type'), array($type));
+  	} else {
+  		return $this->db->ExecuteSelectQueryAndFetchAll(self::SQL('select * by type no deleted'), array($type));
+  	}
 	}
 
 

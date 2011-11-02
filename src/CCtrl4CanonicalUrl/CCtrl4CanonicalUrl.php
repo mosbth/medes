@@ -66,13 +66,13 @@ class CCtrl4CanonicalUrl implements IController {
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoDelete'),
 			),
-  		'create' => array(
+ /* 		'create' => array(
 				'type' => 'submit',
 				'name' => 'doCreate',
 				'value' => 'Create',
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoCreate'),
-			),
+			),*/
 		);
 		$this->f = $f;
   }
@@ -138,6 +138,7 @@ class CCtrl4CanonicalUrl implements IController {
 		
 		$pp->pageTitle = t('Edit Canonical Url: ') . sanitizeHtml($c->GetCanUrl());
 		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction() . "'>View all</a> <a href='" . $pp->req->CreateUrlToControllerAction(null, 'create') . "'>Create new</a></p>"));		
 		$pp->AddView(new CView("<h1>Edit Canonical Url:</h1>" . $f->GetHTML()));
 	}
 
@@ -173,6 +174,7 @@ class CCtrl4CanonicalUrl implements IController {
 		
 		$pp->pageTitle = t('Create a new Canonical Url');
 		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction() . "'>View all</a></p>"));		
 		$pp->AddView(new CView("<h1>Create a Canonical Url:</h1>" . $f->GetHTML()));
 	}
 

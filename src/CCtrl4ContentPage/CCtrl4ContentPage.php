@@ -50,6 +50,7 @@ class CCtrl4ContentPage implements IController {
 		$html .= $f->GetHTML();
 
 		$pp->AddView(new CView(), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction() . "'>View all</a></p>"));		
 		$pp->AddView(new CView(array('html'=>$html)));
 	}
 
@@ -197,7 +198,7 @@ class CCtrl4ContentPage implements IController {
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoPublish'),
 			),
-*/			'save' => array(
+*/		'save' => array(
 				'type' => 'submit',
 				'name' => 'doSave',
 				'value' => 'Save',
@@ -206,6 +207,13 @@ class CCtrl4ContentPage implements IController {
 			),
 			'reset' => array(
 				'type' => 'reset',
+			),
+  		'delete' => array(
+				'type' => 'submit',
+				'name' => 'doDelete',
+				'value' => 'Delete',
+				'disabled' => !$pp->uc->IsAuthenticated(),
+				'callback' => array($this, 'DoDelete'),
 			),
 		);
 		$f->CheckDoSubmitted();
@@ -233,6 +241,7 @@ class CCtrl4ContentPage implements IController {
 		
 		$pp->pageTitle = t('Edit page: ') . sanitizeHtml($c->GetTitle());
 		$pp->AddView(new CView(array('html'=>$details)), 0, 'sidebar2');
+		$pp->AddView(new CView("<p><a href='" . $pp->req->CreateUrlToControllerAction() . "'>View all</a> <a href='" . $pp->req->CreateUrlToControllerAction(null, 'create') . "'>Create new</a></p>"));		
 		$pp->AddView(new CView($f->GetHTML()));
 	}
 
@@ -265,6 +274,23 @@ class CCtrl4ContentPage implements IController {
 		$c->SetFilter($form->GetValue('filter'));
 		$c->Save();
 		$pp->req->RedirectTo(null, 'edit', $c->GetKey());
+	}
+
+
+	/**
+	 * Save page.
+	 */
+	public function DoDelete($form) {
+		global $pp;
+    //$pp->if->UserIsSignedInOrRedirectToSignIn();
+		
+		$c = new CContentPage();		
+		if(!$c->LoadById($form->GetValue('id'))) {
+			$pp->AddFeedbackError(t('Page does not exists.'));
+			$pp->req->RedirectTo('error', 'code404');
+		}
+		$c->Delete();
+		$pp->req->RedirectTo();
 	}
 
 

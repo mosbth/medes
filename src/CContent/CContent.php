@@ -79,6 +79,7 @@ abstract class CContent {
 	public function Load($id = null) { return $this->a->Load($id); }
 	public function LoadByKey($key) { return $this->a->LoadByKey($key); }
 	public function Save() { return $this->a->Save(); }
+	public function Delete() { return $this->a->Delete(); }
 	public function ListByType($type) { return $this->a->ListByType($type); }
 	/**#@-*/
 
