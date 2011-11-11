@@ -7,7 +7,8 @@
 class CNavigation {
 	
 	/**
-	 * Constructor. 
+	 * Generate HTML for a menu, taking input from an array with the elements.
+	 *
 	 * @param array $array array of arrays containing text, url and active status
 	 * @para boolean $list present menu as list
 	 * @param string $id id of nav-element

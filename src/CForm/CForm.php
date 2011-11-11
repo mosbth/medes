@@ -275,36 +275,39 @@ EOD;
 			$name 	= " name='{$onlyname}'";
 			$script = isset($val['script']) ? " script='{$val['script']}'" : null;
 			$onChange = isset($val['onChange']) ? " onChange='{$val['onChange']}'" : null;
+			$autofocus = isset($val['autofocus']) && $val['autofocus'] ? " autofocus='autofocus'" : null;
 
 			if(isset($val['type']) && $val['type'] == 'textarea') {
 				$value 	= isset($val['value']) ? $val['value'] : null;
-				$html .= "<p><label for='$id'>$label</label><br><textarea id='$id'{$class}{$name}{$script}{$onChange}>{$value}</textarea></p>\n";			
+				$html .= "<p><label for='$id'>$label</label><br><textarea id='$id'{$class}{$name}{$script}{$onChange}{$autofocus}>{$value}</textarea></p>\n";			
 			} 
 			else if(isset($val['type']) && $val['type'] == 'hidden') {
 				$value 	= isset($val['value']) ? " value='{$val['value']}'" : null;
-				$html .= "<input type='hidden' id='$id'{$class}{$name}{$script}{$onChange}{$value}/>\n";			
+				$html .= "<input type='hidden' id='$id'{$class}{$name}{$script}{$onChange}{$autofocus}{$value}/>\n";			
 			} 
 			else if(isset($val['type']) && $val['type'] == 'select') {
 				$options = null;
 				foreach($val['options'] as $optkey => $optval) {
 					$selected = isset($val['value']) && $optkey == $val['value'] ? " selected=selected" : null;
-					$options .= "<option value='{$optkey}'{$selected}>{$optval}</option>";
+					$value = (is_array($optval)) ? $optval['label'] : $optval;
+					$title = (is_array($optval)) ? " title='{$optval['description']}'" : null;
+					$options .= " <option{$title} value='{$optkey}'{$selected}>{$value}</option>\n";
 				}
-				$html .= "<p><label for='$id'>$label</label><br><select id='$id'{$class}{$name}{$script}{$onChange}>{$options}</select></p>\n";			
+				$html .= "<p>\n<label for='$id'>$label</label><br>\n<select id='$id'{$class}{$name}{$script}{$onChange}{$autofocus}>\n{$options}</select>\n</p>\n\n";			
 			} 
 			else if(isset($val['type']) && $val['type'] == 'checkbox') {
 				$options = null;
 				$name = substr($name, 0, strlen($name)-1) . "[]'";
 				foreach($val['options'] as $optkey => $optval) {
 					$checked = $this->IsOptionChecked($onlyname, $optkey) ? " checked" : null;
-					$options .= "<input id='$id' type='checkbox'{$class}{$name}{$script}{$onChange} value='{$optkey}'{$checked}/>{$optval}<br/>";
+					$options .= " <input id='$id' type='checkbox'{$class}{$name}{$script}{$onChange} value='{$optkey}'{$checked}/>{$optval}<br/>\n\n";
 				}
-				$html .= "<p><label for='$id'>$label</label><br>{$options}</p>\n";			
+				$html .= "<p>\n<label for='$id'>$label</label><br>\n{$options}</p>\n";			
 			} 
 			else {
 				$type 	= isset($val['type']) ? " type='{$val['type']}'" : null;
 				$value 	= isset($val['value']) ? " value='{$val['value']}'" : null;
-				$html .= "<p><label for='$id'>$label</label><br><input id='$id'{$type}{$class}{$name}{$value}{$script}{$onChange} /></p>\n";			
+				$html .= "<p><label for='$id'>$label</label><br><input id='$id'{$type}{$class}{$name}{$value}{$script}{$onChange}{$autofocus} /></p>\n";			
 			}
 		}
 		return $html;

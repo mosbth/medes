@@ -76,9 +76,19 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	
 
 	/**
-	 * Session name for storing feedback between page requests
-	  */
+	 * Session name for storing feedback between page requests.
+	 */
 	const sessionNameFeedback = 'mds-feedback';
+	
+	
+	/**
+	 * A reference to the template file used by the template engine.
+	 * 
+	 * The theme defines a set of template files, these are set in the configuration array.
+	 * Set this variable to define which template to use, if the key does not exists in the
+	 * configuration array will the 'default' be used.
+	 */
+	public $template = 'default';
 	
 	
 	// CLEAN UP WITH PHPDOC LATER ON
@@ -353,9 +363,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		} 
 		// Check if canonical url exists
 		else if(($url = $canUrl->CheckUrl($this->req->GetCanonicalUrl()))) {
-			//$this->req->ForwardTo($url);
-			//$this->FrontControllerRoute();
-			$this->ForwardTo($url);
+      $this->req->ForwardTo($url);
+      $this->FrontControllerRoute();
 		} 
 		// Page not found 404
 		else { 
@@ -370,24 +379,10 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 
 
 	/**
-	 * Forward to another url
-	 */
-	public function ForwardTo($url) {
-		$this->req->ForwardTo($url);
-		//echo "<pre>", print_r($this->req, true), "</pre>";
-		//exit;
-		$this->FrontControllerRoute();
-	}
-	
-	
-	/**
 	 * Check if we support clean urls.
 	 */
 	public function SupportCleanUrl() {
-		if(isset($this->cfg['config-db']['general']['clean_url']) && $this->cfg['config-db']['general']['clean_url'] === false) {
-			return false;
-		}
-		return true;
+		return (isset($this->cfg['config-db']['general']['clean_url']) && $this->cfg['config-db']['general']['clean_url'] === false) ? false : true;
 	}
 	
 	
@@ -426,9 +421,11 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 * Render all views for a specific region
 	 */
 	public function RenderViewsForRegion($region) {
-		usort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
-		foreach($this->views[$region] as $view) {
-			$view['view']->Render();
+	  if(isset($this->views[$region]) && is_array($this->views[$region])) {
+      usort($this->views[$region], 'CPrinceOfPersia::ViewCompare');
+      foreach($this->views[$region] as $view) {
+        $view['view']->Render();
+      }
 		}
 	}
 	
@@ -455,19 +452,23 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		// Include template file, this hands over control to the theme to make callbacks to $pp.
 		$pp = &$this;
 		// Start by checking there is a template file.
-		$tplFile = $pp->cfg['config-db']['theme']['realpath'] . "/page.tpl.php";
+		$realPath = $pp->cfg['config-db']['theme']['realpath'];
+		$templates = $pp->cfg['config-db']['theme']['templates'];
+		$tplFile = (isset($templates[$this->template])) ? $templates[$this->template] : $templates['default'];
+		$tplFile = (substr($tplFile, 0, 1) == '/') ? $tplFile : "$realPath/$tplFile";
 		if(is_file($tplFile)) {
 		  // Is there a functions.php that comes with the theme?
-			$tplFunctions = $pp->cfg['config-db']['theme']['realpath'] . "/functions.php";
+			$tplFunctions = "$realPath/functions.php";
 			if(is_file($tplFunctions)) {
 				include $tplFunctions;
 			}
-			// Dose the user have their own functions.php-files?
+			// Do the user have their own functions.php-files?
 			if(isset($pp->cfg['config-db']['theme']['functions'])) {
-			  foreach($pp->cfg['config-db']['theme']['functions'] as $val) {
-			    $file = $pp->cfg['config-db']['theme']['realpath'] . "/$val";
+			  foreach($pp->cfg['config-db']['theme']['functions'] as $file) {
           if(is_file($file)) {
             include $file;
+          } else {
+          	throw new Exception(t('#class error: Template site function file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$tplFile)));
           }
 			  }
 			}
@@ -499,7 +500,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$this->pageLang}" lang="{$this->pageLang}">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$this->pageLang}" lang="{$this->pageLang}" class="{$this->template}">
 EOD;
 				break;
 			
@@ -507,13 +508,21 @@ EOD;
 			default:
 				$html = <<<EOD
 <!DOCTYPE html>
-<html lang="{$this->pageLang}">
+<html lang="{$this->pageLang}" class="{$this->template}">
 EOD;
 				break;			
 		}
 
 		return $html;
 	}
+
+
+	/**
+	 * Set the page template  
+	 */
+	public function SetTemplate($template) {
+		$this->template = $template;
+  }
 
 
 	/**

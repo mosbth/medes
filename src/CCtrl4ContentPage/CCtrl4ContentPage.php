@@ -85,7 +85,7 @@ class CCtrl4ContentPage implements IController {
 		global $pp;
 		$html = null;
 		
-		// Key exists, show one page
+		// Key does not exist
 		if(!isset($pp->req->args[0])) {
 		  $this->EditShowAll();
 		  return;
@@ -99,6 +99,7 @@ class CCtrl4ContentPage implements IController {
       //header("Location: " . $pp->req->CreateUrlToControllerAction('error', 'code404'));
       //exit;	
     }
+    $pp->SetTemplate($c->GetTemplate());
     $pp->SetPageTitle($c->GetTitle());
 		$pp->AddView(new CView($c->GetFilteredContent()));
 	}
@@ -151,14 +152,14 @@ class CCtrl4ContentPage implements IController {
 				'name' => 'id',
 			),
 			'key' => array(
-				'label' => 'Name:',
+				'label' => t('Name:'),
 				'type' => 'text',
 				'class' => 'text',
 				'name' => 'key',
 				'mandatory' => true,
 			),
 			'title' => array(
-				'label' => 'Title:',
+				'label' => t('Title:'),
 				'type' => 'text',
 				'class' => 'text',
 				'name' => 'title',
@@ -173,20 +174,33 @@ class CCtrl4ContentPage implements IController {
 			),
 */
 			'content' => array(
-				'label' => 'Content:',
+				'label' => t('Content:'),
 				'type' => 'textarea',
 				'class' => 'wide',
 				'name' => 'content',
 			),
 			'filter' => array(
-				'label' => 'Allowed content is:',
+				'label' => t('Allowed content is:'),
 				'type' => 'select',
 				//'class' => 'wide',
 				'name' => 'filter',
 				'options' => array(
-				  'text' => 'Plain Text',
-				  'html' => 'HTML',
-				  'php' => 'PHP',
+				  'text' 		=> array('label'=>t('Plain text'),'description'=>sanitizeHTML(t('Line breaks turns to <br/> and urls gets anchored.'))),
+				  'fhtml' 	=> array('label'=>t('Filtered HTML'), 'description'=>sanitizeHTML(t('As plain text and keeping tags as <i><b><strong><em><p><img><a><h1><h2><h3><h4><h5><h6><ul><li><ol>.'))),
+				  'bbcode' 	=> array('label'=>t('BBCode'), 'description'=>sanitizeHTML(t('As filtered HTML and supporting BBCode.'))),
+				  'html' 		=> array('label'=>t('HTML'), 'description'=>sanitizeHTML(t('As BBCode but without line breaks turning to <br/>.'))),
+				  'php' 		=> array('label'=>t('PHP'), 'description'=>sanitizeHTML(t('As HTML and will evaluate PHP code within tags <?php ?>.'))),
+				),
+			),
+			'template' => array(
+				'label' => t('Page template:'),
+				'type' => 'select',
+				//'class' => 'wide',
+				'name' => 'template',
+				'options' => array(
+				  'default' => array('label'=>t('Default'),'description'=>t('The default template as specified by the theme, usually the page template.')),
+				  'page' 		=> array('label'=>t('Page'), 'description'=>t('Page template, works for all content and uses all theme regions.')),
+				  'empty' 	=> array('label'=>t('Empty'), 'description'=>t('Empty template without header and footer, only supporting the "content" region of the theme.')),
 				),
 			),
 		);
@@ -201,7 +215,7 @@ class CCtrl4ContentPage implements IController {
 */		'save' => array(
 				'type' => 'submit',
 				'name' => 'doSave',
-				'value' => 'Save',
+				'value' => t('Save'),
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoSave'),
 			),
@@ -211,7 +225,7 @@ class CCtrl4ContentPage implements IController {
   		'delete' => array(
 				'type' => 'submit',
 				'name' => 'doDelete',
-				'value' => 'Delete',
+				'value' => t('Delete'),
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoDelete'),
 			),
@@ -232,6 +246,7 @@ class CCtrl4ContentPage implements IController {
 		$f->SetValue('title', sanitizeHtml($c->GetTitle()));
 		$f->SetValue('content', sanitizeHtml($c->GetContent()));
 		$f->SetValue('filter', sanitizeHtml($c->GetFilter()));
+		$f->SetValue('template', sanitizeHtml($c->GetTemplate()));
 		//$f->SetValue('can_url', sanitizeHtml($c->GetCanonicalUrl()));
 		//$disabled = $pp->uc->IsAdministrator() ? "" : "disabled";	
 		//$statusBar = $this->GetStatusBar();
@@ -272,6 +287,7 @@ class CCtrl4ContentPage implements IController {
 		//$c->SetCanonicalUrl($form->GetValue('can_url'));
 		$c->SetContent($form->GetValue('content'));
 		$c->SetFilter($form->GetValue('filter'));
+		$c->SetTemplate($form->GetValue('template'));
 		$c->Save();
 		$pp->req->RedirectTo(null, 'edit', $c->GetKey());
 	}

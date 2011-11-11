@@ -1,28 +1,19 @@
 <?php
-// ===========================================================================================
-//
-// File: CUserController.php
-//
-// Description: Keep values for an authenticated user. This is used to hold information on the
-// user. An object is instantiated and populated when the user login. The object is stored
-// in the session and used together with CIntercetptionFilter, to verify 
-// authority.
-// Class is implemented as a Singelton-like where the getInstance gets the current instance from 
-// $_SESSION. 
-//
-// Author: Mikael Roos
-//
-// History:
-// 2010-11-26: Created
-//
-
-
+/**
+ * Keep values for an authenticated user.
+ * 
+ * This is used to hold information on the user. An object is instantiated and populated when 
+ * the user login. The object is stored in the session and used together with CIntercetptionFilter,
+ * to verify authority. Class is implemented as a Singelton-like where the getInstance gets the 
+ * current instance from $_SESSION. 
+ *
+ * @package MedesCore
+ */
 class CUserController implements iSingleton, IUsesSQL, IModule {
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Internal variables
-	//
+	/**#@+
+	 * @access public
+   */
 	const sessionName = 'mds-uc';
 	private static $instance = null;
 	//private $settings = array();
@@ -30,26 +21,18 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 	private $userAccount = null;
 	private $userEmail = null;
 
+ /**#@-*/
 
-	// ------------------------------------------------------------------------------------
-	//
-	// Constructor
-	//
+
+	/**
+	 * Constructor
+	 */
 	protected function __construct() {;}
 	
 	
-	// ------------------------------------------------------------------------------------
-	//
-	// Destructor
-	//
-	public function __destruct() {;}
-	
-	
-	// ------------------------------------------------------------------------------------
-	//
-	// Singleton pattern.
-	// Get the instance of the latest created object or create a new one. 
-	//
+	/**
+	 * Singleton pattern
+	 */
 	public static function GetInstance() {
 		if(self::$instance == null) {
 			if(isset($_SESSION[self::sessionName])) {
@@ -139,8 +122,8 @@ class CUserController implements iSingleton, IUsesSQL, IModule {
 		global $pp;
 		$q = $this->SQL('get user');
 		$user = $pp->db->ExecuteSelectQueryAndFetchAll($q, array($aUser));
-		$user = $user[0];
-		if($this->CheckPassword($aPassword, $user['algorithm'], $user['password'], $user['salt'])) {
+		$user = (isset($user[0])) ? $user[0] : false;
+		if($user && $this->CheckPassword($aPassword, $user['algorithm'], $user['password'], $user['salt'])) {
 			$this->userId				= $user['id'];
 			$this->userAccount	= $user['account'];
 			$this->userEmail		= $user['email']; 

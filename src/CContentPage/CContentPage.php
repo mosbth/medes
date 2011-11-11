@@ -95,6 +95,18 @@ class CContentPage extends CContent {
 
 
 	/**
+	 * Rename page key. 
+	 */
+	public function Rename($newKey) {
+		if(empty($this->key) || empty($newKey))	throw new Exception(t('Doing action with empty key.'));
+		if(($res = $this->a->RenameKey($this->key, $newKey)) == true) {
+			$this->key = $newKey;
+		}
+		return $res;
+	}
+
+
+	/**
 	 * Save page content. 
 	 */
 	public function SaveContent($aContent, $aKey=null) {
@@ -116,7 +128,7 @@ class CContentPage extends CContent {
 	/**
 	 * Save draft page content. 
 	 */
-	public function SaveDraftContent($aContent, $aKey=null) {
+/*	public function SaveDraftContent($aContent, $aKey=null) {
 		if(!is_null($aKey)) $this->key = $aKey;
 		if(empty($this->key)) throw new Exception(t('Saving content with empty key.'));
 		
@@ -127,7 +139,7 @@ class CContentPage extends CContent {
 		$this->a->SetDraftContent($aContent);
 		$this->a->Save();
 	}
-
+*/
 
 	/**
 	 * Get page content. 
@@ -144,7 +156,7 @@ class CContentPage extends CContent {
 	/**
 	 * Get draft page content, if it exists, otherwise get page content. 
 	 */
-	public function GetDraftContent($aKey=null) {
+/*	public function GetDraftContent($aKey=null) {
 		if(isset($aKey)) $this->key = $aKey;
 		if(empty($this->key)) throw new Exception(t('Getting draft content with empty key.')); 
 		
@@ -156,27 +168,15 @@ class CContentPage extends CContent {
 		}
 		return $draft;
 	}
-
-
-	/**
-	 * Rename page key. 
-	 */
-	public function Rename($newKey) {
-		if(empty($this->key) || empty($newKey))	throw new Exception(t('Doing action with empty key.'));
-		if(($res = $this->a->RenameKey($this->key, $newKey)) == true) {
-			$this->key = $newKey;
-		}
-		return $res;
-	}
-
+*/
 
 	/**
 	 * Delete all pages. 
 	 */
-	public function DeleteAll() {
+/*	public function DeleteAll() {
 		parent::DeleteAllByOwner(get_class());
 	}
-
+*/
 
 	// ====================================================================================
 	//
@@ -200,7 +200,7 @@ class CContentPage extends CContent {
 	}
 */
 
-
+/*
 	// ------------------------------------------------------------------------------------
 	//
 	// Get view with form to rename page. 
@@ -310,7 +310,7 @@ EOD;
 	}
 */
 
-
+/*
 	// ------------------------------------------------------------------------------------
 	//
 	// Destroy draft page
@@ -436,6 +436,6 @@ EOD;
 	protected function DoActionViewPages() {
 		throw new Exception(__METHOD__ . " error: not yet implemented.");
 	}
-
+*/
 
 }

@@ -25,6 +25,7 @@ class CCtrl4User implements IController {
  	 * Implementing interface IController. All controllers must have an index action.
 	 */
 	public function Index() {	
+	  $this->Settings();
 	}
 
 
@@ -45,6 +46,7 @@ class CCtrl4User implements IController {
 				'type' => 'text',
 				'class' => 'text',
 				'name' => 'user',
+				'autofocus' => true,
 				//'mandatory' => true,
 			),
 			'password' => array(
@@ -67,7 +69,7 @@ class CCtrl4User implements IController {
 		$f->CheckDoSubmitted();
 		
 		$pp->setPageTitle(t('Login user'));
-		$html = t("<h1>Login</h1>\n<p>Login using your userid and password.</p>");
+		$html = t("<h1>Login</h1>\n<p>Login with your user and password.</p>");
 		$html .= $f->GetHTML();
 
 		$pp->AddView(new CView(), 0, 'sidebar2');
@@ -133,7 +135,6 @@ class CCtrl4User implements IController {
 		$pp = &$this->pp;
 		$pp->uc->Logout();
 		$form->AddFeedbackSuccess(t('You have successfully logged out from this site.'));
-
 		header("Location: " . $pp->req->CreateUrlToControllerAction(null, 'logout'));
 		exit;
 	}
@@ -144,13 +145,11 @@ class CCtrl4User implements IController {
 	 */
 	public function Settings() {	
 		$pp = &$this->pp;
-		
-		$html = t("<h1>Settings</h1>\n<p>Change user and site settings for this account.</p>");
-
+    $pp->if->UserIsSignedInOrRedirectToSignIn();		
+    $pp->SetPageTitle(t('Settings for USER', array('USER'=>$pp->uc->GetUserAccount())));
+		$html = t("<h1>Settings</h1>\n<p>Change settings for your account.</p>");
 		$pp->AddView(new CView(), 0, 'sidebar2');
-		$v = new CView();
-		$v->AddStatic($html);
-		$pp->AddView($v);
+		$pp->AddView(new CView($html));		
 	}
 
 

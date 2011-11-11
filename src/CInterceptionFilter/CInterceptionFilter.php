@@ -31,13 +31,12 @@ class CInterceptionFilter {
 	static public function UserIsSignedInOrRedirectToSignIn() {
 	  global $pp;
     if(!$pp->uc->IsAuthenticated()) {
-      echo "need to login";      
+      $pp->req->RedirectTo('user/login');      
     }
 	}
 	
 	
-	
-	
+	// CODE BELOW MAY BE OSBSOLETE	
 /*
 	// ------------------------------------------------------------------------------------
 	//

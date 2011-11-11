@@ -56,7 +56,7 @@ abstract class CContent {
 
 
 	/**
-	 * Get content and preprocess according to its filter, if any. useful when adding content
+	 * Get content and preprocess according to its filter, if any. Useful when adding content
 	 * directly to a view.
 	 * @param string $aKey The key of the content
 	 * @return array with the key to the view and with the preprocessed content.
@@ -65,9 +65,13 @@ abstract class CContent {
     $content = $this->GetContent();
     $filter  = $this->GetFilter();
     $type = 'html';
+    $allowed = '<i><b><strong><em><p><img><a><h1><h2><h3><h4><h5><h6><ul><li><ol>';
     switch($filter) {
-      case 'php':   $type = 'php'; break;
-      case 'text':  $content = nl2br(sanitizeHTML($content), true); break;
+      case 'php':   	$content = bbcode2html($content); $type = 'php'; break;
+    	case 'html': 		$content = bbcode2html($content); break;
+    	case 'bbcode': 	$content = nl2br(bbcode2html(strip_tags($content, $allowed)), true); break;
+    	case 'fhtml': 	$content = nl2br(strip_tags($content, $allowed), true); break;
+      case 'text':  	$content = nl2br(sanitizeHTML($content), true); break;
     }
 		return array($type=>$content);
 	}
@@ -97,6 +101,8 @@ abstract class CContent {
 	public function SetContent($val) { return $this->a->SetContent($val); }
 	public function GetFilter() { return $this->a->GetFilter(); }
 	public function SetFilter($val) { return $this->a->SetFilter($val); }
+	public function GetTemplate() { return $this->a->GetTemplate(); }
+	public function SetTemplate($val) { return $this->a->SetTemplate($val); }
 	/**#@-*/
 
 }

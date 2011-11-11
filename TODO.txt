@@ -2,7 +2,16 @@
 # Release versions, TODO and release planning
 #
 
-# (2011-11-01) v0.2 Second development version 
+# (2011-11-11) v0.2.2 
+Adding content filters, 'Filtered HTML' and 'BBCode'.
+Can not create canurl, fixed.
+Adding support for having several template files for a theme.
+
+# (2011-11-02) v0.2.1 
+Supporting PHP < 5.3.
+Support where mod_rewrite is unavailable.
+
+# (2011-10-31) v0.2 Second development version 
 Released as example code for course dbwebb2.
 Major refactoring. 
 
@@ -10,13 +19,15 @@ Major refactoring.
 First release ever.
 
 
-# THESE ARE PLANNED RELEASES
+# THE FOLLOWING ARE PLANNED RELEASES
 
 #
 # v0.4 
 # A minimum of features, and usability, still ok to hosting a set of websites for testing purpose.
 #
 Basic features and usable as a PHP based MVC inspired framework.
+acp
+ucp
 
 #
 # v0.6 
@@ -26,14 +37,18 @@ Flexible navbar using sitemap, robots.txt
 How to write a addon
 addon blog
 addon pageeditor
-addon stylesheet chooser
+addon theme chooser
+feed and aggregator
+ajax.php
 
 #
 # v0.8 
 # Majority of features implemented. Stabile.
 #
+Documentation stable
 Installation procedure
-Flexible upgrading 
+Flexible upgrading
+Keep track of updates
 
 #
 # v1.0 First major stable release
@@ -41,6 +56,7 @@ Flexible upgrading
 #
 Support for all major browsers
 Common CMS functionality
+MVC framework
 
 
  .   

@@ -66,13 +66,13 @@ class CCtrl4CanonicalUrl implements IController {
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoDelete'),
 			),
- /* 		'create' => array(
+ 		'create' => array(
 				'type' => 'submit',
 				'name' => 'doCreate',
 				'value' => 'Create',
 				'disabled' => !$pp->uc->IsAuthenticated(),
 				'callback' => array($this, 'DoCreate'),
-			),*/
+			),
 		);
 		$this->f = $f;
   }

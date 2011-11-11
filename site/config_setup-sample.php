@@ -129,15 +129,26 @@ $cfg = array(
     array('file'=>'style/screen.css','type'=>'text/css','media'=>'screen'),
 
     // enable to make site modifications by adding stylesheets in site-directory 
-    //'site-mods' => array('file' => MEDES_SITE_PATH . '/theme/style.css', 'media'=>'screen'),
+    //'site-mods' => array('file' => '../site/theme/style.css', 'media'=>'screen'),
   ),
 
-  // enable to add own functions to theme 
+  // enable to add site specific functions to theme 
   //'functions' => array(MEDES_SITE_PATH . '/theme/functions.php',),
   
-  'developer_tools' => true, // Should the developer tools be displayed?=
+  'developer_tools' => true, // Should the developer tools be displayed?
 	
-  // Add values and extract them in your template page using echo $pp->GetHTMLMessage('footer');
+  // Template files, where the actual content goes, the resulting page. Will add realpath to those
+  // with relative paths, absolute paths will be untouched.
+  'templates' => array(
+    'default' => 'page.tpl.php',
+    'page'    => 'page.tpl.php',
+    'empty' 	=> 'empty.tpl.php',
+    
+    // enable to add site specific templates to extend current theme
+    //'xxx'		=> MEDES_SITE_PATH . 'theme/xxx.tlp.php'
+  ),
+  
+  // Add hardcoded values and extract them in your template page using echo $pp->GetHTMLMessage('footer');
   'messages' => array(
     'sitetitle' => '',
     'footer'    => '<p>This is the footer</p>',
@@ -157,7 +168,7 @@ $cfg = array(
     'lang'        => 'en',
   ),
 
-  // Add meta entries as strings and use them in the template with echo $pp->GetHTMLForMeta();
+  // Add meta entries as strings and get them in the template with echo $pp->GetHTMLForMeta();
   'meta' => array(
     'language'    => 'en',		
     'keywords'    => null,		
@@ -174,7 +185,7 @@ $cfg = array(
  * Its the template file that calls the methods for getting the HTML to display for including
  * javaScript external files:
  * echo $pp->GetHTMLForScript();
- * The tracker is pure Javascript with the <javascript>-tags included.
+ * The tracker is pure Javascript, including the <javascript>-tags.
  * 
  */
 'js'=> array(

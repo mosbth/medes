@@ -41,6 +41,43 @@ function sanitizeHTML($text) {
 }
 
 /**
+ * BBCode formatting converting to HTML.
+ * @param string text The text to be converted.
+ */
+function bbcode2html($text) {
+	function phpsyntax($text) {
+		return "<blockquote class='code'> ".highlight_string($text, true).'</blockquote>';
+	};
+	return preg_replace(
+		array(
+			'/\\[url[\\:\\=]((\\"([\\W]*javascript\:[^\\"]*)?([^\\"]*)\\")|'.
+					'(([\\W]*javascript\:[^\\]]*)?([^\\]]*)))\\]/ie', '/\\[\\/url\\]/i',
+			'/\\[b\\]/i', '/\\[\/b\\]/i',
+			'/\\[i\\]/i', '/\\[\/i\\]/i',
+			'/\\[quote\\]/i', '/\\[\/quote\\]/i',
+			'/\\[code\\]/i', '/\\[\/code\\]/i',
+			'/\[php\](.*?)\[\/php\]/ies',
+			'/\[youtube\](.*?)\[\/youtube\]/is',
+		),
+		array(
+			'\'<a href="\'.(\'$4\'?\'$4\':\'$7\').\'">\'', '</a>',
+			'<b>', '</b>',
+			'<i>', '</i>',
+			"<blockquote class='quote'>", '</blockquote>',
+			"<blockquote class='code'>", '</blockquote>',
+			'phpsyntax("\\1", true)',
+			'<object width="425" height="350">
+			 <param name="movie" value="http://www.youtube.com/v/$1"></param>
+			 <param name="wmode" value="transparent"></param>
+			 <embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed>
+			 </object>
+			',
+		),
+		$text
+	);
+}
+
+/**
  * Interface for classes implementing the singleton pattern.
  */
 interface ISingleton {

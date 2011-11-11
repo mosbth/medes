@@ -15,7 +15,7 @@
 /**
  * The Medes version.
  */
-define('MEDES_VERSION', 'v0.2.1');
+define('MEDES_VERSION', 'v0.2.2');
 
 /**
  * The path to the Medes installation directory.
