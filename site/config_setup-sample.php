@@ -120,7 +120,7 @@ $cfg = array(
  */
 'theme'=> array(
   'name'      => 'Medes Core Theme',
-  'regions'   => array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer_column1', 'footer_column2', 'footer_column3', 'footer_column4', 'footer'),
+  'regions'   => array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer-column1', 'footer-column2', 'footer-column3', 'footer-column4', 'bottom'),
   'realpath'  => MEDES_INSTALL_PATH . '/theme/core',
   'url'       => 'theme/core', // Will prepend urlpath to favicon, logo and stylesheets
   'favicon'   => 'img/favicon.png',

@@ -46,7 +46,10 @@ function sanitizeHTML($text) {
  */
 function bbcode2html($text) {
 	function phpsyntax($text) {
-		return "<blockquote class='code'> ".highlight_string($text, true).'</blockquote>';
+		return "<blockquote class='code'>".highlight_string(str_replace('#DOLLAR#', '$', trim($text)), true).'</blockquote>';
+	};
+	function code($text) {
+		return "<blockquote class='code'>".nl2br(sanitizeHTML(trim($text)), true).'</blockquote>';
 	};
 	return preg_replace(
 		array(
@@ -55,7 +58,7 @@ function bbcode2html($text) {
 			'/\\[b\\]/i', '/\\[\/b\\]/i',
 			'/\\[i\\]/i', '/\\[\/i\\]/i',
 			'/\\[quote\\]/i', '/\\[\/quote\\]/i',
-			'/\\[code\\]/i', '/\\[\/code\\]/i',
+			'/\[code\](.*?)\[\/code\]/ies',
 			'/\[php\](.*?)\[\/php\]/ies',
 			'/\[youtube\](.*?)\[\/youtube\]/is',
 		),
@@ -64,8 +67,8 @@ function bbcode2html($text) {
 			'<b>', '</b>',
 			'<i>', '</i>',
 			"<blockquote class='quote'>", '</blockquote>',
-			"<blockquote class='code'>", '</blockquote>',
-			'phpsyntax("\\1", true)',
+			'code("\\1")',
+			'phpsyntax("\\1")',
 			'<object width="425" height="350">
 			 <param name="movie" value="http://www.youtube.com/v/$1"></param>
 			 <param name="wmode" value="transparent"></param>
@@ -73,7 +76,7 @@ function bbcode2html($text) {
 			 </object>
 			',
 		),
-		$text
+		str_replace('$', '#DOLLAR#', $text)
 	);
 }
 

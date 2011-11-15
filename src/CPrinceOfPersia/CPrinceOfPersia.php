@@ -580,6 +580,9 @@ EOD;
 			  $html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
 			}
 		}
+		if(!empty($this->pageStyle)) {
+		  $html .= "<style>\n{$this->pageStyle}\n</style>";
+		}
 		return $html;
 	}
 

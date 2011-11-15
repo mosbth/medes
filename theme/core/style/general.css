@@ -55,13 +55,22 @@ body{background:#fff;}
 .mds-sidebar2{}
 
 
+/* #mds-triptych
+--------------------------------------------------------
+   The triptych of the content part.
+
+*/
+#mds-triptych-wrap{padding:0 8px;}
+#mds-triptych{}
+
+
 /* #mds-footer
 --------------------------------------------------------
    The footer of the content part.
 
 */
-#mds-footer-wrap{padding:0 8px;}
-#mds-footer{}
+#mds-footer-columns-wrap{border-top:1px solid #ccc;background:#eee;padding:0 8px;}
+#mds-footer-columns{padding:1em 0 1em 0;background-color:transparent;color:#555;}
 
 
 /* #mds-bottom
@@ -70,7 +79,7 @@ body{background:#fff;}
    copyright and links.
 
 */
-#mds-bottom-wrap{border-top:1px solid #ccc;background:#eee;padding:0 8px;}
+#mds-bottom-wrap{background:#eee;padding:0 8px;}
 #mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
 
 
