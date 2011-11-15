@@ -187,7 +187,7 @@ class CCtrl4ContentPage implements IController {
 				'options' => array(
 				  'text' 		=> array('label'=>t('Plain text'),'description'=>sanitizeHTML(t('Line breaks turns to <br/> and urls gets anchored.'))),
 				  'fhtml' 	=> array('label'=>t('Filtered HTML'), 'description'=>sanitizeHTML(t('As plain text and keeping tags as <i><b><strong><em><p><img><a><h1><h2><h3><h4><h5><h6><ul><li><ol>.'))),
-				  'bbcode' 	=> array('label'=>t('BBCode'), 'description'=>sanitizeHTML(t('As filtered HTML and supporting BBCode.'))),
+				  'bbcode' 	=> array('label'=>t('BBCode'), 'description'=>sanitizeHTML(t('As filtered HTML and supporting BBCode tags [b][i][url][code][quote][php][youtube].'))),
 				  'html' 		=> array('label'=>t('HTML'), 'description'=>sanitizeHTML(t('As BBCode but without line breaks turning to <br/>.'))),
 				  'php' 		=> array('label'=>t('PHP'), 'description'=>sanitizeHTML(t('As HTML and will evaluate PHP code within tags <?php ?>.'))),
 				),

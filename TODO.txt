@@ -2,10 +2,21 @@
 # Release versions, TODO and release planning
 #
 
-# (2011-11-11) v0.2.2 
+# (current) v0.2.2 latest
+todo: user - login with wrong pwd.
+todo: user - redirect during login.
+todo: cpage - protect with interceptionfilter
+todo: canurl - protect with interceptionfilter
+todo: theme - display regions
+todo: theme - color profiles
+
+
+# (2011-11-11) v0.2.2 Correction release, enhancements and new features
 Adding content filters, 'Filtered HTML' and 'BBCode'.
 Can not create canurl, fixed.
 Adding support for having several template files for a theme.
+Database table article changed, not compatible with v0.2.1
+config_setup-sample.php changed, not compatible with v0.2.1
 
 # (2011-11-02) v0.2.1 
 Supporting PHP < 5.3.
