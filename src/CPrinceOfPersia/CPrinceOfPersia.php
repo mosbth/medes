@@ -470,7 +470,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
           if(is_file($file)) {
             include $file;
           } else {
-          	throw new Exception(t('#class error: Template site function file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$file)));
+          	echo t('#class error: Template site function file does not exist. File = @file', array('#class'=>get_class(), '@file'=>$file));
           }
 			  }
 			}
