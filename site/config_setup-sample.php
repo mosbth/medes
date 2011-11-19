@@ -27,6 +27,7 @@ $cfg = array(
  */
 'general'=> array(
   'clean_url' => false, //set to false if mod_rewrite is unavalable
+  //'home' => array('title' => 'The Homepage', 'href' => 'home1'), // Define your homepage for /
 ),
 
 
@@ -50,8 +51,6 @@ $cfg = array(
   'canurl'    => array('enabled' => true,'class' => 'CCtrl4CanonicalUrl'),
   'acp'       => array('enabled' => true,'class' => 'CCtrl4AdminControlPanel'),
 ),
-// Define your own homepage
-//'home' => array('title' => 'The Homepage', 'href' => 'home1'), 
 
 
 /**
