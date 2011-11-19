@@ -27,7 +27,7 @@ class CCtrl4Theme implements IController {
 		);
 		$html = '<h1>Theme helper</h1><p>Here is useful information for a theme developer and tester, and maybe e menu (bar) of the options.</p>';	
 		$html .= CNavigation::GenerateMenu($nav, $pp->pageUseListForMenus, 'mds-nav-theme', 'mds-nav-tabs');	
-		$pp->AddView(new CView(array('html'=>$html, -9)));
+		$pp->AddView(new CView($html));
 		
 		$nav = array();
 		foreach($pp->cfg['config-db']['theme']['templates'] as $key=>$val) {
@@ -35,7 +35,7 @@ class CCtrl4Theme implements IController {
 		}
 		$html = '<br/><p>Change what template is used when rendering the page.</p>';	
 		$html .= CNavigation::GenerateMenu($nav, $pp->pageUseListForMenus);	
-		$pp->AddView(new CView(array('html'=>$html, -8)));
+		$pp->AddView(new CView($html));
 		
 		$nav = array(
 			array('text'=>'Show regions', 'href'=>$pp->req->CreateUrlToControllerAction(null, 'regions'),),
@@ -43,7 +43,17 @@ class CCtrl4Theme implements IController {
 		);
 		$html = '<br/><p>Display all regions, with or without the grid.</p>';	
 		$html .= CNavigation::GenerateMenu($nav, $pp->pageUseListForMenus);	
-		$pp->AddView(new CView(array('html'=>$html, -7)));
+		$pp->AddView(new CView($html));
+
+		$nav = array();
+		foreach($pp->cfg['config-db']['theme']['stylesheets'] as $key=>$val) {
+		  if(isset($val['enabled']) && !$val['enabled']) {
+  			$nav[] = array('text'=>"{$val['file']}", 'href'=>$pp->req->CreateUrlToControllerAction(null, 'stylesheet', 'key', urlencode($val['file'])));
+      }
+		}
+		$html = '<br/><p>If this theme have disabled stylesheets those will be available here for tryout:</p>';	
+		$html .= CNavigation::GenerateMenu($nav, $pp->pageUseListForMenus);	
+		$pp->AddView(new CView($html));
 	}
 	
 	
@@ -97,12 +107,23 @@ class CCtrl4Theme implements IController {
 	public function Regions() {
 	  global $pp;
 		if(isset($pp->req->params['grid'])) {
-		  $pp->pageStyle .= "#mds-header,#mds-promoted,#mds-triptych,#mds-footer-columns,#mds-bottom,.mds-content-row{background: url(theme/core/img/grid.png);}\n";
+		  $pp->pageStyle .= "#mds-header-area,#mds-promoted,#mds-triptych-area,#mds-footer-area,#mds-main-area{background: url(theme/core/img/grid.png);}\n";
 		}
 	  foreach($pp->cfg['config-db']['theme']['regions'] as $val) {
 		  $pp->AddView(new CView(array('html'=>"<span style='position:relative;z-index:2;background:yellow;'>Region=$val</span>")), -99, $val);
 		  $pp->pageStyle .= "#mds-{$val}{background-color:hsla(120, 100%, 75%, 0.3);min-height:50px;}\n";
 	  }
+	  $pp->pageStyle .= "#mds-top-left, #mds-top-right{min-height:0px;}\n";
+	  $pp->pageStyle .= "#mds-header{min-width:300px;}\n";
+	}
+
+
+	/**
+ 	 * Action to display sidebar.
+	 */
+	public function Stylesheet() {	
+	  global $pp;
+		echo urldecode($pp->req->params['key']);
 	}
 
 

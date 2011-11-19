@@ -120,13 +120,16 @@ $cfg = array(
  */
 'theme'=> array(
   'name'      => 'Medes Core Theme',
-  'regions'   => array('top-left', 'top-right', 'header', 'navbar-1', 'navbar-2', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footer-column1', 'footer-column2', 'footer-column3', 'footer-column4', 'bottom'),
+  'regions'   => array('top-left', 'top-right', 'header', 'promoted', 'content', 'sidebar1', 'sidebar2', 'triptych1', 'triptych2', 'triptych3', 'footercol1', 'footercol2', 'footercol3', 'footercol4', 'footer'),
   'realpath'  => MEDES_INSTALL_PATH . '/theme/core',
   'url'       => 'theme/core', // Will prepend urlpath to favicon, logo and stylesheets
   'favicon'   => 'img/favicon.png',
   'logo'      => array('src'=>'img/logo_medes_330x70.png', 'alt'=>'Medes Logo', 'width'=>330, 'height'  => 70,),
   'stylesheets' => array(
     array('file'=>'style/screen.css','type'=>'text/css','media'=>'screen'),
+    array('file'=>'style/ish_drupal.css','type'=>'text/css','media'=>'screen', 'enabled'=>false),
+    array('file'=>'style/ish_wordpress.css','type'=>'text/css','media'=>'screen', 'enabled'=>false),
+    array('file'=>'style/ish_stylish.css','type'=>'text/css','media'=>'screen', 'enabled'=>false),
 
     // enable to make site modifications by adding stylesheets in site-directory 
     //'site-mods' => array('file' => '../site/theme/style.css', 'media'=>'screen'),
@@ -135,8 +138,6 @@ $cfg = array(
   // enable to add site specific functions to theme 
   //'functions' => array(MEDES_SITE_PATH . '/theme/functions.php',),
   
-  'developer_tools' => true, // Should the developer tools be displayed?
-	
   // Template files, where the actual content goes, the resulting page. Will add realpath to those
   // with relative paths, absolute paths will be untouched.
   'templates' => array(
@@ -176,6 +177,8 @@ $cfg = array(
     'author'      => null,		
     'copyright'   => null,		
   ),
+
+  'developer_tools' => true, // Should the developer tools be displayed?
 ),
 
 

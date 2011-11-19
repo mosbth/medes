@@ -18,7 +18,7 @@ html{background:#eee;overflow-y:scroll;}
 body{background:#fff;} 
 
 
-/* #mds-top
+/* mds-top
 --------------------------------------------------------
    The top of page, usually containing related 
    sitelinks and the login/profile menu. 
@@ -29,17 +29,28 @@ body{background:#fff;}
 #mds-top-right{float:right;}
 
 
-/* #mds-header
+/* mds-header
 --------------------------------------------------------
 	Header area with logo, site title and position of
 	site menu.
 	
 */
 #mds-header-wrap{padding:0 8px;}
-#mds-header{}
+#mds-header-area{}
 #mds-header-logo{}
 #mds-header-title{}
 #mds-header-menu{}
+#mds-header{float:right;}
+
+
+/* mds-promoted
+--------------------------------------------------------
+	The promoted area
+
+*/
+#mds-promoted-wrap{padding:0 8px;}
+#mds-promoted-area{}
+#mds-promoted{}
 
 
 /* mds-content
@@ -47,12 +58,11 @@ body{background:#fff;}
 	Main content with sidebars
 
 */
-#mds-content-wrap{min-height:20em;padding:0 8px;}
-.mds-content-row-wrap{}
-.mds-content-row{}
-.mds-content{}
-.mds-sidebar1{}
-.mds-sidebar2{}
+#mds-main-wrap{min-height:20em;padding:0 8px;}
+#mds-main-area{}
+#mds-content{}
+#mds-sidebar1{}
+#mds-sidebar2{}
 
 
 /* #mds-triptych
@@ -61,7 +71,10 @@ body{background:#fff;}
 
 */
 #mds-triptych-wrap{padding:0 8px;}
-#mds-triptych{}
+#mds-triptych-area{}
+#mds-triptych1{}
+#mds-triptych2{}
+#mds-triptych3{}
 
 
 /* #mds-footer
@@ -69,18 +82,13 @@ body{background:#fff;}
    The footer of the content part.
 
 */
-#mds-footer-columns-wrap{border-top:1px solid #ccc;background:#eee;padding:0 8px;}
-#mds-footer-columns{padding:1em 0 1em 0;background-color:transparent;color:#555;}
-
-
-/* #mds-bottom
---------------------------------------------------------
-   The bottom of the page, usually the footer with
-   copyright and links.
-
-*/
-#mds-bottom-wrap{background:#eee;padding:0 8px;}
-#mds-bottom{padding:1em 0 1em 0;background-color:transparent;color:#555;}
+#mds-footer-wrap{border-top:1px solid #ccc;background:#eee;padding:0 8px;}
+#mds-footer-area{background-color:transparent;color:#555;}
+#mds-footercol1{}
+#mds-footercol2{}
+#mds-footercol3{}
+#mds-footercol4{}
+#mds-footer{}
 
 
 /* Links
