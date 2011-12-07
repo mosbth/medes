@@ -282,7 +282,7 @@ class CRequest {
 	 * @param string $url
 	 */
 	public function CleanUrl($url) {
-		$base = (isset($this->baseUrlModified) ? $this->baseUrlModified : $this->baseUrl;
+		$base = isset($this->baseUrlModified) ? $this->baseUrlModified : $this->baseUrl;
 		return ($this->supportCleanUrls) ? "$base$url" : "$base?p=$url";
 	}
 	
