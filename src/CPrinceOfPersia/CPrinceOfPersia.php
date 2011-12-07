@@ -183,7 +183,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->if = new CInterceptionFilter();
 
 		// Init the requst object, populate with values from the current request
-		$this->req = new CRequest($this->cfg['general']['clean_url']);
+		$this->req = new CRequest($this->cfg['config-db']['general']['clean_url']);
 		$this->req->Init($this->cfg['general']['base_url']);
 		
 		// Create and init the template engine
