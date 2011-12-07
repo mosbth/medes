@@ -12,7 +12,7 @@ class CCtrl4Developer implements IController {
 	public function __construct() {
 	  global $pp;
 		$header = '<h1>Developer information</h2><p>Here is useful information for a developer, and maybe e menu (bar) of the options.</p>';
-
+    $header .= "<p>The latest version of this help-controller, <a target='_blank' href='https://github.com/mosbth/medes/blob/master/src/CCtrl4Developer/CCtrl4Developer.php'>CDeveloper, can be viewed at github</a>.</p>";
 		$nav = array(
 			array('text'=>'Configuration', 'href'=>$pp->req->CreateUrlToControllerAction(null, 'config'),),
 			array('text'=>'Request', 'href'=>$pp->req->CreateUrlToControllerAction(null, 'request'),),
