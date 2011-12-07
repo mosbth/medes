@@ -73,13 +73,13 @@ class CCtrl4Developer implements IController {
 	 */
 	public function Args($v1=null, $v2=null, $v3=null) {	
 		global $pp;
-		$html = "<h2>Passing urlparts as methid arguments</h2><p>This controller method takes three arguments that can be passed through the url.</p>";
+		$html = "<h2>Passing parts of url as method arguments</h2><p>This controller method takes three arguments that can be passed through the url.</p>";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1) . "'>Passing one argument</a> | ";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1, 2) . "'>Passing two arguments</a> | ";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1, 2, 3) . "'>Passing three arguments</a>";
-		$html .= "<pre>Argument 1 = " . (is_int($v1) ? $v1 : 'is not a number');
-		$html .= ".\nArgument 2 = " . (is_int($v2) ? $v2 : 'is not a number');
-		$html .= ".\nArgument 3 = " . (is_int($v3) ? $v3 : 'is not a number');
+		$html .= "<pre>Argument 1 = " . (is_int($v1) ? $v1 : is_null($v1) ? 'null' : 'is not a number');
+		$html .= ".\nArgument 2 = " . (is_int($v2) ? $v2 : is_null($v2) ? 'null' : 'is not a number');
+		$html .= ".\nArgument 3 = " . (is_int($v3) ? $v3 : is_null($v3) ? 'null' : 'is not a number');
 		$html .= ".\n</pre>";
 		$pp->AddView(new CView($html));
 	}
