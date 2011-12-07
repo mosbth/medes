@@ -77,9 +77,9 @@ class CCtrl4Developer implements IController {
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1) . "'>Passing one argument</a> | ";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1, 2) . "'>Passing two arguments</a> | ";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1, 2, 3) . "'>Passing three arguments</a>";
-		$html .= "<pre>Argument 1 = " . (is_int($v1) ? $v1 : is_null($v1) ? 'null' : 'is not a number');
-		$html .= ".\nArgument 2 = " . (is_int($v2) ? $v2 : is_null($v2) ? 'null' : 'is not a number');
-		$html .= ".\nArgument 3 = " . (is_int($v3) ? $v3 : is_null($v3) ? 'null' : 'is not a number');
+		$html .= "<pre>Argument 1 = " . (is_int($v1) ? $v1 : (is_null($v1) ? 'null' : 'is not a number'));
+		$html .= ".\nArgument 2 = " . (is_int($v2) ? $v2 : (is_null($v2) ? 'null' : 'is not a number'));
+		$html .= ".\nArgument 3 = " . (is_int($v3) ? $v3 : (is_null($v3) ? 'null' : 'is not a number'));
 		$html .= ".\n</pre>";
 		$pp->AddView(new CView($html));
 	}
