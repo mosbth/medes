@@ -142,6 +142,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 */
 	protected function __construct() {
 
+    // reference to $pp is used during this phase
+    $pp = &$this;
+
 		// time page generation
 		$this->timer['first'] = microtime(true); 
 
