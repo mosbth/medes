@@ -7,11 +7,13 @@ todo: user - login with wrong pwd.
 todo: user - redirect during login.
 todo: cpage - protect with interceptionfilter
 todo: canurl - protect with interceptionfilter
-todo: theme - display regions
 todo: theme - color profiles
 todo: pp & theme - move theme to CThemeEngine and introduce CRegistry for storing content?
 
-CRequest - support to modify base url by definition in config.php.
+Enable for controllers to accept arguments in methods and sending url-parts as these arguments.
+CTheme - displays/visualizes regions as aid to developers.
+CRequest - support to modify baseurl by definition in config.php, enables to install medes in 
+subdirectory and using mod_rewrite to redirect from root to subdirectory.
 CRequest - made to leaf-class, not dependent on any other class in framework (removed dependency to
 $pp). 
 

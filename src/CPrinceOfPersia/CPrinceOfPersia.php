@@ -353,7 +353,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 				if($rc->hasMethod($action)) {
 					$controllerObj = $rc->newInstance();
 					$method = $rc->getMethod($action);
-					$method->invoke($controllerObj);
+					$method->invokeArgs($controllerObj, $this->req->args);
 				} else {
 					throw new Exception(t('#class error: Controller does not contain action.', array('#class'=>get_class())));		
 				}
