@@ -34,6 +34,8 @@ class CCtrl4Error implements IController {
     echo "$url<br>";
     echo "$script<br>";
     echo "$dir<br>";
+    echo "$query<br>";
+    echo "<pre>" . print_r($parts, true) . "</pre>";
 	}
 
 
