@@ -9,6 +9,7 @@ todo: cpage - protect with interceptionfilter
 todo: canurl - protect with interceptionfilter
 todo: theme - color profiles
 todo: pp & theme - move theme to CThemeEngine and introduce CRegistry for storing content?
+todo: setup.php, a userfriendly installation & setup phase
 
 Enable for controllers to accept arguments in methods and sending url-parts as these arguments.
 CTheme - displays/visualizes regions as aid to developers.

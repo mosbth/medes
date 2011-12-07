@@ -100,8 +100,11 @@ class CRequest {
 			$keys = $val = array();
 			for($i=2, $cnt=count($splits); $i<$cnt; $i+=2) {
 				$params[$splits[$i]] = !empty($splits[$i+1]) ? $splits[$i+1] : null;
+				$args[] = $splits[$i];
+				if(!empty($splits[$i+1])) {
+  				$args[] = $splits[$i+1];
+				}
 			}
-			$args = array_merge(array_keys($params), array_values($params));
 		}
 
 		// Step 3
