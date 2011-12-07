@@ -19,9 +19,10 @@ class CCtrl4Error implements IController {
  	 * Implementing interface IController. All controllers must have an index action.
 	 */
 	public function Code404() {	
-		$pp = CPrinceOfPersia::GetInstance();		
+		global $pp;
 		$feedback	= $pp->GetHTMLForFeedback();
 		$pp->AddView(new CView("<h1>Error Controller</h1>{$feedback}<p>404</p>"));
+		$pp->AddView(new CView(array('html'=>'<h2>$pp->req</h2><pre>' . print_r($pp->req, true) . '</pre>')));
 	}
 
 
