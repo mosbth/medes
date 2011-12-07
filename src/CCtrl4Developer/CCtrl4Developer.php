@@ -73,6 +73,7 @@ class CCtrl4Developer implements IController {
 	 */
 	public function Args($v1=null, $v2=null, $v3=null) {	
 		global $pp;
+		echo "$v1:$v2:$v3";
 		$html = "<h2>Passing parts of url as method arguments</h2><p>This controller method takes three arguments that can be passed through the url.</p>";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1) . "'>Passing one argument</a> | ";
 		$html .= "<a href='" . $pp->req->CreateUrlToControllerAction(null, 'args', 1, 2) . "'>Passing two arguments</a> | ";
