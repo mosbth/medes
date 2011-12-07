@@ -28,7 +28,7 @@ class CCtrl4Error implements IController {
   	$parts 	= parse_url($url);
   	$script	= $_SERVER['SCRIPT_NAME'];
  		$dir 		= rtrim(dirname($script), '/');
- 		$query	= substr($parts['path'], strlen($dir));
+ 		$query	= isset($modifyBaseUrl) ? substr($url, strlen($modifyBaseUrl)) : substr($parts['path'], strlen($dir));
  		$splits = explode('/', trim($query, '/'));
 
     echo "$url<br>";

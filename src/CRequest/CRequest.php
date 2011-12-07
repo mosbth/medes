@@ -79,7 +79,7 @@ class CRequest {
   	$parts 	= parse_url($url);
   	$script	= $_SERVER['SCRIPT_NAME'];
  		$dir 		= rtrim(dirname($script), '/');
- 		$query	= isset($modifyBaseUrl) ? substr($url, strlen($modifyBaseUrl)) : substr($parts['path'], strlen($dir));
+ 		$query	= isset($modifyBaseUrl) && isset($_SERVER['REDIRECT_URL']) ? substr($_SERVER['REDIRECT_URL'], strlen($dir)) : substr($parts['path'], strlen($dir));
  		$splits = explode('/', trim($query, '/'));
 
 		// If split is empty or equal to index.php, then use _GET['p'] to create controller/action,
