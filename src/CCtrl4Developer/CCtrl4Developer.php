@@ -20,7 +20,7 @@ class CCtrl4Developer implements IController {
 			array('text'=>'Call controller method using arguments', 'href'=>$pp->req->CreateUrlToControllerAction(null, 'args'),),
 		);
 		$header .= CNavigation::GenerateMenu($nav, $pp->pageUseListForMenus, 'mds-nav-developer', 'mds-nav-developer mds-nav-tabs');	
-		$pp->AddView(new CView($header);
+		$pp->AddView(new CView($header));
 	}
 	
 	
