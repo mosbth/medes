@@ -142,9 +142,6 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	 */
 	protected function __construct() {
 
-		// $pp should be an reference to the instance of this object	
-		$pp = &$this;
-
 		// time page generation
 		$this->timer['first'] = microtime(true); 
 
@@ -182,8 +179,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		$this->uc = CUserController::GetInstance();
 		$this->if = new CInterceptionFilter();
 
-		// Init the requst object, fill with values from the current request
-		$this->req = new CRequest();
+		// Init the requst object, populate with values from the current request
+		$this->req = new CRequest($this->cfg['general']['clean_url']);
 		$this->req->Init($this->cfg['general']['base_url']);
 		
 		// Create and init the template engine
@@ -378,17 +375,10 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	}
 
 
-	/**
-	 * Check if we support clean urls.
-	 */
-	public function SupportCleanUrl() {
-		return (isset($this->cfg['config-db']['general']['clean_url']) && $this->cfg['config-db']['general']['clean_url'] === false) ? false : true;
-	}
-	
-	
 	// ---------------------------------------------------------------------------------------------
 	//
-	// Template Engine and View, related stuff.
+	// Template Engine and View, related stuff. Move to own class?
+	// Create register class for adding views?
 	// 
 	
 	/**

@@ -15,6 +15,9 @@ class CRequest {
 	/**#@+
 	 * @access public
    */
+	public $supportCleanUrls;
+	
+	// below is current items of the request
 	public $current;
 	public $forwardedFrom;
 	public $forwardedQuery;
@@ -24,6 +27,7 @@ class CRequest {
 	public $query;
 	public $splits;
 	public $baseUrl;
+	public $baseUrlModified;
 	public $baseSecureUrl;
 	public $baseInsecureUrl;
 	public $controller;
@@ -41,8 +45,9 @@ class CRequest {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
+	public function __construct($cleanUrls=false) {
 		$this->current = null;
+    $this->supportCleanUrls = $cleanUrls;
 	}
 	
 	
@@ -64,9 +69,9 @@ class CRequest {
 
 	
 	/**
-	 * Frontcontroller, route to controllers.
+	 * Init the requestobject and populate it with values from the actual request.
 	 */
-  public function Init($baseUrl = null) {
+  public function Init($modifyBaseUrl = null) {
   	
   	// Step 1
   	// Take current url and divide in controller, action and parameters
@@ -99,14 +104,7 @@ class CRequest {
 			$args = array_merge(array_keys($params), array_values($params));
 		}
 
-  	// Step 3
-  	// Set or create the base_url, take from config and recreate if null.
-		if (!isset($baseUrl)) {
-			$baseUrl = "{$parts['scheme']}://{$parts['host']}" . (isset($parts['port']) ? ":{$parts['port']}" : '') . "{$dir}";
-		}
-		$baseUrl .= ($baseUrl[strlen($baseUrl)-1] == '/' ? '' :  '/');
-
-		// Step 4
+		// Step 3
 		// Store it
   	$this->current	= $url;
   	$this->forwardedFrom = null;
@@ -115,9 +113,10 @@ class CRequest {
   	$this->dir 			= $dir;
   	$this->query 		= $query;
   	$this->splits 	= $splits;
-  	$this->baseUrl 	= $baseUrl;
-  	$this->baseSecureUrl 		= str_replace('http://', 'https://', $baseUrl);
-  	$this->baseInsecureUrl 	= str_replace('https://', 'http://', $baseUrl);
+  	$this->baseUrl 	= rtrim("{$parts['scheme']}://{$parts['host']}" . (isset($parts['port']) ? ":{$parts['port']}" : '') . "{$dir}", '/') . '/';
+  	$this->baseUrlModified = isset($modifyBaseUrl) ? rtrim(rtrim($baseUrl, '/') . '/') . "/$dir", '/') . '/' : null;
+  	$this->baseSecureUrl 		= str_replace('http://', 'https://', $this->baseUrl);
+  	$this->baseInsecureUrl 	= str_replace('https://', 'http://', $this->baseUrl);
   	$this->controller = $controller;
   	$this->action 		= $action;
   	$this->params 		= $params;
@@ -197,7 +196,7 @@ class CRequest {
 
 
 	/**
-	 * Get query part of url, except the querystring started by ? 
+	 * Get url part that gives controller and action with parameters.
 	 */
 	public function GetCanonicalUrl() {
 	  if(isset($this->get['p'])) {
@@ -259,37 +258,32 @@ class CRequest {
 	 * 
 	 * @param string $controller
 	 * @param string $action
-	 * @param array $params array with values to be combined in url
+	 * @param string $args this function takes a flexible number of arguments to be combined in url
 	 */
-	public function CreateUrlToControllerAction($controller = null, $action = null, $params = null) {
+	public function CreateUrlToControllerAction($controller = null, $action = null /*, $args=null */) {
 		$controller = isset($controller) ? $controller : $this->controller;
 		$action = isset($action) ? "/$action" : null;
-		$params = null;
+		$args = null;
 		$num = func_num_args();
 		if($num > 2) {
 			for($i=2; $i < $num; $i++) {
-				$params .= '/' . func_get_arg($i);
+				$args .= '/' . func_get_arg($i);
 			}
 		}
-		return $this->CleanUrl("$controller$action$params");
+		return $this->CleanUrl("$controller$action$args");
 	}
 	
 
 	/**
-	 * Enable support of canonical urls or through querystring, depending on configuration.
+	 * Enable support of clean urls or through querystring, depending on configuration.
 	 *
 	 * This is to support those sites where mod_rewrite (or equal) to clean urls does not work.
 	 * 
 	 * @param string $url
 	 */
 	public function CleanUrl($url) {
-		global $pp;
-		$base = $this->baseUrl;
-		if($pp->SupportCleanUrl()) {
-			return "$base$url";
-		} else {
-			return "$base?p=$url";
-		}
+		$base = (isset($this->baseUrlModified) ? $this->baseUrlModified : $this->baseUrl;
+		return ($this->supportCleanUrls) ? "$base$url" : "$base?p=$url";
 	}
 	
 
@@ -312,6 +306,7 @@ class CRequest {
 	}
 
 
+/* OBSOLETE?
 	// ------------------------------------------------------------------------------------
 	//
 	// Modify query string of the url.

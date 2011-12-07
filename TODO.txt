@@ -9,7 +9,11 @@ todo: cpage - protect with interceptionfilter
 todo: canurl - protect with interceptionfilter
 todo: theme - display regions
 todo: theme - color profiles
+todo: pp & theme - move theme to CThemeEngine and introduce CRegistry for storing content?
 
+CRequest - support to modify base url by definition in config.php.
+CRequest - made to leaf-class, not dependent on any other class in framework (removed dependency to
+$pp). 
 
 # (2011-11-11) v0.2.2 Correction release, enhancements and new features
 Adding content filters, 'Filtered HTML' and 'BBCode'.
