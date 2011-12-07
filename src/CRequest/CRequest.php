@@ -114,7 +114,7 @@ class CRequest {
   	$this->query 		= $query;
   	$this->splits 	= $splits;
   	$this->baseUrl 	= rtrim("{$parts['scheme']}://{$parts['host']}" . (isset($parts['port']) ? ":{$parts['port']}" : '') . "{$dir}", '/') . '/';
-  	$this->baseUrlModified = isset($modifyBaseUrl) ? rtrim(rtrim($baseUrl, '/') . "/$dir", '/') . '/' : null;
+  	$this->baseUrlModified = isset($modifyBaseUrl) ? rtrim(rtrim($this->baseUrl, '/') . "/$dir", '/') . '/' : null;
   	$this->baseSecureUrl 		= str_replace('http://', 'https://', $this->baseUrl);
   	$this->baseInsecureUrl 	= str_replace('https://', 'http://', $this->baseUrl);
   	$this->controller = $controller;
