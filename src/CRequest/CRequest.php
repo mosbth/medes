@@ -278,6 +278,15 @@ class CRequest {
 	
 
 	/**
+	 * Shorter method to create a url, uses CreateUrlToControllerAction. Default is current url.
+	 *
+	 */
+	public function CreateUrl($url=null) {
+		return $this->CreateUrlToControllerAction($url);
+	}
+
+
+	/**
 	 * Enable support of clean urls or through querystring, depending on configuration.
 	 *
 	 * This is to support those sites where mod_rewrite (or equal) to clean urls does not work.
