@@ -524,10 +524,9 @@ EOD;
 	 */
 	public function SetTemplate($template) { $this->template = $template; }
 	public function SetPageTitle($title) { $this->pageTitle = $title; }
+	public function AddStylesheet($url) { $this->cfg['config-db']['theme']['stylesheets'][] = array('file'=>$url); }
 	public function AddPageStyle($style) { $this->pageStyle .= $style; }
 	public function AddPageContent($html) { $this->AddView(new CView($html)); }
-
-
 
 
 	/**
@@ -573,8 +572,12 @@ EOD;
 		foreach($stylesheets as $style) {
 		  if(!isset($style['enabled']) || $style['enabled']) {
 			  $media = isset($style['media']) ? "media='{$style['media']}' " : null;
-			  $type = isset($style['type']) ? "type='{$style['type']}' " : null;	
-			  $html .= "<link rel='stylesheet' {$media}{$type}href='$baseurl/{$style['file']}'/>\n";
+			  $type = isset($style['type']) ? "type='{$style['type']}' " : null;
+	  		$url = $style['file'];
+	  		if(!(strpos($url, '://') || $url[0] == '/')) {
+					$url = "$baseurl/$url";
+				}
+			  $html .= "<link rel='stylesheet' {$media}{$type}href='$url'/>\n";
 			}
 		}
 		if(!empty($this->pageStyle)) {
