@@ -8,7 +8,7 @@
 /**
  * Enable auto-load of class declarations.
  */
-function __autoload($aClassName) {
+function autoload($aClassName) {
 	$file1 = MEDES_INSTALL_PATH . "/src/{$aClassName}/{$aClassName}.php";
 	$file2 = MEDES_INSTALL_PATH . "/site/src/{$aClassName}/{$aClassName}.php";
 	if(is_file($file1)) {
@@ -17,6 +17,7 @@ function __autoload($aClassName) {
 		require_once($file2);
 	}
 }
+spl_autoload_register('autoload');
 
 /**
  * Translation.
