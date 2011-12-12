@@ -574,7 +574,6 @@ EOD;
 			  $media = isset($style['media']) ? "media='{$style['media']}' " : null;
 			  $type = isset($style['type']) ? "type='{$style['type']}' " : null;
 	  		$url = $style['file'];
-	  		echo $url;
 	  		if(!(strpos($url, '://') || $url[0] == '/')) {
 					$url = "$baseurl/$url";
 				}
