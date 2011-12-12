@@ -520,13 +520,15 @@ EOD;
 
 
 	/**
-	 * Setters
+	 * Setters & helpers
 	 */
 	public function SetTemplate($template) { $this->template = $template; }
 	public function SetPageTitle($title) { $this->pageTitle = $title; }
 	public function AddStylesheet($url) { $this->cfg['config-db']['theme']['stylesheets'][] = array('file'=>$this->req->baseUrl.trim($url, '/')); }
 	public function AddPageStyle($style) { $this->pageStyle .= $style; }
 	public function AddPageContent($html) { $this->AddView(new CView($html)); }
+	public function CreateUrl($html) { $this->req->CreateUrl($url); }
+	public function PrependBaseurl($link) { return $this->req->baseUrl.trim($link, '/'); }
 
 
 	/**
