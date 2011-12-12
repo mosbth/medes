@@ -69,9 +69,9 @@ abstract class CContent {
     switch($filter) {
       case 'php':   	$content = bbcode2html($content); $type = 'php'; break;
     	case 'html': 		$content = bbcode2html($content); break;
-    	case 'bbcode': 	$content = nl2br(bbcode2html(strip_tags($content, $allowed)), true); break;
-    	case 'fhtml': 	$content = nl2br(strip_tags($content, $allowed), true); break;
-      case 'text':  	$content = nl2br(sanitizeHTML($content), true); break;
+    	case 'bbcode': 	$content = nl2br(bbcode2html(strip_tags($content, $allowed))); break;
+    	case 'fhtml': 	$content = nl2br(strip_tags($content, $allowed)); break;
+      case 'text':  	$content = nl2br(sanitizeHTML($content)); break;
     }
 		return array($type=>$content);
 	}
