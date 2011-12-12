@@ -363,8 +363,15 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		} 
 		// Check if canonical url exists
 		else if(($url = $canUrl->CheckUrl($this->req->GetCanonicalUrl()))) {
-      $this->req->ForwardTo($url);
-      $this->FrontControllerRoute();
+			// Can url is file to include or just forward to a controller?
+			$canfile = MEDES_INSTALL_PATH."/$url";
+			if(is_file($canfile)) {
+				$pp = &$this;
+				include($canfile);			
+			} else {
+      	$this->req->ForwardTo($url);
+      	$this->FrontControllerRoute();
+      }
 		} 
 		// Page not found 404
 		else { 
