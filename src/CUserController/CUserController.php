@@ -9,7 +9,7 @@
  *
  * @package MedesCore
  */
-class CUserController implements iSingleton, IUsesSQL, IModule {
+class CUserController implements ISingleton, IUsesSQL, IModule {
 
 	/**#@+
 	 * @access public
