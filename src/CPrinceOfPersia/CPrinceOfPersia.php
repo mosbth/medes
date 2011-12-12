@@ -520,19 +520,14 @@ EOD;
 
 
 	/**
-	 * Set the page template  
+	 * Setters
 	 */
-	public function SetTemplate($template) {
-		$this->template = $template;
-  }
+	public function SetTemplate($template) { $this->template = $template; }
+	public function SetPageTitle($title) { $this->pageTitle = $title; }
+	public function AddPageStyle($style) { $this->pageStyle .= $style; }
+	public function AddPageContent($html) { $this->AddView(new CView($html)); }
 
 
-	/**
-	 * Set the page title 
-	 */
-	public function SetPageTitle($title) {
-		$this->pageTitle = $title;
-  }
 
 
 	/**
