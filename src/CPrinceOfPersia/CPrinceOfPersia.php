@@ -491,6 +491,34 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 
 
 	/**
+	 * Setters & helpers api for 3:rd party integrators.
+	 */
+	public function SetDocType($type)       { $this->pageDocType  = $type; }
+	public function SetCharset($charset)    { $this->pageCharset  = $charset; }
+	public function SetTemplate($template)  { $this->template     = $template; }
+	public function SetPageTitle($title)    { $this->pageTitle    = $title; }
+	public function AddPageStyle($style)    { $this->pageStyle    .= $style; }
+	public function AddPageScript($script)  { $this->pageScript   .= $script; }
+	public function AddPageContent($html)   { $this->AddView(new CView($html)); }
+	public function CreateUrl($html)        { $this->req->CreateUrl($url); }
+	public function PrependBaseurl($link)   { return $this->req->baseUrl.trim($link, '/'); }
+
+	public function AddStylesheet($url) {
+    if(!(strpos($url, '://') || $url[0] == '/')) {
+      $url = $this->req->baseUrl.trim($url, '/');
+    }
+	  $this->cfg['config-db']['theme']['stylesheets'][] = array('file'=>$url); 
+	}
+
+	public function AddJavascript($src) {
+    /*if(!(strpos($url, '://') || $url[0] == '/')) {
+      $url = $this->req->baseUrl.trim($url, '/');
+    }*/
+	  $this->cfg['config-db']['js']['external'][] = array('file'=>$src); 
+	}
+
+
+	/**
 	 * Create code for correct doctype
 	 */ 
 	public function GetHTMLDocType() {
@@ -517,18 +545,6 @@ EOD;
 
 		return $html;
 	}
-
-
-	/**
-	 * Setters & helpers
-	 */
-	public function SetTemplate($template) { $this->template = $template; }
-	public function SetPageTitle($title) { $this->pageTitle = $title; }
-	public function AddStylesheet($url) { $this->cfg['config-db']['theme']['stylesheets'][] = array('file'=>$this->req->baseUrl.trim($url, '/')); }
-	public function AddPageStyle($style) { $this->pageStyle .= $style; }
-	public function AddPageContent($html) { $this->AddView(new CView($html)); }
-	public function CreateUrl($html) { $this->req->CreateUrl($url); }
-	public function PrependBaseurl($link) { return $this->req->baseUrl.trim($link, '/'); }
 
 
 	/**
