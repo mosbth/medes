@@ -77,6 +77,7 @@ function bbcode2html($text) {
 			 </object>
 			',
 		),
-		str_replace('$', '#DOLLAR#', $text)
+		$text
+		//str_replace('$', '#DOLLAR#', $text)
 	);
 }
