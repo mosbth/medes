@@ -500,7 +500,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	public function AddPageStyle($style)    { $this->pageStyle    .= $style; }
 	public function AddPageScript($script)  { $this->pageScript   .= $script; }
 	public function AddPageContent($html)   { $this->AddView(new CView($html)); }
-	public function CreateUrl($url)        	{ $this->req->CreateUrl($url); }
+	public function CreateUrl($url)        	{ return $this->req->CreateUrl($url); }
 	public function PrependBaseurl($link)   { return $this->req->baseUrl.trim($link, '/'); }
 
 	public function AddStylesheet($url) {

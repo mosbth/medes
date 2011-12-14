@@ -88,6 +88,8 @@ class CView {
 	 * Render the view
 	 */
 	public function Render() {
+		global $pp;
+		
 		if(isset($this->vars)) {
 			extract($this->vars);
 		}
