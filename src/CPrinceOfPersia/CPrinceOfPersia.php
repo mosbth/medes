@@ -97,6 +97,7 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	// site-related
 	public $siteUrl;
 	public $sessionName;
+	public $sessionId;
 
 	// current page-related
 	protected static $currentUrl = null; // get this value though the method GetUrlToCurrentPage()
@@ -162,6 +163,8 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 		// Start a named session
 		session_name($this->cfg['session']['name']);
 		session_start();
+		$this->sessionId = session_id();
+		$this->sessionName = session_name();
 
 		// Set default date/time-zone
 		date_default_timezone_set($this->cfg['server']['timezone']);
@@ -515,6 +518,35 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
       $url = $this->req->baseUrl.trim($url, '/');
     }*/
 	  $this->cfg['config-db']['js']['external'][] = array('file'=>$src); 
+	}
+
+	/**
+	 * Switch to a user named session.
+	 */
+	public function SwitchToSession($name) {
+		$id = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : null;
+		session_write_close();
+		session_name($name);
+		if(!$id) {
+			session_start();
+			session_regenerate_id();
+			$_SESSION = array();
+		} else {
+			session_name($name);
+			session_id($id);	
+			session_start();	
+		}
+	}
+
+
+	/**
+	 * Switch to the inital session
+	 */
+	function SwitchToInitialSession() {
+		session_write_close();
+		session_name($this->sessionName);
+		session_id($this->sessionId);
+		session_start();
 	}
 
 
