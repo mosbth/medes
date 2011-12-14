@@ -503,9 +503,19 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	public function AddPageStyle($style)    { $this->pageStyle    .= $style; }
 	public function AddPageScript($script)  { $this->pageScript   .= $script; }
 	public function AddPageContent($html)   { $this->AddView(new CView($html)); }
-	public function CreateUrl($url)        	{ return $this->req->CreateUrl($url); }
 	public function PrependBaseurl($link)   { return $this->req->baseUrl.trim($link, '/'); }
 
+	/**
+	 * Create a url within the framework.
+	 *
+	 * @param $url string the local url as controller/action/arg1/arg2 or the whole canurl.
+	 * @param $args string is the query portion of the url, the whole string after the ? (exclude the ?)
+	 */
+	public function CreateUrl($url, $args=null) { return $this->req->CreateUrl($url, $args); }
+
+	/**
+	 * Add a link to an external stylesheet, will prepend baseurl if relative path.
+	 */
 	public function AddStylesheet($url) {
     if(!(strpos($url, '://') || $url[0] == '/')) {
       $url = $this->req->baseUrl.trim($url, '/');
@@ -513,6 +523,9 @@ class CPrinceOfPersia implements ISingleton, IUsesSQL, IModule {
 	  $this->cfg['config-db']['theme']['stylesheets'][] = array('file'=>$url); 
 	}
 
+	/**
+	 * Add a link to an external js-file, will prepend baseurl if relative path.
+	 */
 	public function AddJavascript($src) {
     /*if(!(strpos($url, '://') || $url[0] == '/')) {
       $url = $this->req->baseUrl.trim($url, '/');

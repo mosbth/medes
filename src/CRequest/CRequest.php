@@ -281,8 +281,10 @@ class CRequest {
 	 * Shorter method to create a url, uses CreateUrlToControllerAction. Default is current url.
 	 *
 	 */
-	public function CreateUrl($url=null) {
-		return $this->CreateUrlToControllerAction($url);
+	public function CreateUrl($url=null, $args=null) {
+		$separator = $this->supportCleanUrls ? '?' : '&';
+		$querypart = isset($args) ? "$separator$args" : null;
+		return $this->CreateUrlToControllerAction($url) . $querypart;
 	}
 
 
